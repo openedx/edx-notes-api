@@ -1,3 +1,0 @@
-EdX Student Notes API
-=====================
-
