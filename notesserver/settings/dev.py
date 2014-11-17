@@ -1,7 +1,5 @@
 from .common import *
 
-SECRET_KEY = 'fkjsdfkjsdhflhdlfhs;lfoefh'
+SECRET_KEY = 'secret_key'
 
 DEBUG = True
-
-ANNOTATOR_STORE = "http://0.0.0.0:5002/"
