@@ -29,8 +29,7 @@ class AnnotationSearchView(APIView):
 
         This method supports the limit and offset query parameters for paging through results.
         """
-
-        params = request.QUERY_PARAMS
+        params = request.QUERY_PARAMS.dict()
 
         if 'offset' in params:
             kwargs['offset'] = atoi(params.pop('offset'), default=None)
@@ -72,7 +71,7 @@ class AnnotationListView(APIView):
         refresh = self.kwargs.get('refresh') != 'false'
         annotation.save(refresh=refresh)
 
-        location = reverse('api:v0:annotations_detail', kwargs={'annotation_id': annotation['id']})
+        location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation['id']})
 
         return Response(annotation, status=status.HTTP_201_CREATED, headers={'Location': location})
 
