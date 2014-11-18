@@ -1,3 +1,10 @@
+DEBUG = False
+TEMPLATE_DEBUG = False
+USE_TZ = True
+TIME_ZONE = 'UTC'
+
+SECRET_KEY = '*^owi*4%!%9=#h@app!l^$jz8(c*q297^)4&4yn^#_m#fq=z#l'
+
 ROOT_URLCONF = 'notesserver.urls'
 
 MIDDLEWARE_CLASSES = (
@@ -15,12 +22,12 @@ INSTALLED_APPS = (
 
 STATIC_URL = '/static/'
 
+WSGI_APPLICATION = 'notesserver.wsgi.application'
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ]
 }
-
-WSGI_APPLICATION = 'notesserver.wsgi.application'
 
 CORS_ORIGIN_ALLOW_ALL = True
