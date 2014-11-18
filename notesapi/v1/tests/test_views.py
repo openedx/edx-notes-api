@@ -1,3 +1,6 @@
+import unittest
+from mock import patch
+
 from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -42,7 +45,15 @@ class AnnotationViewTests(APITestCase):
         """
         return Annotation.fetch(annotation_id)
 
-    def test_add_note(self):
+    def _get_search_results(self, qs=''):
+        """
+        Helper for search method.
+        """
+        url = reverse('api:v1:annotations_search') + '?{}'.format(qs)
+        result = self.client.get(url, **self.headers)
+        return result.data
+
+    def test_create_note(self):
         """
         Ensure we can create a new note.
         """
@@ -59,6 +70,77 @@ class AnnotationViewTests(APITestCase):
 
         #self.assertEqual(self.user.id, response.data['user'])
         #self.assertEqual(self.user.consumer.key, response.data['consumer'])
+
+    def test_create_ignore_created(self):
+        """
+        Test if annotation 'created' field is not used by API.
+        """
+        payload = {'created': 'abc'}
+        response = self.client.post(reverse('api:v1:annotations'), payload, format='json', **self.headers)
+
+        annotation = self._get_annotation(response.data['id'])
+
+        self.assertNotEqual(annotation['created'], 'abc', "annotation 'created' field should not be used by API")
+
+    def test_create_ignore_updated(self):
+        """
+        Test if annotation 'updated' field is not used by API.
+        """
+        payload = {'updated': 'abc'}
+        response = self.client.post(reverse('api:v1:annotations'), payload, format='json', **self.headers)
+
+        annotation = self._get_annotation(response.data['id'])
+
+        self.assertNotEqual(annotation['updated'], 'abc', "annotation 'updated' field should not be used by API")
+
+    @unittest.skip("Unskip when auth will be done.")
+    def test_create_ignore_auth_in_payload(self):
+        """
+        Test if annotation 'user' and 'consumer' fields are not used by API.
+        """
+        payload = {'user': 'jenny', 'consumer': 'myconsumer'}
+
+        response = self.client.post(reverse('api:v1:annotations'), payload, format='json', **self.headers)
+        annotation = self._get_annotation(response.data['id'])
+
+        self.assertEqual(annotation['user'], self.user.id, "'user' field should not be used by API")
+        self.assertEqual(annotation['consumer'], self.user.consumer.key, "'consumer' field should not be used by API")
+
+    def test_create_should_not_update(self):
+        """
+        Ccreate should always create a new annotation.
+        """
+        payload = {'name': 'foo'}
+        response = self.client.post(reverse('api:v1:annotations'), payload, format='json', **self.headers)
+        annotation_id = response.data['id']
+
+        # Try and update the annotation using the create API.
+        update_payload = {'name': 'bar', 'id': annotation_id}
+        response = self.client.post(reverse('api:v1:annotations'), update_payload, format='json', **self.headers)
+
+        self.assertNotEqual(annotation_id, response.data['id'], "create should always create a new annotation")
+
+        annotation_1 = self._get_annotation(annotation_id)
+        annotation_2 = self._get_annotation(response.data['id'])
+
+        self.assertEqual(annotation_1['name'], 'foo')
+        self.assertEqual(annotation_2['name'], 'bar')
+
+    @unittest.skip("TODO")
+    @patch('notesapi.v1.views.Annotation')
+    def test_create_refresh(self, ann_mock):
+        """
+        """
+        url = reverse('api:v1:annotations') + '?refresh=true'
+        response = self.client.post(url, {}, format='json', **self.headers)
+        ann_mock.return_value.save.assert_called_once_with(refresh=True)
+
+    @unittest.skip("TODO")
+    @patch('annotator.store.Annotation')
+    def test_create_disable_refresh(self, ann_mock):
+        url = reverse('api:v1:annotations') + '?refresh=true'
+        response = self.client.post(url, {}, format='json', **self.headers)
+        ann_mock.return_value.save.assert_called_once_with(refresh=False)
 
     def test_read(self):
         """
@@ -91,6 +173,38 @@ class AnnotationViewTests(APITestCase):
 
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
         self.assertEqual(response.data['text'], "Bar", "update annotation should be returned in response")
+
+    def test_update_without_payload_id(self):
+        """
+        Test if there is no id in payload then no update will be performed.
+        """
+        self._create_annotation(text=u"Foo", id='123')
+
+        payload = {'text': 'Bar'}
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        response = self.client.put(url, payload, format='json')
+
+        annotation = self._get_annotation('123')
+        self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
+
+    def test_update_with_wrong_payload_id(self):
+        """
+        Test if there is wrong id in payload then no update will be performed.
+        """
+        self._create_annotation(text=u"Foo", id='123')
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        payload = {'text': 'Bar', 'id': 'abc'}
+        response = self.client.put(url, payload, format='json')
+
+        annotation = self._get_annotation('123')
+        self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
+
+    def test_update_notfound(self):
+        payload = {'id': '123', 'text': 'Bar'}
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        response = self.client.put(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete(self):
         """
@@ -177,11 +291,3 @@ class AnnotationViewTests(APITestCase):
         result = self._get_search_results('offset=foobar')
         self.assertEqual(len(result['rows']), 20)
         self.assertEqual(result['rows'][0], first)
-
-    def _get_search_results(self, qs=''):
-        """
-        Helper for search method.
-        """
-        url = reverse('api:v1:annotations_search') + '?{}'.format(qs)
-        result = self.client.get(url, **self.headers)
-        return result.data

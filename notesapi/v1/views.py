@@ -44,13 +44,14 @@ class AnnotationSearchView(APIView):
 
         return Response({'total': total, 'rows': results})
 
+
 class AnnotationListView(APIView):
     """
     List all annotations or create.
     """
     permission_classes = (AllowAny,)
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         """
         Get a list of all annotations.
         """
@@ -68,7 +69,7 @@ class AnnotationListView(APIView):
         if request.DATA is not None:
             annotation = Annotation(_filter_input(request.DATA, CREATE_FILTER_FIELDS))
 
-        refresh = self.kwargs.get('refresh') != 'false'
+        refresh = request.QUERY_PARAMS.get('refresh') != u'false'
         annotation.save(refresh=refresh)
 
         location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation['id']})

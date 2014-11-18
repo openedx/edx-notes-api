@@ -5,3 +5,4 @@ elasticsearch==1.2.0
 annotator==0.12.0
 django-cors-headers==0.13
 path.py==7.0
+mock==1.0.1
