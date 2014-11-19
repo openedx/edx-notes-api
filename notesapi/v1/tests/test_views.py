@@ -130,6 +130,7 @@ class AnnotationViewTests(APITestCase):
     @patch('notesapi.v1.views.Annotation')
     def test_create_refresh(self, ann_mock):
         """
+        Ensure save was with refresh.
         """
         url = reverse('api:v1:annotations') + '?refresh=true'
         response = self.client.post(url, {}, format='json', **self.headers)
@@ -138,6 +139,9 @@ class AnnotationViewTests(APITestCase):
     @unittest.skip("TODO")
     @patch('annotator.store.Annotation')
     def test_create_disable_refresh(self, ann_mock):
+        """
+        Ensure save was without refresh.
+        """
         url = reverse('api:v1:annotations') + '?refresh=true'
         response = self.client.post(url, {}, format='json', **self.headers)
         ann_mock.return_value.save.assert_called_once_with(refresh=False)
@@ -201,6 +205,9 @@ class AnnotationViewTests(APITestCase):
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
 
     def test_update_notfound(self):
+        """
+        Test if annotation not exists with specified id and update was attempted on it.
+        """
         payload = {'id': '123', 'text': 'Bar'}
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
         response = self.client.put(url, payload, format='json')

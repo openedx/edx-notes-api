@@ -1,2 +1,5 @@
-### Python artifacts
+# Python artifacts
 *.pyc
+
+# Coverage reports
+.coverage

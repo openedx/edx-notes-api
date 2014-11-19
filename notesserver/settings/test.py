@@ -9,3 +9,5 @@ DATABASES = {
         'NAME': TEST_ROOT / "db" / "notesserver.db",
     }
 }
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
