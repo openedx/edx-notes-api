@@ -1,5 +1,6 @@
 # Python artifacts
 *.pyc
 
-# Coverage reports
+# Tests / Coverage reports
 .coverage
+.tox

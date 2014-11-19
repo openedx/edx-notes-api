@@ -142,7 +142,7 @@ class AnnotationViewTests(APITestCase):
         """
         Ensure save was without refresh.
         """
-        url = reverse('api:v1:annotations') + '?refresh=true'
+        url = reverse('api:v1:annotations') + '?refresh=false'
         response = self.client.post(url, {}, format='json', **self.headers)
         ann_mock.return_value.save.assert_called_once_with(refresh=False)
 

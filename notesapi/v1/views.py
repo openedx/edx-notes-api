@@ -1,4 +1,3 @@
-import requests
 import json
 from django.http import HttpResponse
 from django.conf import settings
