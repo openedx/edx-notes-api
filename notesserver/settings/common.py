@@ -20,7 +20,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_swagger',
     'corsheaders',
-    'django_nose',
 )
 
 STATIC_URL = '/static/'
