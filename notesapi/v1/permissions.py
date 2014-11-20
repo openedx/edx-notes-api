@@ -7,8 +7,8 @@ class HasAccessToken(BasePermission):
     """
     def has_permission(self, request, view):
         try:
-            # expected HTTP Header "Authorization: Bearer TOKEN"
-            AccessToken.objects.get_token(request.META["HTTP_AUTHORIZATION"].split()[1])
+            # expected HTTP Header "X-Annotator-Auth-Token: TOKEN"
+            AccessToken.objects.get_token(request.META["HTTP-X-ANNOTATOR-AUTH-TOKEN"].strip())
             return True
         except AccessToken.DoesNotExist:
             return False
