@@ -126,25 +126,25 @@ class AnnotationViewTests(APITestCase):
         self.assertEqual(annotation_1['name'], 'foo')
         self.assertEqual(annotation_2['name'], 'bar')
 
-    @unittest.skip("TODO")
-    @patch('notesapi.v1.views.Annotation')
-    def test_create_refresh(self, ann_mock):
+    @patch('notesapi.v1.views.Annotation', autospec=Annotation)
+    def test_create_refresh(self, mocked_annotation):
         """
         Ensure save was with refresh.
         """
+        mocked_annotation.return_value.__getitem__ = lambda x, y: 'test_id'
         url = reverse('api:v1:annotations') + '?refresh=true'
         response = self.client.post(url, {}, format='json', **self.headers)
-        ann_mock.return_value.save.assert_called_once_with(refresh=True)
+        mocked_annotation.return_value.save.assert_called_once_with(refresh=True)
 
-    @unittest.skip("TODO")
-    @patch('annotator.store.Annotation')
-    def test_create_disable_refresh(self, ann_mock):
+    @patch('notesapi.v1.views.Annotation', autospec=Annotation)
+    def test_create_disable_refresh(self, mocked_annotation):
         """
         Ensure save was without refresh.
         """
+        mocked_annotation.return_value.__getitem__ = lambda x, y: 'test_id'
         url = reverse('api:v1:annotations') + '?refresh=false'
         response = self.client.post(url, {}, format='json', **self.headers)
-        ann_mock.return_value.save.assert_called_once_with(refresh=False)
+        mocked_annotation.return_value.save.assert_called_once_with(refresh=False)
 
     def test_read(self):
         """

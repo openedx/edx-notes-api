@@ -54,7 +54,7 @@ class AnnotationListView(APIView):
         """
         Get a list of all annotations.
         """
-        # TODO: get user.
+        # TODO: get user when auth will be done.
         user = None
 
         annotations = Annotation.search(user)
@@ -65,11 +65,11 @@ class AnnotationListView(APIView):
         """
         Create a new annotation.
         """
-        if request.DATA is not None:
-            annotation = Annotation(_filter_input(request.DATA, CREATE_FILTER_FIELDS))
+        annotation = Annotation(_filter_input(request.DATA, CREATE_FILTER_FIELDS))
 
         refresh = request.QUERY_PARAMS.get('refresh') != u'false'
         annotation.save(refresh=refresh)
+
 
         location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation['id']})
 
