@@ -48,7 +48,13 @@ CONFIG_ROOT = os.environ.get('CONFIG_ROOT', "/edx/app/edxapp")
 # prefix.
 CONFIG_PREFIX = SERVICE_VARIANT + "." if SERVICE_VARIANT else ""
 
-with open(os.path.join(CONFIG_ROOT, CONFIG_PREFIX + "auth.json")) as auth_file:
-    AUTH_TOKENS = json.load(auth_file)
-
-DATABASES = AUTH_TOKENS['DATABASES']
+try:
+    with open(os.path.join(CONFIG_ROOT, CONFIG_PREFIX + "auth.json")) as auth_file:
+        AUTH_TOKENS = json.load(auth_file)
+        DATABASES = AUTH_TOKENS['DATABASES']
+except IOError:
+    DATABASES = {'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:'
+        }
+    }
