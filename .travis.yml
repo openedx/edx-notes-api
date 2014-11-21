@@ -1,0 +1,15 @@
+language: python
+python: 2.7
+
+services:
+    - elasticsearch
+
+install:
+    - pip install -r requirements/test.py
+    - pip install coveralls
+
+script:
+    - make test
+
+after_success:
+    - coveralls
