@@ -5,7 +5,7 @@ services:
     - elasticsearch
 
 install:
-    - pip install -r requirements/test.py
+    - pip install -r requirements/test.txt
     - pip install coveralls
 
 script:
