@@ -4,6 +4,7 @@ class MockConsumer(object):
         self.secret = 'top-secret'
         self.ttl = 86400
 
+
 class MockUser(object):
     def __init__(self, id='alice', consumer=None):
         self.id = id
@@ -14,6 +15,7 @@ class MockUser(object):
 class MockAuthenticator(object):
     def request_user(self, request):
         return MockUser()
+
 
 def mock_authorizer(*args, **kwargs):
     return True

@@ -69,7 +69,6 @@ class AnnotationListView(APIView):
         refresh = request.QUERY_PARAMS.get('refresh') != u'false'
         annotation.save(refresh=refresh)
 
-
         location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation['id']})
 
         return Response(annotation, status=status.HTTP_201_CREATED, headers={'Location': location})
@@ -116,7 +115,6 @@ class AnnotationDetailView(APIView):
 
         return Response(annotation)
 
-
     def delete(self, request, *args, **kwargs):
         """
         Delete an annotation.
@@ -141,6 +139,7 @@ def _filter_input(annotation, fields):
         annotation.pop(field, None)
 
     return annotation
+
 
 def _convert_str(value, default=None):
     """

@@ -1,4 +1,5 @@
-import os, json
+import os
+import json
 
 DEBUG = False
 TEMPLATE_DEBUG = False
@@ -52,8 +53,9 @@ try:
         AUTH_TOKENS = json.load(auth_file)
         DATABASES = AUTH_TOKENS['DATABASES']
 except IOError:
-    DATABASES = {'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:'
         }
     }

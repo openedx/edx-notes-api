@@ -65,11 +65,13 @@ class AnnotationViewTests(APITestCase):
         self.assertIn('id', response.data, "annotation id should be returned in response")
 
         expected_location = '/api/v1/annotations/{0}'.format(response.data['id'])
-        self.assertTrue(response['Location'].endswith(expected_location), "The response should have a Location header "
-            "with the URL to read the annotation that was created")
+        self.assertTrue(
+            response['Location'].endswith(expected_location),
+            "the response should have a Location header with the URL to read the annotation that was created"
+        )
 
-        #self.assertEqual(self.user.id, response.data['user'])
-        #self.assertEqual(self.user.consumer.key, response.data['consumer'])
+        # TODO: self.assertEqual(self.user.id, response.data['user'])
+        # TODO: self.assertEqual(self.user.consumer.key, response.data['consumer'])
 
     def test_create_ignore_created(self):
         """
