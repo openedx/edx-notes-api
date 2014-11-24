@@ -2,8 +2,8 @@ Part of `edX code`__.
 
 __ http://code.edx.org/
 
-EdX Repository Skeleton
-=======================
+edX Student Notes API |build-status| |coverage-status|
+======================================================
 
 A skeleton that can be used as the basis for open-source edX repositories.
 
@@ -61,3 +61,8 @@ You can discuss this code on the `edx-code Google Group`__ or in the
 ``edx-code`` IRC channel on Freenode.
 
 __ https://groups.google.com/forum/#!forum/edx-code
+
+.. |build-status| image:: https://travis-ci.org/edx/edx-notes-api.svg?branch=master
+   :target: https://travis-ci.org/edx/edx-notes-api
+.. |coverage-status| image:: https://coveralls.io/repos/edx/edx-notes-api/badge.png?branch=master
+   :target: https://coveralls.io/r/edx/edx-notes-api?branch=master
