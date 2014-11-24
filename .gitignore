@@ -4,3 +4,4 @@
 # Tests / Coverage reports
 .coverage
 .tox
+coverage/

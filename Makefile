@@ -19,3 +19,4 @@ clean:
 
 quality:
 	pep8 --config=.pep8 $(PACKAGES)
+	pylint $(PACKAGES)
