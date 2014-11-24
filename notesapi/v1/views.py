@@ -10,7 +10,6 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 
 from annotator.annotation import Annotation
-from annotator.atoi import atoi
 
 CREATE_FILTER_FIELDS = ('updated', 'created', 'consumer', 'id')
 UPDATE_FILTER_FIELDS = ('updated', 'created', 'user', 'consumer')
@@ -31,9 +30,9 @@ class AnnotationSearchView(APIView):
         params = request.QUERY_PARAMS.dict()
 
         if 'offset' in params:
-            kwargs['offset'] = atoi(params.pop('offset'), default=None)
+            kwargs['offset'] = _convert_str(params.pop('offset'))
         if 'limit' in params:
-            kwargs['limit'] = atoi(params.pop('limit'), default=None)
+            kwargs['limit'] = _convert_str(params.pop('limit'))
 
         # All remaining parameters are considered searched fields.
         kwargs['query'] = params
@@ -135,13 +134,19 @@ class AnnotationDetailView(APIView):
 
 
 def _filter_input(annotation, fields):
+    """
+    Pop given fields from annotation.
+    """
     for field in fields:
         annotation.pop(field, None)
 
     return annotation
 
-def _convert_str(value, default=0):
+def _convert_str(value, default=None):
+    """
+    Convert given value to string.
+    """
     try:
-        return int(v or default)
+        return int(value or default)
     except ValueError:
         return default
