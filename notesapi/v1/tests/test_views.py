@@ -298,3 +298,25 @@ class AnnotationViewTests(APITestCase):
         result = self._get_search_results('offset=foobar')
         self.assertEqual(len(result['rows']), 20)
         self.assertEqual(result['rows'][0], first)
+
+    def test_read_all_no_annotations(self):
+        """
+        Tests list all annotations endpoint when no annotions are present in elasticsearch.
+        """
+        url = reverse('api:v1:annotations')
+        response = self.client.get(url, **self.headers)
+        self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
+
+    def test_read_all(self):
+        """
+        Tests list all annotations.
+        """
+        for i in xrange(5):
+            kwargs = {'text': 'Foo_{}'.format(i), 'id': str(i)}
+            self._create_annotation(refresh=False, **kwargs)
+
+        es.conn.indices.refresh(es.index)
+
+        url = reverse('api:v1:annotations')
+        response = self.client.get(url, **self.headers)
+        self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
