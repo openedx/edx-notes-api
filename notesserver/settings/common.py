@@ -21,6 +21,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_swagger',
     'corsheaders',
+    'notesapi',
+    'notesapi.v1',
 )
 
 STATIC_URL = '/static/'

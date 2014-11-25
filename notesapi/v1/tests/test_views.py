@@ -2,6 +2,8 @@ import unittest
 from mock import patch
 
 from django.core.urlresolvers import reverse
+from django.conf import settings
+
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -15,6 +17,9 @@ class AnnotationViewTests(APITestCase):
     Tests for annotation views.
     """
     def setUp(self):
+        assert Annotation.es.host == settings.ELASTICSEARCH_URL
+        assert Annotation.es.index == settings.ELASTICSEARCH_INDEX
+
         annotation.Annotation.create_all()
         es.conn.cluster.health(wait_for_status='yellow')
 
