@@ -31,3 +31,6 @@ diff-quality:
 	diff-quality --violations=pylint --html-report coverage/diff_quality_pylint.html
 
 coverage: diff-coverage diff-quality
+
+create-index:
+	python manage.py create_index
