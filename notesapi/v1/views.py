@@ -63,11 +63,16 @@ class AnnotationListView(APIView):
     def post(self, request, *args, **kwargs):
         """
         Create a new annotation.
-        """
-        annotation = Annotation(_filter_input(request.DATA, CREATE_FILTER_FIELDS))
 
-        refresh = request.QUERY_PARAMS.get('refresh') != u'false'
-        annotation.save(refresh=refresh)
+        Returns 400 request if bad payload is sent or it was empty object.
+        """
+        filtered_payload = _filter_input(request.DATA, CREATE_FILTER_FIELDS)
+
+        if len(filtered_payload) == 0:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        annotation = Annotation(filtered_payload)
+        annotation.save(refresh=True)
 
         location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation['id']})
 

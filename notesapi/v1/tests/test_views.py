@@ -28,6 +28,22 @@ class AnnotationViewTests(APITestCase):
         token = auth.encode_token(payload, self.user.consumer.secret)
         self.headers = {'x-annotator-auth-token': token}
 
+        self.payload = {
+            "user": "test-user-id",
+            "usage_id": "test-usage-id",
+            "course_id": "test-course-id",
+            "text": "test note text",
+            "quote": "test note quote",
+            "ranges": [
+                {
+                    "start": "/p[1]",
+                    "end": "/p[1]",
+                    "startOffset": 0,
+                    "endOffset": 10,
+                }
+            ],
+        }
+
     def tearDown(self):
         annotation.Annotation.drop_all()
 
@@ -58,16 +74,25 @@ class AnnotationViewTests(APITestCase):
         result = self.client.get(url, **self.headers)
         return result.data
 
+    def test_create_no_payload(self):
+        """
+        Test if no payload is sent when creating a note.
+        """
+        url = reverse('api:v1:annotations')
+        response = self.client.post(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_create_note(self):
         """
         Ensure we can create a new note.
         """
         url = reverse('api:v1:annotations')
-        payload = {'text': 'testing notes'}
-        response = self.client.post(url, payload, format='json')
+        response = self.client.post(url, self.payload, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn('id', response.data, "annotation id should be returned in response")
+        self.assertIn('created', response.data, "annotation created field should be returned in response")
+        self.assertIn('updated', response.data, "annotation updated field be returned in response")
 
         expected_location = '/api/v1/annotations/{0}'.format(response.data['id'])
         self.assertTrue(
@@ -82,8 +107,8 @@ class AnnotationViewTests(APITestCase):
         """
         Test if annotation 'created' field is not used by API.
         """
-        payload = {'created': 'abc'}
-        response = self.client.post(reverse('api:v1:annotations'), payload, format='json', **self.headers)
+        self.payload['created'] = 'abc'
+        response = self.client.post(reverse('api:v1:annotations'), self.payload, format='json', **self.headers)
 
         annotation = self._get_annotation(response.data['id'])
 
@@ -93,8 +118,8 @@ class AnnotationViewTests(APITestCase):
         """
         Test if annotation 'updated' field is not used by API.
         """
-        payload = {'updated': 'abc'}
-        response = self.client.post(reverse('api:v1:annotations'), payload, format='json', **self.headers)
+        self.payload['updated'] = 'abc'
+        response = self.client.post(reverse('api:v1:annotations'), self.payload, format='json', **self.headers)
 
         annotation = self._get_annotation(response.data['id'])
 
@@ -132,26 +157,6 @@ class AnnotationViewTests(APITestCase):
 
         self.assertEqual(annotation_1['name'], 'foo')
         self.assertEqual(annotation_2['name'], 'bar')
-
-    @patch('notesapi.v1.views.Annotation', autospec=Annotation)
-    def test_create_refresh(self, mocked_annotation):
-        """
-        Ensure save was with refresh.
-        """
-        mocked_annotation.return_value.__getitem__ = lambda x, y: 'test_id'
-        url = reverse('api:v1:annotations') + '?refresh=true'
-        response = self.client.post(url, {}, format='json', **self.headers)
-        mocked_annotation.return_value.save.assert_called_once_with(refresh=True)
-
-    @patch('notesapi.v1.views.Annotation', autospec=Annotation)
-    def test_create_disable_refresh(self, mocked_annotation):
-        """
-        Ensure save was without refresh.
-        """
-        mocked_annotation.return_value.__getitem__ = lambda x, y: 'test_id'
-        url = reverse('api:v1:annotations') + '?refresh=false'
-        response = self.client.post(url, {}, format='json', **self.headers)
-        mocked_annotation.return_value.save.assert_called_once_with(refresh=False)
 
     def test_read(self):
         """
