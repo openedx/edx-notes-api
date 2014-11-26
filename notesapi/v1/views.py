@@ -30,9 +30,9 @@ class AnnotationSearchView(APIView):
         params = request.QUERY_PARAMS.dict()
 
         if 'offset' in params:
-            kwargs['offset'] = _convert_str(params.pop('offset'))
+            kwargs['offset'] = _convert_to_int(params.pop('offset'))
         if 'limit' in params:
-            kwargs['limit'] = _convert_str(params.pop('limit'))
+            kwargs['limit'] = _convert_to_int(params.pop('limit'))
 
         # All remaining parameters are considered searched fields.
         kwargs['query'] = params
@@ -141,9 +141,9 @@ def _filter_input(annotation, fields):
     return annotation
 
 
-def _convert_str(value, default=None):
+def _convert_to_int(value, default=None):
     """
-    Convert given value to string.
+    Convert given value to int.
     """
     try:
         return int(value or default)
