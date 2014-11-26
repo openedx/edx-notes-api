@@ -3,7 +3,7 @@ PACKAGES = notesserver notesapi
 test: clean test-local coverage
 
 test-local:
-	./manage.py test --settings=notesserver.settings.test --with-coverage \
+	./manage.py test --settings=notesserver.settings.test --with-coverage --with-ignore-docstrings \
 		--exclude-dir=notesserver/settings --cover-inclusive --cover-branches \
 		--cover-html --cover-html-dir=coverage/html/ \
 		--cover-xml --cover-xml-file=coverage/coverage.xml \
