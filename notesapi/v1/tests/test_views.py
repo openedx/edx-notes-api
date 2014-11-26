@@ -115,7 +115,7 @@ class AnnotationViewTests(APITestCase):
 
     def test_create_should_not_update(self):
         """
-        Ccreate should always create a new annotation.
+        Create should always create a new annotation.
         """
         payload = {'name': 'foo'}
         response = self.client.post(reverse('api:v1:annotations'), payload, format='json', **self.headers)
@@ -308,7 +308,7 @@ class AnnotationViewTests(APITestCase):
 
     def test_read_all_no_annotations(self):
         """
-        Tests list all annotations endpoint when no annotions are present in elasticsearch.
+        Tests list all annotations endpoint when no annotations are present in elasticsearch.
         """
         url = reverse('api:v1:annotations')
         response = self.client.get(url, **self.headers)
