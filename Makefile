@@ -24,7 +24,7 @@ quality:
 	pylint $(PACKAGES)
 
 diff-coverage:
-	diff-cover coverage/coverage.xml --html-report build/coverage/diff_cover.html
+	diff-cover build/coverage/coverage.xml --html-report build/coverage/diff_cover.html
 
 diff-quality:
 	diff-quality --violations=pep8 --html-report build/coverage/diff_quality_pep8.html
@@ -34,3 +34,12 @@ coverage: diff-coverage diff-quality
 
 create-index:
 	python manage.py create_index
+
+requirements:
+	pip install -q -r requirements/base.txt --exists-action=w
+
+test.requirements: requirements
+	pip install -q -r requirements/test.txt --exists-action=w
+
+develop: test.requirements
+	pip install -q -r requirements/local.txt --exists-action=w
