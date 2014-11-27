@@ -1,8 +1,8 @@
 PACKAGES = notesserver notesapi
 
-test: clean test-local coverage
+validate: clean test coverage
 
-test-local:
+test:
 	./manage.py test --settings=notesserver.settings.test --with-coverage --with-ignore-docstrings \
 		--exclude-dir=notesserver/settings --cover-inclusive --cover-branches \
 		--cover-html --cover-html-dir=build/coverage/html/ \
