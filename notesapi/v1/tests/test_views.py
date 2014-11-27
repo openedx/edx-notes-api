@@ -44,6 +44,25 @@ class AnnotationViewTests(APITestCase):
             ],
         }
 
+        self.expected_note = {
+            "created": "2014-11-26T00:00:00+00:00",
+            "updated": "2014-11-26T00:00:00+00:00",
+            "user": "test-user-id",
+            "usage_id": "test-usage-id",
+            "course_id": "test-course-id",
+            "text": "test note text",
+            "quote": "test note quote",
+            "ranges": [
+                {
+                    "start": "/p[1]",
+                    "end": "/p[1]",
+                    "startOffset": 0,
+                    "endOffset": 10,
+                }
+            ],
+            "permissions": {"read": ["group:__consumer__"]},
+        }
+
     def tearDown(self):
         annotation.Annotation.drop_all()
 
@@ -82,17 +101,22 @@ class AnnotationViewTests(APITestCase):
         response = self.client.post(url, {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_note(self):
+    @patch('annotator.elasticsearch.datetime')
+    def test_create_note(self, mock_datetime):
         """
         Ensure we can create a new note.
         """
+        mock_datetime.datetime.now.return_value.isoformat.return_value = "2014-11-26T00:00:00+00:00"
+
         url = reverse('api:v1:annotations')
         response = self.client.post(url, self.payload, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertIn('id', response.data, "annotation id should be returned in response")
-        self.assertIn('created', response.data, "annotation created field should be returned in response")
-        self.assertIn('updated', response.data, "annotation updated field be returned in response")
+
+        annotation = response.data.copy()
+        self.assertIn('id', annotation)
+        annotation.pop('id')
+        self.assertEqual(annotation, self.expected_note)
 
         expected_location = '/api/v1/annotations/{0}'.format(response.data['id'])
         self.assertTrue(
@@ -138,36 +162,39 @@ class AnnotationViewTests(APITestCase):
         self.assertEqual(annotation['user'], self.user.id, "'user' field should not be used by API")
         self.assertEqual(annotation['consumer'], self.user.consumer.key, "'consumer' field should not be used by API")
 
-    def test_create_should_not_update(self):
+    def test_create_must_not_update(self):
         """
-        Create should always create a new annotation.
+        Create must not update annotations.
         """
         payload = {'name': 'foo'}
         response = self.client.post(reverse('api:v1:annotations'), payload, format='json', **self.headers)
         annotation_id = response.data['id']
 
-        # Try and update the annotation using the create API.
+        # Try to update the annotation using the create API.
         update_payload = {'name': 'bar', 'id': annotation_id}
         response = self.client.post(reverse('api:v1:annotations'), update_payload, format='json', **self.headers)
 
-        self.assertNotEqual(annotation_id, response.data['id'], "create should always create a new annotation")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        annotation_1 = self._get_annotation(annotation_id)
-        annotation_2 = self._get_annotation(response.data['id'])
+        # Check if annotation was not updated.
+        annotation = self._get_annotation(annotation_id)
+        self.assertEqual(annotation['name'], 'foo')
 
-        self.assertEqual(annotation_1['name'], 'foo')
-        self.assertEqual(annotation_2['name'], 'bar')
-
-    def test_read(self):
+    @patch('annotator.elasticsearch.datetime')
+    def test_read(self, mock_datetime):
         """
         Ensure we can get an existing annotation.
         """
-        kwargs = dict(text=u"Foo", id='123')
-        self._create_annotation(**kwargs)
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        mock_datetime.datetime.now.return_value.isoformat.return_value = "2014-11-26T00:00:00+00:00"
+        note = self.payload
+        note['id'] = "test_id"
+        self._create_annotation(**note)
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': "test_id"})
         response = self.client.get(url, **self.headers)
-        self.assertEqual(response.data['id'], '123', "annotation id should be returned in response")
-        self.assertEqual(response.data['text'], "Foo", "annotation text should be returned in response")
+        self.expected_note['id'] = 'test_id'
+        self.expected_note['consumer'] = 'mockconsumer'
+        self.assertEqual(response.data, self.expected_note)
 
     def test_read_notfound(self):
         """
@@ -192,7 +219,9 @@ class AnnotationViewTests(APITestCase):
 
     def test_update_without_payload_id(self):
         """
-        Test if there is no id in payload then no update will be performed.
+        Test if update will be performed when there is no id in payload.
+
+        Use id from URL, regardless of what arrives in JSON payload.
         """
         self._create_annotation(text=u"Foo", id='123')
 
@@ -205,7 +234,9 @@ class AnnotationViewTests(APITestCase):
 
     def test_update_with_wrong_payload_id(self):
         """
-        Test if there is wrong id in payload then no update will be performed.
+        Test if update will be performed when there is wrong id in payload.
+
+        Use id from URL, regardless of what arrives in JSON payload.
         """
         self._create_annotation(text=u"Foo", id='123')
 

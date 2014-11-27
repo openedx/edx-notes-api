@@ -66,6 +66,9 @@ class AnnotationListView(APIView):
 
         Returns 400 request if bad payload is sent or it was empty object.
         """
+        if 'id' in request.DATA:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         filtered_payload = _filter_input(request.DATA, CREATE_FILTER_FIELDS)
 
         if len(filtered_payload) == 0:
