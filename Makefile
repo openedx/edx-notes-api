@@ -5,8 +5,8 @@ test: clean test-local coverage
 test-local:
 	./manage.py test --settings=notesserver.settings.test --with-coverage --with-ignore-docstrings \
 		--exclude-dir=notesserver/settings --cover-inclusive --cover-branches \
-		--cover-html --cover-html-dir=coverage/html/ \
-		--cover-xml --cover-xml-file=coverage/coverage.xml \
+		--cover-html --cover-html-dir=build/coverage/html/ \
+		--cover-xml --cover-xml-file=build/coverage/coverage.xml \
 		$(foreach package,$(PACKAGES),--cover-package=$(package)) \
 		$(PACKAGES)
 
@@ -24,11 +24,11 @@ quality:
 	pylint $(PACKAGES)
 
 diff-coverage:
-	diff-cover coverage/coverage.xml --html-report coverage/diff_cover.html
+	diff-cover coverage/coverage.xml --html-report build/coverage/diff_cover.html
 
 diff-quality:
-	diff-quality --violations=pep8 --html-report coverage/diff_quality_pep8.html
-	diff-quality --violations=pylint --html-report coverage/diff_quality_pylint.html
+	diff-quality --violations=pep8 --html-report build/coverage/diff_quality_pep8.html
+	diff-quality --violations=pylint --html-report build/coverage/diff_quality_pylint.html
 
 coverage: diff-coverage diff-quality
 
