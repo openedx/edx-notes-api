@@ -133,9 +133,9 @@ class AnnotationViewTests(APITestCase):
         """
         self.payload['created'] = 'abc'
         response = self.client.post(reverse('api:v1:annotations'), self.payload, format='json', **self.headers)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         annotation = self._get_annotation(response.data['id'])
-
         self.assertNotEqual(annotation['created'], 'abc', "annotation 'created' field should not be used by API")
 
     def test_create_ignore_updated(self):
@@ -144,9 +144,9 @@ class AnnotationViewTests(APITestCase):
         """
         self.payload['updated'] = 'abc'
         response = self.client.post(reverse('api:v1:annotations'), self.payload, format='json', **self.headers)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         annotation = self._get_annotation(response.data['id'])
-
         self.assertNotEqual(annotation['updated'], 'abc', "annotation 'updated' field should not be used by API")
 
     @unittest.skip("Unskip when auth will be done.")
@@ -192,6 +192,8 @@ class AnnotationViewTests(APITestCase):
 
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': "test_id"})
         response = self.client.get(url, **self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         self.expected_note['id'] = 'test_id'
         self.expected_note['consumer'] = 'mockconsumer'
         self.assertEqual(response.data, self.expected_note)
@@ -212,8 +214,9 @@ class AnnotationViewTests(APITestCase):
         payload = {'id': '123', 'text': 'Bar'}
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
         response = self.client.put(url, payload, format='json')
-        annotation = self._get_annotation('123')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        annotation = self._get_annotation('123')
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
         self.assertEqual(response.data['text'], "Bar", "update annotation should be returned in response")
 
@@ -221,13 +224,14 @@ class AnnotationViewTests(APITestCase):
         """
         Test if update will be performed when there is no id in payload.
 
-        Use id from URL, regardless of what arrives in JSON payload.
+        Tests if id is used from URL, regardless of what arrives in JSON payload.
         """
         self._create_annotation(text=u"Foo", id='123')
 
         payload = {'text': 'Bar'}
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
         response = self.client.put(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         annotation = self._get_annotation('123')
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
@@ -236,13 +240,14 @@ class AnnotationViewTests(APITestCase):
         """
         Test if update will be performed when there is wrong id in payload.
 
-        Use id from URL, regardless of what arrives in JSON payload.
+        Tests if id is used from URL, regardless of what arrives in JSON payload.
         """
         self._create_annotation(text=u"Foo", id='123')
 
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
         payload = {'text': 'Bar', 'id': 'abc'}
         response = self.client.put(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         annotation = self._get_annotation('123')
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
@@ -280,12 +285,17 @@ class AnnotationViewTests(APITestCase):
         """
         Tests for search method.
         """
-        note_1 = self._create_annotation(text=u'Note 1', user=u'user_3')
-        note_2 = self._create_annotation(text=u'Note 2', user=u'user_2')
-        note_3 = self._create_annotation(text=u'Note 3', user=u'user_3')
+        note_1 = self._create_annotation(text=u'First one', user=u'user_3')
+        note_2 = self._create_annotation(text=u'Second note', user=u'user_2')
+        note_3 = self._create_annotation(text=u'Third note', user=u'user_3')
 
         results = self._get_search_results()
         self.assertEqual(results['total'], 3)
+
+        results = self._get_search_results("text=Second")
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(len(results['rows']), 1)
+        self.assertEqual(results['rows'][0]['text'], 'Second note')
 
         results = self._get_search_results('limit=1')
         self.assertEqual(results['total'], 3)
@@ -348,6 +358,7 @@ class AnnotationViewTests(APITestCase):
         """
         url = reverse('api:v1:annotations')
         response = self.client.get(url, **self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
 
     def test_read_all(self):
@@ -362,4 +373,5 @@ class AnnotationViewTests(APITestCase):
 
         url = reverse('api:v1:annotations')
         response = self.client.get(url, **self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
