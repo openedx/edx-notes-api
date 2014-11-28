@@ -31,8 +31,15 @@ class AnnotationSearchView(APIView):
 
         if 'offset' in params:
             kwargs['offset'] = _convert_to_int(params.pop('offset'))
-        if 'limit' in params:
+
+        if 'limit' in params and _convert_to_int(params['limit']) is not None:
             kwargs['limit'] = _convert_to_int(params.pop('limit'))
+        elif 'limit' in params and _convert_to_int(params['limit']) is None: # bad value
+            params.pop('limit')
+            kwargs['limit'] = settings.RESULTS_DEFAULT_SIZE
+        else:
+            # default
+            kwargs['limit'] = settings.RESULTS_DEFAULT_SIZE
 
         # All remaining parameters are considered searched fields.
         kwargs['query'] = params

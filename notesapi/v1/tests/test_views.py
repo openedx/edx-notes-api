@@ -305,18 +305,18 @@ class AnnotationViewTests(APITestCase):
         """
         Tests for limit query parameter for paging through results.
         """
-        for i in xrange(250):
+        for i in xrange(300):
             self._create_annotation(refresh=False)
 
         es.conn.indices.refresh(es.index)
 
-        # By default return 20. See RESULTS_DEFAULT_SIZE in annotator.
+        # By default return 25. See RESULTS_DEFAULT_SIZE in settings.
         result = self._get_search_results()
-        self.assertEqual(len(result['rows']), 20)
+        self.assertEqual(len(result['rows']), 25)
 
-        # Return maximum 200. See RESULTS_MAX_SIZE in annotator.
-        result = self._get_search_results('limit=250')
-        self.assertEqual(len(result['rows']), 200)
+        # Return maximum 250. See RESULTS_MAX_SIZE in settings.
+        result = self._get_search_results('limit=300')
+        self.assertEqual(len(result['rows']), 250)
 
         # Return minimum 0.
         result = self._get_search_results('limit=-10')
@@ -324,7 +324,7 @@ class AnnotationViewTests(APITestCase):
 
         # Ignore bogus values.
         result = self._get_search_results('limit=foobar')
-        self.assertEqual(len(result['rows']), 20)
+        self.assertEqual(len(result['rows']), 25)
 
     def test_search_offset(self):
         """
@@ -336,7 +336,7 @@ class AnnotationViewTests(APITestCase):
         es.conn.indices.refresh(es.index)
 
         result = self._get_search_results()
-        self.assertEqual(len(result['rows']), 20)
+        self.assertEqual(len(result['rows']), 25)
         first = result['rows'][0]
 
         result = self._get_search_results('offset=240')
@@ -344,12 +344,12 @@ class AnnotationViewTests(APITestCase):
 
         # ignore negative values
         result = self._get_search_results('offset=-10')
-        self.assertEqual(len(result['rows']), 20)
+        self.assertEqual(len(result['rows']), 25)
         self.assertEqual(result['rows'][0], first)
 
         # ignore bogus values
         result = self._get_search_results('offset=foobar')
-        self.assertEqual(len(result['rows']), 20)
+        self.assertEqual(len(result['rows']), 25)
         self.assertEqual(result['rows'][0], first)
 
     def test_read_all_no_annotations(self):
