@@ -1,5 +1,6 @@
 import os
 import json
+import sys
 
 DEBUG = False
 TEMPLATE_DEBUG = False
@@ -28,6 +29,56 @@ INSTALLED_APPS = (
 STATIC_URL = '/static/'
 
 WSGI_APPLICATION = 'notesserver.wsgi.application'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stderr,
+            'formatter': 'standard',
+        },
+    },
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s %(levelname)s %(process)d [%(name)s] %(filename)s:%(lineno)d - %(message)s',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'notesserver': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'elasticsearch.trace': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'elasticsearch': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': True
+        },
+        'annotator.elasticsearch': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': True
+        },
+        'urllib3': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+    },
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
