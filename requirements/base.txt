@@ -5,4 +5,3 @@ django-rest-swagger==0.2.0
 elasticsearch==1.2.0
 annotator==0.12.0
 django-cors-headers==0.13
--e git+https://github.com/edx/django-oauth2-provider.git@0.2.7-fork-edx-2#egg=django-oauth2-provider
