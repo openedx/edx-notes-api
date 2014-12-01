@@ -301,6 +301,21 @@ class AnnotationViewTests(APITestCase):
         self.assertEqual(results['total'], 3)
         self.assertEqual(len(results['rows']), 1)
 
+    def test_search_ordering(self):
+        """
+        Tests ordering of search results.
+
+        Sorting is by descending order (most recent first).
+        """
+        note_1 = self._create_annotation(text=u'First one', user=u'user_3')
+        note_2 = self._create_annotation(text=u'Second note', user=u'user_3')
+        note_3 = self._create_annotation(text=u'Third note', user=u'user_3')
+
+        results = self._get_search_results()
+        self.assertEqual(results['rows'][0]['text'], 'Third note')
+        self.assertEqual(results['rows'][1]['text'], 'Second note')
+        self.assertEqual(results['rows'][2]['text'], 'First one')
+
     def test_search_limit(self):
         """
         Tests for limit query parameter for paging through results.
