@@ -21,14 +21,14 @@ class AnnotationSearchView(APIView):
     """
     permission_classes = (AllowAny,)
 
-    def get(self, request, *args, **kwargs):
+    def get(self, *args, **kwargs):
         """
         Search annotations.
 
         This method supports the limit and offset query parameters for paging
         through results.
         """
-        params = request.QUERY_PARAMS.dict()
+        params = self.request.QUERY_PARAMS.dict()
 
         if 'offset' in params:
             kwargs['offset'] = _convert_to_int(params.pop('offset'))
@@ -57,26 +57,26 @@ class AnnotationListView(APIView):
     """
     permission_classes = (AllowAny,)
 
-    def get(self, request, *args, **kwargs):
+    def get(self, *args, **kwargs):
         """
         Get a list of all annotations.
         """
-        kwargs['query'] = request.QUERY_PARAMS.dict()
+        self.kwargs['query'] = self.request.QUERY_PARAMS.dict()
 
         annotations = Annotation.search(**kwargs)
 
         return Response(annotations)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, *args, **kwargs):
         """
         Create a new annotation.
 
         Returns 400 request if bad payload is sent or it was empty object.
         """
-        if 'id' in request.DATA:
+        if 'id' in self.request.DATA:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        filtered_payload = _filter_input(request.DATA, CREATE_FILTER_FIELDS)
+        filtered_payload = _filter_input(self.request.DATA, CREATE_FILTER_FIELDS)
 
         if len(filtered_payload) == 0:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -97,7 +97,7 @@ class AnnotationDetailView(APIView):
 
     UPDATE_FILTER_FIELDS = ('updated', 'created', 'user', 'consumer')
 
-    def get(self, request, *args, **kwargs):
+    def get(self, *args, **kwargs):
         """
         Get an existing annotation.
         """
@@ -109,7 +109,7 @@ class AnnotationDetailView(APIView):
 
         return Response(annotation)
 
-    def put(self, request, *args, **kwargs):
+    def put(self, *args, **kwargs):
         """
         Update an existing annotation.
         """
@@ -119,8 +119,8 @@ class AnnotationDetailView(APIView):
         if not annotation:
             return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
 
-        if request.DATA is not None:
-            updated = _filter_input(request.DATA, UPDATE_FILTER_FIELDS)
+        if self.request.DATA is not None:
+            updated = _filter_input(self.request.DATA, UPDATE_FILTER_FIELDS)
             updated['id'] = annotation_id  # use id from URL, regardless of what arrives in JSON payload.
 
             annotation.update(updated)
@@ -130,7 +130,7 @@ class AnnotationDetailView(APIView):
 
         return Response(annotation)
 
-    def delete(self, request, *args, **kwargs):
+    def delete(self, *args, **kwargs):
         """
         Delete an annotation.
         """

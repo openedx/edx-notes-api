@@ -24,7 +24,7 @@ class StatusView(APIView):
     """
     permission_classes = (AllowAny,)
 
-    def get(self, request):
+    def get(self, *args, **kwargs):
         """
         Service status.
         """
