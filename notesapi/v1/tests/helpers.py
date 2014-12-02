@@ -1,3 +1,9 @@
+import jwt
+from calendar import timegm
+from datetime import datetime, timedelta
+from django.conf import settings
+
+
 class MockConsumer(object):
     def __init__(self, key='mockconsumer'):
         self.key = key
@@ -19,3 +25,12 @@ class MockAuthenticator(object):
 
 def mock_authorizer(*args, **kwargs):
     return True
+
+def get_id_token(user):
+    now = datetime.utcnow()
+    return jwt.encode({
+        'aud': settings.CLIENT_ID,
+        'sub': user,
+        'iat': timegm(now.utctimetuple()),
+        'exp': timegm((now + timedelta(seconds=300)).utctimetuple()),
+        }, settings.CLIENT_SECRET)
