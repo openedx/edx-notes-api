@@ -7,6 +7,7 @@ TEMPLATE_DEBUG = False
 USE_TZ = True
 TIME_ZONE = 'UTC'
 
+# This value needs to be overriden in production.
 SECRET_KEY = '*^owi*4%!%9=#h@app!l^$jz8(c*q297^)4&4yn^#_m#fq=z#l'
 
 ROOT_URLCONF = 'notesserver.urls'
