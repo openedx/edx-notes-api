@@ -5,31 +5,43 @@ __ http://code.edx.org/
 edX Student Notes API |build-status| |coverage-status|
 ======================================================
 
-A skeleton that can be used as the basis for open-source edX repositories.
+This is a backend store for edX Student Notes.
 
-The ``README.rst`` file, should start with a brief description of the repository
-which sets it in the context of other repositories under the ``edx``
-organization. It should make clear where this fits in to the overall edX
-codebase.
+Overview
+--------
 
-Overview (please modify)
-------------------------
+The edX Notes API is designed to be compatible with the
+`Annotator <http://annotatorjs.org/>`__.
 
-The ``README.rst`` file should then provide an overview of the code in this
-repository, what the main components are and useful entry points for starting
-to understand the code in more detail.
+Getting Started
+---------------
 
+1. You'll need a recent version `ElasticSearch <http://elasticsearch.org>`__ (>=1.0.0)
+installed.
 
-Getting Started (please modify)
--------------------------------
+2. Install the requirements:
 
-The ``README.rst`` file should include a quick guide to getting up and running.
-This should be the simplest set of steps just to show that things are working.
+   ::
 
-Documentation (please modify)
------------------------------
+       $ make develop
 
-The docs for XXX is on Read The Docs:  https://XXX.readthedocs.org
+3. Create index and put mapping:
+
+   ::
+
+       $ make create-index
+
+4. Run the server:
+
+   ::
+
+       $ make run
+
+Running Tests
+-------------
+
+Run ``make validate`` install the requirements, run the tests, and run
+lint.
 
 License
 -------
