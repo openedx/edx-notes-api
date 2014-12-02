@@ -2,7 +2,6 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from rest_framework import status
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -16,7 +15,6 @@ class AnnotationSearchView(APIView):
     """
     Search annotations.
     """
-    permission_classes = (AllowAny,)
 
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -52,7 +50,6 @@ class AnnotationListView(APIView):
     """
     List all annotations or create.
     """
-    permission_classes = (AllowAny,)
 
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -90,7 +87,6 @@ class AnnotationDetailView(APIView):
     """
     Annotation detail view.
     """
-    permission_classes = (AllowAny,)
 
     UPDATE_FILTER_FIELDS = ('updated', 'created', 'user', 'consumer')
 

@@ -16,11 +16,11 @@ def root(request):  # pylint: disable=unused-argument
     })
 
 
+@permission_classes([AllowAny])
 class StatusView(APIView):
     """
     Determine if server is alive.
     """
-    permission_classes = (AllowAny,)
 
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
         """

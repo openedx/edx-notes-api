@@ -4,11 +4,17 @@ import sys
 
 DEBUG = False
 TEMPLATE_DEBUG = False
+DISABLE_TOKEN_CHECK = False
 USE_TZ = True
 TIME_ZONE = 'UTC'
 
 # This value needs to be overriden in production.
 SECRET_KEY = '*^owi*4%!%9=#h@app!l^$jz8(c*q297^)4&4yn^#_m#fq=z#l'
+
+# ID and Secret used for authenticating JWT Auth Tokens
+# should match those configured for `edx-notes` Client in EdX's /admin/oauth2/client/
+CLIENT_ID = 'edx-notes-id'
+CLIENT_SECRET = 'edx-notes-secret'
 
 ROOT_URLCONF = 'notesserver.urls'
 
@@ -78,12 +84,17 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True
         },
+        'notesapi.v1.permissions': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
     },
 }
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
+        'notesapi.v1.permissions.HasAccessToken'
     ]
 }
 
