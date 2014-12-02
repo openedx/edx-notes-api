@@ -25,7 +25,8 @@ class AnnotationSearchView(APIView):
         """
         Search annotations.
 
-        This method supports the limit and offset query parameters for paging through results.
+        This method supports the limit and offset query parameters for paging
+        through results.
         """
         params = request.QUERY_PARAMS.dict()
 
@@ -60,10 +61,9 @@ class AnnotationListView(APIView):
         """
         Get a list of all annotations.
         """
-        # TODO: get user when auth will be done.
-        user = None
+        kwargs['query'] = request.QUERY_PARAMS.dict()
 
-        annotations = Annotation.search(user)
+        annotations = Annotation.search(**kwargs)
 
         return Response(annotations)
 
