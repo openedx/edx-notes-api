@@ -5,8 +5,10 @@ from rest_framework.permissions import BasePermission
 
 logger = logging.getLogger(__name__)
 
+
 class TokenWrongIssuer(Exception):
     pass
+
 
 class HasAccessToken(BasePermission):
     """
