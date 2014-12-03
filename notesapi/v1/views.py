@@ -10,13 +10,10 @@ from rest_framework.decorators import api_view, permission_classes
 
 from annotator.annotation import Annotation
 
-from .permissions import HasAccessToken
-
 CREATE_FILTER_FIELDS = ('updated', 'created', 'consumer', 'id')
 UPDATE_FILTER_FIELDS = ('updated', 'created', 'user', 'consumer')
 
 
-@permission_classes((HasAccessToken,))
 class AnnotationSearchView(APIView):
     """
     Search annotations.
@@ -52,7 +49,6 @@ class AnnotationSearchView(APIView):
         return Response({'total': total, 'rows': results})
 
 
-@permission_classes((HasAccessToken,))
 class AnnotationListView(APIView):
     """
     List all annotations or create.
@@ -90,7 +86,6 @@ class AnnotationListView(APIView):
         return Response(annotation, status=status.HTTP_201_CREATED, headers={'Location': location})
 
 
-@permission_classes((HasAccessToken,))
 class AnnotationDetailView(APIView):
     """
     Annotation detail view.

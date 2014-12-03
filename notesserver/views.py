@@ -18,11 +18,11 @@ def root(request):
     })
 
 
+@permission_classes([AllowAny])
 class StatusView(APIView):
     """
     Determine if server is alive.
     """
-    permission_classes = (AllowAny,)
 
     def get(self, *args, **kwargs):
         """
