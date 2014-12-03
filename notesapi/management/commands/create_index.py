@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from annotator.annotation import Annotation
 
+
 class Command(BaseCommand):
     help = 'Creates the mapping in the index.'
 
