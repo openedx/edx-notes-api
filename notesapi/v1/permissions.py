@@ -13,6 +13,20 @@ class TokenWrongIssuer(Exception):
 class HasAccessToken(BasePermission):
     """
     Allow requests having valid ID Token.
+
+    https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-31
+    Expected Token:
+    Header {
+        "alg": "HS256",
+        "typ": "JWT"
+    }
+    Claims {
+        "sub": "<USER_ID>",
+        "exp": <EXPIRATION TIMESTAMP>,
+        "iat": <ISSUED TIMESTAMP>,
+        "aud": "<CLIENT ID"
+    }
+    Should be signed with CLIENT_SECRET
     """
     def has_permission(self, request, view):
         if getattr(settings, 'DISABLE_TOKEN_CHECK', False):
