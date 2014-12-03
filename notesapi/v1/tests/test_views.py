@@ -12,8 +12,9 @@ from rest_framework.test import APITestCase
 
 from annotator import annotation, es, auth
 from annotator.annotation import Annotation
-from .helpers import MockUser, get_id_token
+from .helpers import get_id_token
 
+TEST_USER = "test-user-id"
 
 class BaseAnnotationViewTests(APITestCase):
     """
@@ -26,13 +27,12 @@ class BaseAnnotationViewTests(APITestCase):
         annotation.Annotation.create_all()
         es.conn.cluster.health(wait_for_status='yellow')
 
-        self.user = MockUser(id="test-user-id")
-        token = get_id_token("test-user-id")
+        token = get_id_token(TEST_USER)
         self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
-        self.headers = {"user": "test-user-id"}
+        self.headers = {"user": TEST_USER}
 
         self.payload = {
-            "user": "test-user-id",
+            "user": TEST_USER,
             "usage_id": "test-usage-id",
             "course_id": "test-course-id",
             "text": "test note text",
@@ -50,7 +50,7 @@ class BaseAnnotationViewTests(APITestCase):
         self.expected_note = {
             "created": "2014-11-26T00:00:00+00:00",
             "updated": "2014-11-26T00:00:00+00:00",
-            "user": "test-user-id",
+            "user": TEST_USER,
             "usage_id": "test-usage-id",
             "course_id": "test-course-id",
             "text": "test note text",
@@ -74,7 +74,7 @@ class BaseAnnotationViewTests(APITestCase):
         Create annotation directly in elasticsearch.
         """
         opts = {
-            'user': "test-user-id",
+            'user': TEST_USER,
         }
         opts.update(kwargs)
         annotation = Annotation(**opts)
@@ -91,7 +91,7 @@ class BaseAnnotationViewTests(APITestCase):
         """
         Helper for search method.
         """
-        url = reverse('api:v1:annotations_search') + '?user=test-user-id&{}'.format(qs)
+        url = reverse('api:v1:annotations_search') + '?user=' + TEST_USER + '&{}'.format(qs)
         result = self.client.get(url)
         return result.data
 
@@ -124,7 +124,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
             "the response should have a Location header with the URL to read the annotation that was created"
         )
 
-        self.assertEqual(self.user.id, response.data['user'])
+        self.assertEqual(response.data['user'], TEST_USER)
 
     def test_create_ignore_created(self):
         """
@@ -407,7 +407,7 @@ class TokenTests(BaseAnnotationViewTests):
     url = reverse('api:v1:annotations')
     token_data = {
         'aud': settings.CLIENT_ID,
-        'sub': "test-user-id",
+        'sub': TEST_USER,
         'iat': timegm(datetime.utcnow().utctimetuple()),
         'exp': timegm((datetime.utcnow() + timedelta(seconds=300)).utctimetuple()),
     }
