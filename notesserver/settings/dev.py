@@ -12,10 +12,10 @@ es.host = ELASTICSEARCH_URL
 es.index = ELASTICSEARCH_INDEX
 
 # Number of rows to return by default in result.
-RESULTS_DEFAULT_SIZE = 25
+RESULTS_DEFAULT_SIZE = 1000
 
 # Max number of rows to return in result.
-RESULTS_MAX_SIZE = 250
+RESULTS_MAX_SIZE = 1100
 
 # Override default annotator-store elasticsearch settings.
 es.host = ELASTICSEARCH_URL
