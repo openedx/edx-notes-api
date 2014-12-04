@@ -5,11 +5,12 @@ services:
     - elasticsearch
 
 install:
-    - pip install -r requirements/test.py
+    - pip install -r requirements/test.txt
+    - git fetch origin master:refs/remotes/origin/master # https://github.com/edx/diff-cover#troubleshooting
     - pip install coveralls
 
 script:
-    - make test
+    - make validate
 
 after_success:
     - coveralls
