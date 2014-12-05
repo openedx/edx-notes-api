@@ -6,3 +6,4 @@ elasticsearch==1.2.0
 annotator==0.12.0
 django-cors-headers==0.13
 PyJWT==0.3.0
+lxml==3.4.0

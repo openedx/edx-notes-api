@@ -1,4 +1,5 @@
 import os
+from lxml import etree
 from django.core.management.base import BaseCommand
 from annotator.annotation import Annotation
 from annotator import es
@@ -33,24 +34,30 @@ class Command(BaseCommand):
         })
 
         start_offset = 0
-        number = 1
-        text_file = os.path.dirname(__file__) + "/text.txt"
-        with open(text_file, 'r') as text:
-            for word in self.words(text):
-                note["text"] = "Text number: {}".format(number)
+        note_number = 1
+        paragraph_number = 1
+        text_file = os.path.dirname(__file__) + "/Latin-Lipsum.html"
+        paragraphs = etree.parse(text_file).getroot().getchildren()
+        for paragraph in paragraphs:
+            for word in self.words(paragraph.text):
+
+                note["text"] = "Text number: {}".format(note_number)
                 note["quote"] = word
                 end_offset = start_offset + len(word)
                 note["ranges"][0]["startOffset"] = start_offset
                 note["ranges"][0]["endOffset"] = end_offset
+                ranges =  "/div[1]/div[1]/p[{}]".format(paragraph_number)
+                note["ranges"][0]["start"] = note["ranges"][0]["end"] = ranges
                 annotation = Annotation(note)
                 annotation.save(refresh=False)
                 start_offset = end_offset + 1
-                number += 1
+                note_number += 1
+
+            paragraph_number +=1
 
         es.conn.indices.refresh(es.index)
 
     def words(self, text):
-        for line in text:
-            for word in line.split():
+            for word in text.split():
                 yield word
 
