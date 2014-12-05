@@ -1,4 +1,5 @@
 PACKAGES = notesserver notesapi
+.PHONY: requirements
 
 validate: test.requirements test coverage
 
