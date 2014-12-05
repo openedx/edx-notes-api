@@ -55,7 +55,8 @@ class AnnotationListView(APIView):
         """
         Get a list of all annotations.
         """
-        self.kwargs['query'] = self.request.QUERY_PARAMS.dict()
+        kwargs['query'] = self.request.QUERY_PARAMS.dict()
+        kwargs['limit'] = settings.RESULTS_DEFAULT_SIZE
 
         annotations = Annotation.search(**kwargs)
 

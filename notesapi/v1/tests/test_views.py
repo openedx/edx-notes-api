@@ -362,7 +362,8 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
     def test_read_all_no_annotations(self):
         """
-        Tests list all annotations endpoint when no annotations are present in elasticsearch.
+        Tests list all annotations endpoint when no annotations are present in
+        elasticsearch.
         """
         url = reverse('api:v1:annotations')
         response = self.client.get(url, self.headers)
@@ -384,6 +385,22 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
 
+    def test_read_all_limit(self):
+        """
+        Tests list all annotations with limit query parameter.
+
+        Limit query parameter must be used from settings.
+        """
+        for i in xrange(250):
+            kwargs = {'text': 'Foo_{}'.format(i), 'id': str(i)}
+            self._create_annotation(refresh=False, **kwargs)
+
+        es.conn.indices.refresh(es.index)
+
+        url = reverse('api:v1:annotations')
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), settings.RESULTS_DEFAULT_SIZE)
 
 @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
 class AllowAllAnnotationViewTests(BaseAnnotationViewTests):
