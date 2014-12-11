@@ -8,5 +8,4 @@ urlpatterns = patterns(
     url(r'^annotations/$', AnnotationListView.as_view(), name='annotations'),
     url(r'^annotations/(?P<annotation_id>[a-zA-Z0-9_-]+)/?$', AnnotationDetailView.as_view(), name='annotations_detail'),
     url(r'^search/$', AnnotationSearchView.as_view(), name='annotations_search'),
-    url(r'^status/$', RedirectView.as_view(url=reverse_lazy('status')), name='status'),
 )
