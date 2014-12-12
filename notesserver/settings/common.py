@@ -16,6 +16,15 @@ SECRET_KEY = '*^owi*4%!%9=#h@app!l^$jz8(c*q297^)4&4yn^#_m#fq=z#l'
 CLIENT_ID = 'edx-notes-id'
 CLIENT_SECRET = 'edx-notes-secret'
 
+ELASTICSEARCH_URL = 'http://127.0.0.1:9200'
+ELASTICSEARCH_INDEX = 'edx-notes'
+
+# Number of rows to return by default in result.
+RESULTS_DEFAULT_SIZE = 25
+
+# Max number of rows to return in result.
+RESULTS_MAX_SIZE = 250
+
 ROOT_URLCONF = 'notesserver.urls'
 
 MIDDLEWARE_CLASSES = (
