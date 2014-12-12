@@ -16,6 +16,21 @@ def get_id_token(user):
         'exp': timegm((now + timedelta(seconds=300)).utctimetuple()),
     }, settings.CLIENT_SECRET)
 
+NOTE = {
+        "user": 'test-user-id',
+        "usage_id": "test-usage-id",
+        "course_id": "test-course-id",
+        "text": "test note text",
+        "quote": "test note quote",
+        "ranges": [
+            {
+                "start": "/p[1]",
+                "end": "/p[1]",
+                "startOffset": 0,
+                "endOffset": 10,
+            }
+        ],
+    }
 
 class AnnotationFactory(object):
     """
@@ -27,8 +42,8 @@ class AnnotationFactory(object):
         Create multiple notes directly in elasticsearch.
         """
         for i in xrange(1, number + 1):
-            kwargs = {'id': str(i), 'text': 'Text {}'.format(i)}
-            _create_annotation(refresh=False, **kwargs)
+            NOTE.update({'id': str(i), 'text': 'Text {}'.format(i)})
+            _create_annotation(refresh=False, **NOTE)
 
         es.conn.indices.refresh(es.index)
 
@@ -37,7 +52,6 @@ def _create_annotation(refresh=True, **kwargs):
     """
     Create annotation directly in elasticsearch.
     """
-    kwargs['user'] = 'test-user-id'
     return Annotation(**kwargs).save(refresh=refresh)
 
 

@@ -12,7 +12,7 @@ from rest_framework.test import APITestCase
 
 from annotator import es, auth
 from annotator.annotation import Annotation
-from .helpers import get_id_token, AnnotationFactory, _create_annotation, _get_annotation
+from .helpers import get_id_token, AnnotationFactory, _create_annotation, _get_annotation, NOTE
 
 TEST_USER = "test-user-id"
 
@@ -31,21 +31,7 @@ class BaseAnnotationViewTests(APITestCase):
         self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
         self.headers = {"user": TEST_USER}
 
-        self.payload = {
-            "user": TEST_USER,
-            "usage_id": "test-usage-id",
-            "course_id": "test-course-id",
-            "text": "test note text",
-            "quote": "test note quote",
-            "ranges": [
-                {
-                    "start": "/p[1]",
-                    "end": "/p[1]",
-                    "startOffset": 0,
-                    "endOffset": 10,
-                }
-            ],
-        }
+        self.payload = NOTE.copy()
 
         self.expected_note = {
             "created": "2014-11-26T00:00:00+00:00",
@@ -158,15 +144,13 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         Ensure we can get an existing annotation.
         """
         mock_datetime.datetime.now.return_value.isoformat.return_value = "2014-11-26T00:00:00+00:00"
-        note = self.payload
-        note['id'] = "test_id"
-        _create_annotation(**note)
+        AnnotationFactory.create()
 
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': "test_id"})
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 1})
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.expected_note['id'] = 'test_id'
+        self.expected_note.update({'id': '1', 'text': "Text 1"})
         self.assertEqual(response.data, self.expected_note)
 
     def test_read_notfound(self):
@@ -181,14 +165,14 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Ensure we can update an existing annotation.
         """
-        _create_annotation(text=u"Foo", id='123', created='2014-10-10')
-        payload = {'id': '123', 'text': 'Bar'}
+        AnnotationFactory.create()
+        payload = {'id': 1, 'text': 'Bar'}
         payload.update(self.headers)
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 1})
         response = self.client.put(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        annotation = _get_annotation('123')
+        annotation = _get_annotation(1)
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
         self.assertEqual(response.data['text'], "Bar", "update annotation should be returned in response")
 
@@ -198,15 +182,15 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         Tests if id is used from URL, regardless of what arrives in JSON payload.
         """
-        _create_annotation(text=u"Foo", id='123')
+        AnnotationFactory.create()
 
         payload = {'text': 'Bar'}
         payload.update(self.headers)
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 1})
         response = self.client.put(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        annotation = _get_annotation('123')
+        annotation = _get_annotation(1)
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
 
     def test_update_with_wrong_payload_id(self):
@@ -215,15 +199,15 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         Tests if id is used from URL, regardless of what arrives in JSON payload.
         """
-        _create_annotation(text=u"Foo", id='123')
+        AnnotationFactory.create()
 
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 1})
         payload = {'text': 'Bar', 'id': 'abc'}
         payload.update(self.headers)
         response = self.client.put(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        annotation = _get_annotation('123')
+        annotation = _get_annotation(1)
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
 
     def test_update_notfound(self):
@@ -245,7 +229,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         response = self.client.delete(url, self.headers)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
-        self.assertEqual(_get_annotation('1'), None, "annotation wasn't deleted in db")
+        self.assertEqual(_get_annotation(1), None, "annotation wasn't deleted in db")
 
     def test_delete_notfound(self):
         """
