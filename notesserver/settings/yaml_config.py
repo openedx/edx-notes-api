@@ -1,10 +1,20 @@
-import annotator
-from annotator import es
+import yaml
+
 from .common import *
 
-DEBUG = True
+DEBUG = False
+TEMPLATE_DEBUG = False
 
-ELASTICSEARCH_INDEX = 'edx-notes-dev'
+ALLOWED_HOSTS = ['*']
+
+DISABLE_TOKEN_CHECK = False
+
+CONFIG_ROOT = os.environ.get('CONFIG_ROOT')
+
+with open(CONFIG_ROOT / "edx-notes-api.yml") as yaml_file:
+    config_from_yaml = yaml.load(yaml_file)
+
+vars().update(config_from_yaml)
 
 ###############################################################################
 # Override default annotator-store elasticsearch settings.
