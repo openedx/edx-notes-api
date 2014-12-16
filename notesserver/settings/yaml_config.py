@@ -2,14 +2,16 @@ import yaml
 
 from .common import *
 
+###############################################################################
+# Explicitly declare here in case someone changes common.py.
+###############################################################################
 DEBUG = False
 TEMPLATE_DEBUG = False
-
 ALLOWED_HOSTS = ['*']
-
 DISABLE_TOKEN_CHECK = False
+###############################################################################
 
-CONFIG_ROOT = os.environ.get('CONFIG_ROOT')
+CONFIG_ROOT = os.environ.get('EDXNOTES_CONFIG_ROOT')
 
 with open(CONFIG_ROOT / "edx-notes-api.yml") as yaml_file:
     config_from_yaml = yaml.load(yaml_file)
