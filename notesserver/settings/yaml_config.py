@@ -1,6 +1,8 @@
 import yaml
+import annotator
+from annotator import es
 
-from .common import *
+from .common import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
 ###############################################################################
 # Explicitly declare here in case someone changes common.py.
