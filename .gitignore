@@ -5,3 +5,6 @@
 .coverage
 .tox
 coverage/
+
+# Sqlite Database
+*.db

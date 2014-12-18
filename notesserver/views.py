@@ -1,7 +1,13 @@
+import traceback
+import datetime
+from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+
+from elasticsearch.exceptions import TransportError
+from annotator import es
 
 
 @api_view(['GET'])
@@ -16,14 +22,37 @@ def root(request):  # pylint: disable=unused-argument
     })
 
 
+@api_view(['GET'])
 @permission_classes([AllowAny])
-class StatusView(APIView):
+def heartbeat(request):  # pylint: disable=unused-argument
     """
-    Determine if server is alive.
+    ElasticSearch is reachable and ready to handle requests.
     """
+    if es.conn.ping():
+        return Response({"OK": True})
+    else:
+        return Response({"OK": False, "check": "es"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def get(self, *args, **kwargs):  # pylint: disable=unused-argument
-        """
-        Service status.
-        """
-        return Response()
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def selftest(request):  # pylint: disable=unused-argument
+    """
+    Manual test endpoint.
+    """
+    start = datetime.datetime.now()
+    try:
+        es_status = es.conn.info()
+    except TransportError:
+        return Response(
+            {"es_error": traceback.format_exc()},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+    end = datetime.datetime.now()
+    delta = end - start
+
+    return Response({
+        "es": es_status,
+        "time_elapsed": int(delta.total_seconds() * 1000)  # In milliseconds.
+    })
