@@ -1,8 +1,12 @@
 Django==1.7.1
 requests==2.4.3
-djangorestframework==2.4.4
+djangorestframework==3.0.2
 django-rest-swagger==0.2.0
-elasticsearch==1.2.0
-annotator==0.12.0
+django-haystack==2.3.1
+elasticsearch==0.4.5  # only 0.4 works for ES 0.90
 django-cors-headers==0.13
 PyJWT==0.3.0
+MySQL-python==1.2.5  # GPL License
+gunicorn==19.1.1     # MIT
+path.py==3.0.1
+python-dateutil==2.4.0

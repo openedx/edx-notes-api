@@ -1,5 +1,3 @@
-from annotator import es
-import annotator
 from .common import *
 
 DATABASES = {
@@ -9,15 +7,37 @@ DATABASES = {
 }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
+DISABLE_TOKEN_CHECK = False
 INSTALLED_APPS += ('django_nose',)
 
-ELASTICSEARCH_INDEX = 'edx-notes-test'
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'notesserver.highlight.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'notes_index_test',
+    },
+}
 
-###############################################################################
-# Override default annotator-store elasticsearch settings.
-###############################################################################
-es.host = ELASTICSEARCH_URL
-es.index = ELASTICSEARCH_INDEX
-annotator.elasticsearch.RESULTS_MAX_SIZE = RESULTS_MAX_SIZE
-###############################################################################
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stderr,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'elasticsearch.trace': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False
+        }
+    },
+}

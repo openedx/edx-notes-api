@@ -3,9 +3,16 @@ PACKAGES = notesserver notesapi
 
 validate: test.requirements test coverage
 
+ifeq ($(ESVER),-)
+test_settings = notesserver.settings.test_es_disabled
+else
+test_settings = notesserver.settings.test
+endif
+
 test: clean
-	./manage.py test --settings=notesserver.settings.test --with-coverage --with-ignore-docstrings \
+	./manage.py test --settings=$(test_settings) --with-coverage --with-ignore-docstrings \
 		--exclude-dir=notesserver/settings --cover-inclusive --cover-branches \
+		--ignore-files=search_indexes.py --ignore-files=highlight.py\
 		--cover-html --cover-html-dir=build/coverage/html/ \
 		--cover-xml --cover-xml-file=build/coverage/coverage.xml \
 		$(foreach package,$(PACKAGES),--cover-package=$(package)) \
@@ -34,12 +41,15 @@ diff-quality:
 coverage: diff-coverage diff-quality
 
 create-index:
-	python manage.py create_index
+	python manage.py rebuild_index
 
 requirements:
 	pip install -q -r requirements/base.txt --exists-action=w
 
 test.requirements: requirements
 	pip install -q -r requirements/test.txt --exists-action=w
+	@# unicode QUERY_PARAMS are being improperly decoded in test client
+	@# remove after https://github.com/tomchristie/django-rest-framework/issues/1891 is fixed
+	pip install -q -e git+https://github.com/tymofij/django-rest-framework.git@bugfix/test-unicode-query-params#egg=djangorestframework
 
 develop: test.requirements

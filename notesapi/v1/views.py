@@ -1,49 +1,85 @@
+import logging
+import json
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from annotator.annotation import Annotation
+from notesapi.v1.models import Note
 
-CREATE_FILTER_FIELDS = ('updated', 'created', 'consumer', 'id')
-UPDATE_FILTER_FIELDS = ('updated', 'created', 'user', 'consumer')
+if not settings.ES_DISABLED:
+    from notesserver.highlight import SearchQuerySet
+
+log = logging.getLogger(__name__)
 
 
 class AnnotationSearchView(APIView):
     """
     Search annotations.
     """
-
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
-        Search annotations.
+        Search annotations in most appropriate storage
+        """
+        # search in DB when ES is not available or there is no need to bother it
+        if settings.ES_DISABLED or 'text' not in self.request.QUERY_PARAMS.dict():
+            results = self.get_from_db(*args, **kwargs)
+        else:
+            results = self.get_from_es(*args, **kwargs)
+        return Response({'total': len(results), 'rows': results})
 
-        This method supports the limit and offset query parameters for paging
-        through results.
+    def get_from_db(self, *args, **kwargs):  # pylint: disable=unused-argument
+        """
+        Search annotations in database
         """
         params = self.request.QUERY_PARAMS.dict()
+        query = Note.objects.filter(
+            **{f: v for (f, v) in params.items() if f in ('course_id', 'usage_id')}
+        ).order_by('-updated')
 
-        if 'offset' in params:
-            kwargs['offset'] = _convert_to_int(params.pop('offset'))
+        if 'user' in params:
+            query = query.filter(user_id=params['user'])
 
-        if 'limit' in params and _convert_to_int(params['limit']) is not None:
-            kwargs['limit'] = _convert_to_int(params.pop('limit'))
-        elif 'limit' in params and _convert_to_int(params['limit']) is None:  # bad value
-            params.pop('limit')
-            kwargs['limit'] = settings.RESULTS_DEFAULT_SIZE
-        else:
-            # default
-            kwargs['limit'] = settings.RESULTS_DEFAULT_SIZE
+        if 'text' in params:
+            query = query.filter(text__icontains=params['text'])
 
-        # All remaining parameters are considered searched fields.
-        kwargs['query'] = params
+        return [note.as_dict() for note in query]
 
-        results = Annotation.search(**kwargs)
-        total = Annotation.count(**kwargs)
+    def get_from_es(self, *args, **kwargs):  # pylint: disable=unused-argument
+        """
+        Search annotations in ElasticSearch
+        """
+        params = self.request.QUERY_PARAMS.dict()
+        query = SearchQuerySet().models(Note).filter(
+            **{f: v for (f, v) in params.items() if f in ('user', 'course_id', 'usage_id', 'text')}
+        ).order_by('-updated')
 
-        return Response({'total': total, 'rows': results})
+        if params.get('highlight'):
+            tag = params.get('highlight_tag', 'em')
+            klass = params.get('highlight_class')
+            opts = {
+                'pre_tags': ['<{tag}{klass_str}>'.format(
+                    tag=tag,
+                    klass_str=' class="{}"'.format(klass) if klass else ''
+                )],
+                'post_tags': ['</{tag}>'.format(tag=tag)],
+            }
+            query = query.highlight(**opts)
+
+        results = []
+        for item in query:
+            note_dict = item.get_stored_fields()
+            note_dict['ranges'] = json.loads(item.ranges)
+            note_dict['id'] = str(item.pk)
+            if item.highlighted:
+                note_dict['text'] = item.highlighted[0]
+            results.append(note_dict)
+
+        return results
 
 
 class AnnotationListView(APIView):
@@ -55,11 +91,14 @@ class AnnotationListView(APIView):
         """
         Get a list of all annotations.
         """
-        self.kwargs['query'] = self.request.QUERY_PARAMS.dict()
+        params = self.request.QUERY_PARAMS.dict()
 
-        annotations = Annotation.search(**kwargs)
+        if 'course_id' not in params:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(annotations)
+        results = Note.objects.filter(course_id=params['course_id'], user_id=params['user']).order_by('-updated')
+
+        return Response([result.as_dict() for result in results])
 
     def post(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -70,17 +109,18 @@ class AnnotationListView(APIView):
         if 'id' in self.request.DATA:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        filtered_payload = _filter_input(self.request.DATA, CREATE_FILTER_FIELDS)
-
-        if len(filtered_payload) == 0:
+        try:
+            note = Note.create(self.request.DATA)
+            note.full_clean()
+        except ValidationError as error:
+            log.debug(error, exc_info=True)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        annotation = Annotation(filtered_payload)
-        annotation.save(refresh=True)
+        note.save()
 
-        location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation['id']})
+        location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note.id})
 
-        return Response(annotation, status=status.HTTP_201_CREATED, headers={'Location': location})
+        return Response(note.as_dict(), status=status.HTTP_201_CREATED, headers={'Location': location})
 
 
 class AnnotationDetailView(APIView):
@@ -94,66 +134,49 @@ class AnnotationDetailView(APIView):
         """
         Get an existing annotation.
         """
-        annotation_id = self.kwargs.get('annotation_id')
-        annotation = Annotation.fetch(annotation_id)
+        note_id = self.kwargs.get('annotation_id')
 
-        if not annotation:
-            return Response(annotation, status=status.HTTP_404_NOT_FOUND)
+        try:
+            note = Note.objects.get(id=note_id)
+        except Note.DoesNotExist:
+            return Response('Annotation not found!', status=status.HTTP_404_NOT_FOUND)
 
-        return Response(annotation)
+        return Response(note.as_dict())
 
     def put(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
         Update an existing annotation.
         """
-        annotation_id = self.kwargs.get('annotation_id')
-        annotation = Annotation.fetch(annotation_id)
+        note_id = self.kwargs.get('annotation_id')
 
-        if not annotation:
+        try:
+            note = Note.objects.get(id=note_id)
+        except Note.DoesNotExist:
             return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
 
-        if self.request.DATA is not None:
-            updated = _filter_input(self.request.DATA, UPDATE_FILTER_FIELDS)
-            updated['id'] = annotation_id  # use id from URL, regardless of what arrives in JSON payload.
+        try:
+            note.text = self.request.data['text']
+            note.full_clean()
+        except KeyError as error:
+            log.debug(error, exc_info=True)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            annotation.update(updated)
+        note.save()
 
-            refresh = self.kwargs.get('refresh') != 'false'
-            annotation.save(refresh=refresh)
-
-        return Response(annotation)
+        return Response(note.as_dict())
 
     def delete(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
         Delete an annotation.
         """
-        annotation_id = self.kwargs.get('annotation_id')
-        annotation = Annotation.fetch(annotation_id)
+        note_id = self.kwargs.get('annotation_id')
 
-        if not annotation:
-            return Response('Annotation not found! No delete performed.', status=status.HTTP_404_NOT_FOUND)
+        try:
+            note = Note.objects.get(id=note_id)
+        except Note.DoesNotExist:
+            return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
 
-        annotation.delete()
+        note.delete()
 
         # Annotation deleted successfully.
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-def _filter_input(annotation, fields):
-    """
-    Pop given fields from annotation.
-    """
-    for field in fields:
-        annotation.pop(field, None)
-
-    return annotation
-
-
-def _convert_to_int(value, default=None):
-    """
-    Convert given value to int.
-    """
-    try:
-        return int(value or default)
-    except ValueError:
-        return default

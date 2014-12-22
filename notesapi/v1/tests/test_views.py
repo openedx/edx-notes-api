@@ -1,31 +1,35 @@
+# -*- coding: utf-8 -*-
 import jwt
+import unittest
 from calendar import timegm
 from datetime import datetime, timedelta
 from mock import patch
-import unittest
 
+from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.http import QueryDict
 
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from annotator import es, auth
-from annotator.annotation import Annotation
 from .helpers import get_id_token
 
-TEST_USER = "test-user-id"
+TEST_USER = "test_user_id"
+
+if not settings.ES_DISABLED:
+    import haystack
+else:
+    def call_command(*args, **kwargs):
+        pass
+
 
 class BaseAnnotationViewTests(APITestCase):
     """
     Abstract class for testing annotation views.
     """
     def setUp(self):
-        assert Annotation.es.host == settings.ELASTICSEARCH_URL
-        assert Annotation.es.index == settings.ELASTICSEARCH_INDEX
-
-        Annotation.create_all()
-        es.conn.cluster.health(wait_for_status='yellow')
+        call_command('clear_index', interactive=False)
 
         token = get_id_token(TEST_USER)
         self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
@@ -47,66 +51,36 @@ class BaseAnnotationViewTests(APITestCase):
             ],
         }
 
-        self.expected_note = {
-            "created": "2014-11-26T00:00:00+00:00",
-            "updated": "2014-11-26T00:00:00+00:00",
-            "user": TEST_USER,
-            "usage_id": "test-usage-id",
-            "course_id": "test-course-id",
-            "text": "test note text",
-            "quote": "test note quote",
-            "ranges": [
-                {
-                    "start": "/p[1]",
-                    "end": "/p[1]",
-                    "startOffset": 0,
-                    "endOffset": 10,
-                }
-            ],
-            "permissions": {"read": ["group:__consumer__"]},
-        }
-
-    def tearDown(self):
-        Annotation.drop_all()
-
-    def _create_annotation(self, refresh=True, **kwargs):
+    def _create_annotation(self, **kwargs):
         """
-        Create annotation directly in elasticsearch.
+        Create annotation
         """
-        opts = {
-            'user': TEST_USER,
-        }
+        opts = self.payload.copy()
         opts.update(kwargs)
-        annotation = Annotation(**opts)
-        annotation.save(refresh=refresh)
-        return annotation
+        url = reverse('api:v1:annotations')
+        response = self.client.post(url, opts, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        return response.data.copy()
 
     def _get_annotation(self, annotation_id):
         """
-        Fetch annotation directly from elasticsearch.
+        Fetch annotation
         """
-        return Annotation.fetch(annotation_id)
-
-    def _get_search_results(self, qs=''):
-        """
-        Helper for search method.
-        """
-        url = reverse('api:v1:annotations_search') + '?user=' + TEST_USER + '&{}'.format(qs)
-        result = self.client.get(url)
-        return result.data
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation_id})
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        return response.data
 
 
-class AnnotationViewTests(BaseAnnotationViewTests):
+class AnnotationListViewTests(BaseAnnotationViewTests):
     """
-    Test annotation views, checking permissions
+    Test annotation creation and listing by user and course
     """
 
-    @patch('annotator.elasticsearch.datetime')
-    def test_create_note(self, mock_datetime):
+    def test_create_note(self):
         """
         Ensure we can create a new note.
         """
-        mock_datetime.datetime.now.return_value.isoformat.return_value = "2014-11-26T00:00:00+00:00"
 
         url = reverse('api:v1:annotations')
         response = self.client.post(url, self.payload, format='json')
@@ -115,8 +89,12 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         annotation = response.data.copy()
         self.assertIn('id', annotation)
-        annotation.pop('id')
-        self.assertEqual(annotation, self.expected_note)
+        self.assertEqual(type(annotation['id']), str)
+        del annotation['id']
+        del annotation['updated']
+        del annotation['created']
+
+        self.assertEqual(annotation, self.payload)
 
         expected_location = '/api/v1/annotations/{0}'.format(response.data['id'])
         self.assertTrue(
@@ -130,7 +108,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Test if annotation 'created' field is not used by API.
         """
-        self.payload['created'] = 'abc'
+        self.payload['created'] = '2015-01-05T11:46:58.837059+00:00'
         response = self.client.post(reverse('api:v1:annotations'), self.payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -141,9 +119,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Test if annotation 'updated' field is not used by API.
         """
-        self.payload['updated'] = 'abc'
-        payload = self.payload
-        payload.update(self.headers)
+        self.payload['updated'] = '2015-01-05T11:46:58.837059+00:00'
         response = self.client.post(reverse('api:v1:annotations'), self.payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -154,38 +130,121 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Create must not update annotations.
         """
-        payload = {'name': 'foo'}
-        payload.update(self.headers)
-        response = self.client.post(reverse('api:v1:annotations'), payload, format='json')
-        annotation_id = response.data['id']
+        note = self._create_annotation(**self.payload)
 
         # Try to update the annotation using the create API.
-        update_payload = {'name': 'bar', 'id': annotation_id}
-        update_payload.update(self.headers)
+        update_payload = note
+        update_payload.update({'text': 'baz'})
         response = self.client.post(reverse('api:v1:annotations'), update_payload, format='json')
-
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Check if annotation was not updated.
-        annotation = self._get_annotation(annotation_id)
-        self.assertEqual(annotation['name'], 'foo')
+        annotation = self._get_annotation(note['id'])
+        self.assertEqual(annotation['text'], 'test note text')
 
-    @patch('annotator.elasticsearch.datetime')
-    def test_read(self, mock_datetime):
+    def test_create_multirange(self):
         """
-        Ensure we can get an existing annotation.
+        Create a note that has several ranges and read it
         """
-        mock_datetime.datetime.now.return_value.isoformat.return_value = "2014-11-26T00:00:00+00:00"
-        note = self.payload
-        note['id'] = "test_id"
-        self._create_annotation(**note)
+        note = self.payload.copy()
+        ranges = [
+            {
+                "start": "/p[1]",
+                "end": "/p[1]",
+                "startOffset": 0,
+                "endOffset": 10,
+            },
+            {
+                "start": "/p[2]",
+                "end": "/p[2]",
+                "startOffset": 20,
+                "endOffset": 22,
+            }
+        ]
 
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': "test_id"})
+        note['ranges'] = ranges
+        note_id = self._create_annotation(**note)['id']
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note_id})
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.expected_note['id'] = 'test_id'
-        self.assertEqual(response.data, self.expected_note)
+        annotation = response.data
+        del annotation['id']
+        del annotation['updated']
+        del annotation['created']
+        self.assertEqual(annotation, note)
+
+    def test_read_all_no_annotations(self):
+        """
+        Tests list all annotations endpoint when no annotations are present in database.
+        """
+        headers = self.headers.copy()
+        headers["course_id"] = "a/b/c"
+        response = self.client.get(reverse('api:v1:annotations'), headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
+
+    def test_read_all(self):
+        """
+        Tests list all annotations.
+        """
+        for i in xrange(5):
+            kwargs = {'text': 'Foo_{}'.format(i)}
+            self._create_annotation(**kwargs)
+
+        headers = self.headers.copy()
+        headers["course_id"] = "test-course-id"
+        response = self.client.get(reverse('api:v1:annotations'), headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
+
+    def test_read_all_ordering(self):
+        """
+        Tests ordering of listing of all notes.
+
+        Sorting is by descending order (most recent first).
+        """
+        self._create_annotation(text=u'First one')
+        self._create_annotation(text=u'Second note')
+        self._create_annotation(text=u'Third note')
+
+        headers = self.headers.copy()
+        headers["course_id"] = "test-course-id"
+        results = self.client.get(reverse('api:v1:annotations'), headers).data
+
+        self.assertEqual(results[0]['text'], 'Third note')
+        self.assertEqual(results[1]['text'], 'Second note')
+        self.assertEqual(results[2]['text'], 'First one')
+
+    def test_read_all_no_query_param(self):
+        """
+        Tests list all annotations when course_id query param is not present.
+        """
+        response = self.client.get(reverse('api:v1:annotations'), self.headers)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class AnnotationDetailViewTests(BaseAnnotationViewTests):
+    """
+    Test one annotation updating, reading and deleting
+    """
+    def test_read(self):
+        """
+        Ensure we can get an existing annotation.
+        """
+        note_id = self._create_annotation(**self.payload)['id']
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note_id})
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        annotation = response.data
+        self.assertEqual(type(annotation['id']), str)
+        del annotation['id']
+        del annotation['updated']
+        del annotation['created']
+        self.assertEqual(annotation, self.payload)
 
     def test_read_notfound(self):
         """
@@ -199,16 +258,30 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Ensure we can update an existing annotation.
         """
-        self._create_annotation(text=u"Foo", id='123', created='2014-10-10')
-        payload = {'id': '123', 'text': 'Bar'}
+        data = self._create_annotation(text=u"Foo")
+        payload = self.payload.copy()
+        payload.update({'id': data['id'], 'text': 'Bar'})
         payload.update(self.headers)
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': data['id']})
         response = self.client.put(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        annotation = self._get_annotation('123')
+        annotation = self._get_annotation(data['id'])
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
         self.assertEqual(response.data['text'], "Bar", "update annotation should be returned in response")
+
+    def test_update_fail(self):
+        """
+        Ensure can not update an existing annotation with bad note.
+        """
+        data = self._create_annotation(text=u"Foo")
+
+        # Bad note. Only id and user is present.
+        payload = {'id': data['id'], 'user': TEST_USER}
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': data['id']})
+        response = self.client.put(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_without_payload_id(self):
         """
@@ -216,16 +289,16 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         Tests if id is used from URL, regardless of what arrives in JSON payload.
         """
-        self._create_annotation(text=u"Foo", id='123')
-
-        payload = {'text': 'Bar'}
+        note = self._create_annotation(text=u"Foo")
+        payload = self.payload.copy()
+        payload.update({'text': 'Bar'})
         payload.update(self.headers)
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
         response = self.client.put(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        annotation = self._get_annotation('123')
-        self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
+        updated_note = self._get_annotation(note['id'])
+        self.assertEqual(updated_note['text'], "Bar", "annotation wasn't updated in db")
 
     def test_update_with_wrong_payload_id(self):
         """
@@ -233,16 +306,16 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         Tests if id is used from URL, regardless of what arrives in JSON payload.
         """
-        self._create_annotation(text=u"Foo", id='123')
-
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
-        payload = {'text': 'Bar', 'id': 'abc'}
+        note = self._create_annotation(text=u"Foo")
+        payload = self.payload.copy()
+        payload.update({'text': 'Bar', 'id': 'xxx'})
         payload.update(self.headers)
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
         response = self.client.put(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        annotation = self._get_annotation('123')
-        self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
+        updated_note = self._get_annotation(note['id'])
+        self.assertEqual(updated_note['text'], "Bar", "annotation wasn't updated in db")
 
     def test_update_notfound(self):
         """
@@ -258,13 +331,14 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Ensure we can delete an existing annotation.
         """
-        kwargs = dict(text=u"Bar", id='456')
-        self._create_annotation(**kwargs)
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 456})
-        response = self.client.delete(url, self.headers)
+        note = self._create_annotation()
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
 
+        response = self.client.delete(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
-        self.assertEqual(self._get_annotation('456'), None, "annotation wasn't deleted in db")
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_notfound(self):
         """
@@ -274,121 +348,153 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         response = self.client.delete(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, "response should be 404 NOT FOUND")
 
+
+class AnnotationSearchViewTests(BaseAnnotationViewTests):
+    """
+    Test annotation searching by user, course_id, usage_id and text
+    """
+    def _get_search_results(self, **kwargs):
+        """
+        Helper for search method. All keyword parameters are passed in GET
+        """
+        q = QueryDict("user=" + TEST_USER, mutable=True)
+        q.update(kwargs)
+        url = reverse('api:v1:annotations_search') + '?{}'.format(q.urlencode())
+        result = self.client.get(url)
+        return result.data
+
     def test_search(self):
         """
         Tests for search method.
         """
-        note_1 = self._create_annotation(text=u'First one')
-        note_2 = self._create_annotation(text=u'Second note')
-        note_3 = self._create_annotation(text=u'Third note')
+        self._create_annotation(text=u'First one')
+        self._create_annotation(text=u'Second note')
+        note = self._create_annotation(text=u'Third note')
+        del note['created']
+        del note['updated']
 
         results = self._get_search_results()
+        last_note = results['rows'][0]
+        del last_note['created']
+        del last_note['updated']
+        self.assertEqual(last_note, note)
         self.assertEqual(results['total'], 3)
 
-        results = self._get_search_results("text=Second")
+        results = self._get_search_results(text="Second")
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(results['rows'][0]['text'], 'Second note')
 
-        results = self._get_search_results('limit=1')
-        self.assertEqual(results['total'], 3)
+    def test_search_deleted(self):
+        """
+        Tests for search method to not return deleted notes.
+        """
+        note = self._create_annotation(text=u'To-be-deleted one')
+        self._create_annotation(text=u'Second one')
+
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 2)
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
+        response = self.client.delete(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
+
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], 'Second one')
+
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
+    def test_search_highlight(self):
+        """
+        Tests highlighting.
+        """
+        self._create_annotation(text=u'First note')
+        self._create_annotation(text=u'Second note')
+
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 2)
+
+        results = self._get_search_results(text="first", highlight=True)
+        self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
+        self.assertEqual(results['rows'][0]['text'], '<em>First</em> note')
+
+        results = self._get_search_results(text="first", highlight=True, highlight_tag='tag')
+        self.assertEqual(results['rows'][0]['text'], '<tag>First</tag> note')
+
+        results = self._get_search_results(text="first", highlight=True, highlight_tag='tag', highlight_class='klass')
+        self.assertEqual(results['rows'][0]['text'], '<tag class="klass">First</tag> note')
 
     def test_search_ordering(self):
         """
         Tests ordering of search results.
 
-        Sorting is by descending order (most recent first).
+        Sorting is by descending order by updated field (most recent first).
         """
-        note_1 = self._create_annotation(text=u'First one')
-        note_2 = self._create_annotation(text=u'Second note')
-        note_3 = self._create_annotation(text=u'Third note')
+        self._create_annotation(text=u'First one')
+        note = self._create_annotation(text=u'Second note')
+        self._create_annotation(text=u'Third note')
+
+        payload = self.payload.copy()
+        payload.update({'id': note['id'], 'text': 'Updated Second Note'})
+        payload.update(self.headers)
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
+        self.client.put(url, payload, format='json')
 
         results = self._get_search_results()
-        self.assertEqual(results['rows'][0]['text'], 'Third note')
-        self.assertEqual(results['rows'][1]['text'], 'Second note')
+        self.assertEqual(results['rows'][0]['text'], 'Updated Second Note')
+        self.assertEqual(results['rows'][1]['text'], 'Third note')
         self.assertEqual(results['rows'][2]['text'], 'First one')
 
-    def test_search_limit(self):
+    @unittest.skipIf(settings.ES_DISABLED, "Unicode support in MySQL is limited")
+    def test_search_unicode(self):
         """
-        Tests for limit query parameter for paging through results.
+        Tests searching of unicode strings.
         """
-        for i in xrange(300):
-            self._create_annotation(refresh=False)
+        self._create_annotation(text=u'Веселих свят')
 
-        es.conn.indices.refresh(es.index)
+        results = self._get_search_results(text=u"веселих")
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], u'Веселих свят')
 
-        # By default return RESULTS_DEFAULT_SIZE notes.
-        result = self._get_search_results()
-        self.assertEqual(len(result['rows']), settings.RESULTS_DEFAULT_SIZE)
+        results = self._get_search_results(text=u"Свят")
+        self.assertEqual(results['rows'][0]['text'], u'Веселих свят')
 
-        # Return maximum RESULTS_MAX_SIZE notes.
-        result = self._get_search_results('limit=300')
-        self.assertEqual(len(result['rows']), settings.RESULTS_MAX_SIZE)
-
-        # Return minimum 0.
-        result = self._get_search_results('limit=-10')
-        self.assertEqual(len(result['rows']), 0)
-
-        # Ignore bogus values.
-        result = self._get_search_results('limit=foobar')
-        self.assertEqual(len(result['rows']), settings.RESULTS_DEFAULT_SIZE)
-
-    def test_search_offset(self):
+    def test_search_multiword(self):
         """
-        Tests for offset query parameter for paging through results.
+        Tests searching of complex words and word combinations
         """
-        for i in xrange(250):
-            self._create_annotation(refresh=False)
+        self._create_annotation(text=u'Totally different something')
+        self.assertEqual(self._get_search_results(text=u"TOTALLY")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"different")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"differ")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"total")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"totil")['total'], 0)
+        self.assertEqual(self._get_search_results(text=u"something")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"totally different")['total'], 1)
 
-        es.conn.indices.refresh(es.index)
-
-        result = self._get_search_results()
-        self.assertEqual(len(result['rows']), settings.RESULTS_DEFAULT_SIZE)
-        first = result['rows'][0]
-
-        result = self._get_search_results('offset=240')
-        self.assertEqual(len(result['rows']), 10)
-
-        # ignore negative values
-        result = self._get_search_results('offset=-10')
-        self.assertEqual(len(result['rows']), settings.RESULTS_DEFAULT_SIZE)
-        self.assertEqual(result['rows'][0], first)
-
-        # ignore bogus values
-        result = self._get_search_results('offset=foobar')
-        self.assertEqual(len(result['rows']), settings.RESULTS_DEFAULT_SIZE)
-        self.assertEqual(result['rows'][0], first)
-
-    def test_read_all_no_annotations(self):
+    def test_search_course(self):
         """
-        Tests list all annotations endpoint when no annotations are present in elasticsearch.
+        Tests searching with course_id provided
         """
-        url = reverse('api:v1:annotations')
-        response = self.client.get(url, self.headers)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
+        self._create_annotation(text=u'First one', course_id="u'edX/DemoX/Demo_Course'")
+        self._create_annotation(text=u'Not shown', course_id="u'edx/demox/demo_course'")  # wrong case
+        self._create_annotation(text=u'Second note', course_id="u'edX/DemoX/Demo_Course'")
+        self._create_annotation(text=u'Third note', course_id="b")
+        self._create_annotation(text=u'Fourth note', course_id="c")
 
-    def test_read_all(self):
-        """
-        Tests list all annotations.
-        """
-        for i in xrange(5):
-            kwargs = {'text': 'Foo_{}'.format(i), 'id': str(i)}
-            self._create_annotation(refresh=False, **kwargs)
+        results = self._get_search_results(course_id="u'edX/DemoX/Demo_Course'")
+        self.assertEqual(results['total'], 2)
 
-        es.conn.indices.refresh(es.index)
-
-        url = reverse('api:v1:annotations')
-        response = self.client.get(url, self.headers)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
+        results = self._get_search_results(course_id="b")
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], u'Third note')
 
 
 @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
 class AllowAllAnnotationViewTests(BaseAnnotationViewTests):
     """
-    Test annotator behavior when authorization is not enforced
+    Test service behavior when authorization is not enforced.
     """
 
     def test_create_no_payload(self):
@@ -424,6 +530,7 @@ class TokenTests(BaseAnnotationViewTests):
         """
         Ensure we can read list of annotations
         """
+        self.headers["course_id"] = "test-course-id"
         response = self.client.get(self.url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -452,7 +559,7 @@ class TokenTests(BaseAnnotationViewTests):
 
     def test_wrong_issuer(self):
         """
-        403 when token's issuer is wrong
+        403 when token's intended audience is wrong
         """
         token = self.token_data.copy()
         token['aud'] = 'not Edx-notes'
@@ -468,9 +575,25 @@ class TokenTests(BaseAnnotationViewTests):
         token = jwt.encode(token, settings.CLIENT_SECRET)
         self._assert_403(token)
 
+    def test_no_user(self):
+        """
+        403 when user is not present in request
+        """
+        del self.headers['user']
+        self._assert_403(jwt.encode(self.token_data, settings.CLIENT_SECRET))
+
     def test_wrong_secret(self):
         """
         403 when token is signed by wrong secret
         """
         token = jwt.encode(self.token_data, "some secret")
         self._assert_403(token)
+
+    def test_multifield_user(self):
+        """
+        403 when user in GET matches token, but in POST does not
+        """
+        url = reverse('api:v1:annotations')
+        self.payload['user'] = 'other-user'
+        response = self.client.post(url + "?user=" + TEST_USER, self.payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
