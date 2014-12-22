@@ -6,6 +6,13 @@ DEBUG = True
 
 ELASTICSEARCH_INDEX = 'edx-notes-dev'
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'default.db',
+    }
+}
+
 ###############################################################################
 # Override default annotator-store elasticsearch settings.
 ###############################################################################
