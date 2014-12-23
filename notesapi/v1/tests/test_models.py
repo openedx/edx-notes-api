@@ -3,16 +3,15 @@ from unittest import TestCase
 from notesapi.v1.models import Note
 from django.core.exceptions import ValidationError
 
+
 class NoteTest(TestCase):
     def setUp(self):
         self.course_id = "test_course_id"
         self.user_id = "test_user_id"
-        #self.usage = BlockUsageLocator.from_string("i4x://org/course/category/name")
-        self.usage = "test_usage_id"
 
         self.note = {
             "user": u"test_user_id",
-            "usage_id": u"test-usage-id",
+            "usage_id": "i4x://org/course/category/name",
             "course_id": u"test-course-id",
             "text": u"test note text",
             "quote": u"test note quote",
