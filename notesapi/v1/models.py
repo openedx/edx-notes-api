@@ -1,4 +1,6 @@
+import json
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class Note(models.Model):
@@ -17,24 +19,32 @@ class Note(models.Model):
 
     def clean(self, json_body):
         """
-        Cleans the note object or raises a ValidationError.
+        Clean the note object or raises a ValidationError.
         """
         if json_body is None:
             raise ValidationError('Note must have a body.')
 
-        self.text = strip_tags(body.get('text', ''))
-        self.quote = strip_tags(body.get('quote', ''))
+        try:
+            body = json.loads(json_body)
+        except (ValueError, TypeError) as error:
+            raise ValidationError('Note must have a valid json.')
+
+        if not type(body) is dict:
+            raise ValidationError('Note body must be a dictionary.')
+
+        self.text = body.get('text', '')
+        self.quote = body.get('quote', '')
 
         try:
             self.course_id = body['course_id']
             self.usage_id = body['usage_id']
-            self.user_id = body['user_id']
+            self.user_id = body['user']
         except KeyError as error:
             raise ValidationError('Note must have a course_id and usage_id and user_id.')
 
-        body = json.loads(json_body)
-        if not type(body) is dict:
-            raise ValidationError('Note body must be a dictionary.')
+        ranges = body.get('ranges')
+        if ranges is None or len(ranges) != 1:
+            raise ValidationError('Note must contain exactly one range.')
 
         self.range_start = ranges[0]['start']
         self.range_start_offset = ranges[0]['startOffset']
@@ -47,7 +57,7 @@ class Note(models.Model):
         """
         return {
             'id': self.pk,
-            'user': self.user,
+            'user': self.user_id,
             'course_id': self.course_id,
             'usage_id': self.usage_id,
             'text': self.text,
@@ -58,6 +68,6 @@ class Note(models.Model):
                 'end': self.range_end,
                 'endOffset': self.range_end_offset
             }],
-            'created': str(self.created),
-            'updated': str(self.updated)
+            'created': self.created,
+            'updated': self.updated
         }
