@@ -55,6 +55,9 @@ class Note(models.Model):
         """
         Returns the note object as a dictionary.
         """
+        created = self.created.isoformat() if self.created else None
+        updated = self.updated.isoformat() if self.updated else None
+
         return {
             'id': self.pk,
             'user': self.user_id,
@@ -68,6 +71,6 @@ class Note(models.Model):
                 'end': self.range_end,
                 'endOffset': self.range_end_offset
             }],
-            'created': self.created,
-            'updated': self.updated
+            'created': created,
+            'updated': updated,
         }
