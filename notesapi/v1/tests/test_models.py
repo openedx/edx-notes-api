@@ -6,13 +6,11 @@ from django.core.exceptions import ValidationError
 
 class NoteTest(TestCase):
     def setUp(self):
-        self.course_id = "test_course_id"
-        self.user_id = "test_user_id"
 
         self.note = {
             "user": u"test_user_id",
-            "usage_id": "i4x://org/course/category/name",
-            "course_id": u"test-course-id",
+            "usage_id": u"i4x://org/course/html/52aa9816425a4ce98a07625b8cb70811",
+            "course_id": u"org/course/run",
             "text": u"test note text",
             "quote": u"test note quote",
             "ranges": [
@@ -58,7 +56,7 @@ class NoteTest(TestCase):
             note.clean(json.dumps({
                 'text': 'foo',
                 'quote': 'bar',
-                'ranges': [{} for i in range(10)]  # too many ranges
+                'ranges': [{} for i in range(10)]  # Too many ranges.
             }))
 
     def test_save(self):

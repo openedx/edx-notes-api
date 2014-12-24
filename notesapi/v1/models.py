@@ -2,7 +2,7 @@ import json
 from django.db import models
 from django.core.exceptions import ValidationError
 from opaque_keys.edx.keys import CourseKey, UsageKey
-from opaque_keys.edx.locations import BlockUsageLocator
+from opaque_keys.edx.locations import BlockUsageLocator, CourseLocator
 
 
 def _strip_object(key):
@@ -116,7 +116,7 @@ class UsageKeyField(OpaqueKeyField):
 
 class Note(models.Model):
     user_id = models.CharField(max_length=255)
-    course_id = models.CharField(max_length=255)
+    course_id = CourseKeyField(max_length=255)
     usage_id = UsageKeyField(max_length=255)
     text = models.TextField(default="")
     quote = models.TextField(default="")
@@ -147,7 +147,7 @@ class Note(models.Model):
         self.quote = body.get('quote', '')
 
         try:
-            self.course_id = body['course_id']
+            self.course_id = CourseLocator.from_string(body['course_id'])
             self.usage_id = BlockUsageLocator.from_string(body['usage_id'])
             self.user_id = body['user']
         except KeyError as error:
@@ -172,7 +172,7 @@ class Note(models.Model):
         return {
             'id': self.pk,
             'user': self.user_id,
-            'course_id': self.course_id,
+            'course_id': self.course_id.html_id(),
             'usage_id': self.usage_id.to_deprecated_string(),
             'text': self.text,
             'quote': self.quote,
