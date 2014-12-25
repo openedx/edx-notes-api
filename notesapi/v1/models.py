@@ -114,5 +114,13 @@ class NoteMappingType(MappingType, Indexable):
 
         return obj.as_dict()
 
+    @staticmethod
+    def process_result(data):
+        for i, item in enumerate(data):
+            if isinstance(item, dict):
+                for k, v in item.items():
+                    if isinstance(v, list) and len(v) > 0:
+                        data[i][k] = v[0]
+        return data
 
 note_searcher = NoteMappingType.search()
