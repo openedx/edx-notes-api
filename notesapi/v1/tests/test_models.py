@@ -25,7 +25,7 @@ class NoteTest(TestCase):
 
     def test_clean_valid_note(self):
         note = Note()
-        note.clean(json.dumps(self.note))
+        note.clean(self.note)
 
         self.note.update({
             'id': None,
@@ -47,19 +47,19 @@ class NoteTest(TestCase):
             payload.pop(field)
 
             with self.assertRaises(ValidationError):
-                note.clean(json.dumps(payload))
+                note.clean(payload)
 
     def test_clean_many_ranges(self):
         note = Note()
 
         with self.assertRaises(ValidationError):
-            note.clean(json.dumps({
+            note.clean({
                 'text': 'foo',
                 'quote': 'bar',
                 'ranges': [{} for i in range(10)]  # Too many ranges.
-            }))
+            })
 
     def test_save(self):
         note = Note()
-        note.clean(json.dumps(self.note))
+        note.clean(self.note)
         note.save()

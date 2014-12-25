@@ -128,32 +128,27 @@ class Note(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
 
-    def clean(self, json_body):
+    def clean(self, note):
         """
         Clean the note object or raises a ValidationError.
         """
-        if json_body is None:
+        if note is None:
             raise ValidationError('Note must have a body.')
 
-        try:
-            body = json.loads(json_body)
-        except (ValueError, TypeError) as error:
-            raise ValidationError('Note must have a valid json.')
+        if type(note) is not dict:
+            raise ValidationError('Note must be a dictionary.')
 
-        if not type(body) is dict:
-            raise ValidationError('Note body must be a dictionary.')
-
-        self.text = body.get('text', '')
-        self.quote = body.get('quote', '')
+        self.text = note.get('text', '')
+        self.quote = note.get('quote', '')
 
         try:
-            self.course_id = CourseLocator.from_string(body['course_id'])
-            self.usage_id = BlockUsageLocator.from_string(body['usage_id'])
-            self.user_id = body['user']
+            self.course_id = CourseLocator.from_string(note['course_id'])
+            self.usage_id = BlockUsageLocator.from_string(note['usage_id'])
+            self.user_id = note['user']
         except KeyError as error:
             raise ValidationError('Note must have a course_id and usage_id and user_id.')
 
-        ranges = body.get('ranges')
+        ranges = note.get('ranges')
         if ranges is None or len(ranges) != 1:
             raise ValidationError('Note must contain exactly one range.')
 
