@@ -19,6 +19,10 @@ CLIENT_SECRET = 'edx-notes-secret'
 ELASTICSEARCH_URL = 'http://127.0.0.1:9200'
 ELASTICSEARCH_INDEX = 'edx-notes'
 
+ES_URLS = ['http://localhost:9200']
+ES_INDEXES = {'default': 'main_index'}
+ES_DISABLED = False
+
 # Number of rows to return by default in result.
 RESULTS_DEFAULT_SIZE = 25
 

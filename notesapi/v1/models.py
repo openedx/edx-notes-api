@@ -1,6 +1,10 @@
 import json
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from elasticutils.contrib.django import Indexable, MappingType
 
 
 class Note(models.Model):
@@ -69,3 +73,46 @@ class Note(models.Model):
             'created': created,
             'updated': updated,
         }
+
+
+
+@receiver(post_save, sender=Note)
+def update_in_index(sender, instance, **kw):
+        if settings.ES_DISABLED:
+            return
+        NoteMappingType.bulk_index([instance.as_dict()], id_field='id')
+
+
+class NoteMappingType(MappingType, Indexable):
+    @classmethod
+    def get_model(cls):
+        return Note
+
+    @classmethod
+    def get_mapping(cls):
+        """
+        Returns an Elasticsearch mapping for Note MappingType
+        """
+        charfield = {'type': 'string', 'index': 'not_analyzed', 'store': True}
+        return {
+            'properties': {
+                'id': charfield,
+                'course_id': charfield,
+                'usage_id': charfield,
+                'text': {'type': 'string', 'index': 'snowball', 'store': True},
+                'quote': {'type': 'string', 'index': 'snowball', 'store': True},
+                'created': charfield,
+                'updated': charfield,
+            }
+        }
+
+    @classmethod
+    def extract_document(cls, obj_id, obj=None):
+        """Converts this instance into an Elasticsearch document"""
+        if obj is None:
+            obj = cls.get_model().objects.get(pk=obj_id)
+
+        return obj.as_dict()
+
+
+note_searcher = NoteMappingType.search()
