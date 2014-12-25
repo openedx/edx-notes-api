@@ -1,14 +1,20 @@
+import logging
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from annotator.annotation import Annotation
+from notesapi.v1.models import Note
 
 CREATE_FILTER_FIELDS = ('updated', 'created', 'consumer', 'id')
 UPDATE_FILTER_FIELDS = ('updated', 'created', 'user', 'consumer')
+
+log = logging.getLogger(__name__)
 
 
 class AnnotationSearchView(APIView):
@@ -75,6 +81,16 @@ class AnnotationListView(APIView):
         if len(filtered_payload) == 0:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        note = Note()
+
+        try:
+            note.clean(filtered_payload)
+        except ValidationError as error:
+            log.debug(error)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        note.save()
+
         annotation = Annotation(filtered_payload)
         annotation.save(refresh=True)
 
@@ -106,34 +122,58 @@ class AnnotationDetailView(APIView):
         """
         Update an existing annotation.
         """
-        annotation_id = self.kwargs.get('annotation_id')
-        annotation = Annotation.fetch(annotation_id)
+        note_id = self.kwargs.get('annotation_id')
 
-        if not annotation:
+        try:
+            note = Note.objects.get(id=note_id)
+        except Note.DoesNotExist:
             return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
 
-        if self.request.DATA is not None:
-            updated = _filter_input(self.request.DATA, UPDATE_FILTER_FIELDS)
-            updated['id'] = annotation_id  # use id from URL, regardless of what arrives in JSON payload.
+        es_note = Annotation.fetch(note_id)
 
-            annotation.update(updated)
+        if not es_note:
+            return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
 
-            refresh = self.kwargs.get('refresh') != 'false'
-            annotation.save(refresh=refresh)
+        if note.user_id != es_note['user_id']:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(annotation)
+        filtered_payload = _filter_input(self.request.DATA, UPDATE_FILTER_FIELDS)
+
+        # use id from URL, regardless of what arrives in JSON payload.
+        filtered_payload['id'] = note_id
+        es_note.update(updated)
+
+        try:
+            note.clean(filtered_payload)
+        except ValidationError as e:
+            log.debug(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        note.save()
+
+        refresh = self.kwargs.get('refresh') != 'false'
+        es_note.save(refresh=refresh)
+
+        return Response(es_note)
 
     def delete(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
         Delete an annotation.
         """
-        annotation_id = self.kwargs.get('annotation_id')
-        annotation = Annotation.fetch(annotation_id)
+        note_id = self.kwargs.get('annotation_id')
 
-        if not annotation:
+        try:
+            note = Note.objects.get(id=note_id)
+        except Note.DoesNotExist:
+            return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
+
+        es_note = Annotation.fetch(note_id)
+
+        if not es_note:
             return Response('Annotation not found! No delete performed.', status=status.HTTP_404_NOT_FOUND)
 
-        annotation.delete()
+        note.delete()
+        es_note.delete()
 
         # Annotation deleted successfully.
         return Response(status=status.HTTP_204_NO_CONTENT)
