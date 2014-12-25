@@ -73,10 +73,15 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True
         },
-        'elasticsearch.trace': {
+        'notesapi.v1.views': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True
+        },
+        'elasticsearch.trace': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False
         },
         'elasticsearch': {
             'handlers': ['console'],
