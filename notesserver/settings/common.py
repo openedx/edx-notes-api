@@ -4,7 +4,7 @@ import sys
 
 DEBUG = False
 TEMPLATE_DEBUG = False
-DISABLE_TOKEN_CHECK = False
+DISABLE_TOKEN_CHECK = True
 USE_TZ = True
 TIME_ZONE = 'UTC'
 
