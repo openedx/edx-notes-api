@@ -73,6 +73,7 @@ class BaseAnnotationViewTests(APITestCase):
     @classmethod
     def setUpClass(cls):
         es.indices.create(index=settings.ES_INDEXES['default'], ignore=400)
+        es.indices.refresh()
 
     @classmethod
     def tearDownClass(cls):
@@ -80,6 +81,7 @@ class BaseAnnotationViewTests(APITestCase):
         * deletes the test index
         """
         es.indices.delete(index=settings.ES_INDEXES['default'])
+        es.indices.refresh()
 
     def _create_annotation(self, refresh=True, **kwargs):
         """
