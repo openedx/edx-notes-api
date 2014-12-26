@@ -4,7 +4,7 @@ import sys
 
 DEBUG = False
 TEMPLATE_DEBUG = False
-DISABLE_TOKEN_CHECK = True
+DISABLE_TOKEN_CHECK = False
 USE_TZ = True
 TIME_ZONE = 'UTC'
 
@@ -20,7 +20,7 @@ ELASTICSEARCH_URL = 'http://127.0.0.1:9200'
 ELASTICSEARCH_INDEX = 'edx-notes'
 
 ES_URLS = ['http://localhost:9200']
-ES_INDEXES = {'default': 'main_index'}
+ES_INDEXES = {'default': 'notes_index'}
 ES_DISABLED = False
 
 # Number of rows to return by default in result.

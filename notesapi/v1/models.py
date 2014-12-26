@@ -37,7 +37,8 @@ class Note(models.Model):
         try:
             self.course_id = note['course_id']
             self.usage_id = note['usage_id']
-            self.user_id = note['user']
+            if not self.user_id:
+                self.user_id = note['user']
         except KeyError as error:
             raise ValidationError('Note must have a course_id and usage_id and user_id.')
 
@@ -97,6 +98,7 @@ class NoteMappingType(MappingType, Indexable):
         return {
             'properties': {
                 'id': charfield,
+                'user': charfield,
                 'course_id': charfield,
                 'usage_id': charfield,
                 'text': {'type': 'string', 'index': 'snowball', 'store': True},
@@ -119,7 +121,7 @@ class NoteMappingType(MappingType, Indexable):
         for i, item in enumerate(data):
             if isinstance(item, dict):
                 for k, v in item.items():
-                    if isinstance(v, list) and len(v) > 0:
+                    if k != 'ranges' and isinstance(v, list) and len(v) > 0:
                         data[i][k] = v[0]
         return data
 

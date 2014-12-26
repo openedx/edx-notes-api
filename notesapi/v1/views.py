@@ -110,7 +110,8 @@ class AnnotationDetailView(APIView):
         except Note.DoesNotExist:
             return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
 
-        if note.user_id != es_note['user_id']:
+        # changing user_id is not permitted
+        if note.user_id != self.request.DATA['user']:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         filtered_payload = _filter_input(self.request.DATA, UPDATE_FILTER_FIELDS)
