@@ -17,12 +17,12 @@ class OperationalEndpointsTest(APITestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response.data, {"OK": True})
 
-    @patch('annotator.elasticsearch.ElasticSearch.conn')
-    def test_heartbeat_failure(self, mocked_conn):
+    @patch('notesserver.views.get_es')
+    def test_heartbeat_failure(self, mocked_get_es):
         """
         Elasticsearch is not reachable.
         """
-        mocked_conn.ping.return_value = False
+        mocked_get_es.return_value.ping.return_value = False
         response = self.client.get(reverse('heartbeat'))
         self.assertEquals(response.status_code, 500)
         self.assertEquals(response.data, {"OK": False, "check": "es"})
@@ -54,13 +54,13 @@ class OperationalAuthEndpointsTest(APITestCase):
         self.assertEquals(response.status_code, 200)
 
     @patch('notesserver.views.datetime', datetime=Mock(wraps=datetime.datetime))
-    @patch('annotator.elasticsearch.ElasticSearch.conn')
-    def test_selftest_data(self, mocked_conn, mocked_datetime):
+    @patch('notesserver.views.get_es')
+    def test_selftest_data(self, mocked_get_es, mocked_datetime):
         """
         Test returned data on success.
         """
         mocked_datetime.datetime.now.return_value = datetime.datetime(2014, 12, 11)
-        mocked_conn.info.return_value = {}
+        mocked_get_es.return_value.info.return_value = {}
         response = self.client.get(reverse('selftest'))
         self.assertEquals(response.status_code, 200)
         self.assertEquals(
@@ -71,11 +71,11 @@ class OperationalAuthEndpointsTest(APITestCase):
             }
         )
 
-    @patch('annotator.elasticsearch.ElasticSearch.conn')
-    def test_selftest_failure(self, mocked_conn):
+    @patch('notesserver.views.get_es')
+    def test_selftest_failure(self, mocked_get_es):
         """
         Elasticsearch is not reachable on selftest.
         """
-        mocked_conn.info.side_effect = TransportError()
+        mocked_get_es.return_value.info.side_effect = TransportError()
         response = self.client.get(reverse('selftest'))
         self.assertEquals(response.status_code, 500)

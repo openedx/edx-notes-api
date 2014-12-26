@@ -16,9 +16,6 @@ SECRET_KEY = '*^owi*4%!%9=#h@app!l^$jz8(c*q297^)4&4yn^#_m#fq=z#l'
 CLIENT_ID = 'edx-notes-id'
 CLIENT_SECRET = 'edx-notes-secret'
 
-ELASTICSEARCH_URL = 'http://127.0.0.1:9200'
-ELASTICSEARCH_INDEX = 'edx-notes'
-
 ES_URLS = ['http://localhost:9200']
 ES_INDEXES = {'default': 'notes_index'}
 ES_DISABLED = False
@@ -88,11 +85,6 @@ LOGGING = {
             'propagate': False
         },
         'elasticsearch': {
-            'handlers': ['console'],
-            'level': 'WARNING',
-            'propagate': True
-        },
-        'annotator.elasticsearch': {
             'handlers': ['console'],
             'level': 'WARNING',
             'propagate': True
