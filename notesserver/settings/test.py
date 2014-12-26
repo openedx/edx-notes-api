@@ -9,10 +9,9 @@ DATABASES = {
 }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
+DISABLE_TOKEN_CHECK = False
 INSTALLED_APPS += ('django_nose',)
 
-ELASTICSEARCH_INDEX = 'edx-notes-test'
 
 ###############################################################################
 # Override default annotator-store elasticsearch settings.
@@ -21,6 +20,8 @@ es.host = ELASTICSEARCH_URL
 es.index = ELASTICSEARCH_INDEX
 annotator.elasticsearch.RESULTS_MAX_SIZE = RESULTS_MAX_SIZE
 ###############################################################################
+
+ES_INDEXES = {'default': 'notes_index_test'}
 
 
 LOGGING = {
