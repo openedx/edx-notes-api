@@ -25,7 +25,9 @@ class AnnotationSearchView(APIView):
         """
         Search annotations.
         """
-        params = self.request.QUERY_PARAMS.dict()
+        params = {}
+        for k, v in self.request.QUERY_PARAMS.dict().items():
+            params[k] = v.lower()
         results = NoteMappingType.process_result(
             list(note_searcher.filter(**params).values_dict("_source"))
         )
