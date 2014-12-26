@@ -310,20 +310,20 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(results['rows'][0]['text'], 'Second note')
 
-#     def test_search_ordering(self):
-#         """
-#         Tests ordering of search results.
+    def test_search_ordering(self):
+        """
+        Tests ordering of search results.
 
-#         Sorting is by descending order (most recent first).
-#         """
-#         note_1 = self._create_annotation(text=u'First one')
-#         note_2 = self._create_annotation(text=u'Second note')
-#         note_3 = self._create_annotation(text=u'Third note')
+        Sorting is by descending order (most recent first).
+        """
+        note_1 = self._create_annotation(text=u'First one')
+        note_2 = self._create_annotation(text=u'Second note')
+        note_3 = self._create_annotation(text=u'Third note')
 
-#         results = self._get_search_results()
-#         self.assertEqual(results['rows'][0]['text'], 'Third note')
-#         self.assertEqual(results['rows'][1]['text'], 'Second note')
-#         self.assertEqual(results['rows'][2]['text'], 'First one')
+        results = self._get_search_results()
+        self.assertEqual(results['rows'][0]['text'], 'Third note')
+        self.assertEqual(results['rows'][1]['text'], 'Second note')
+        self.assertEqual(results['rows'][2]['text'], 'First one')
 
     def test_read_all_no_annotations(self):
         """

@@ -26,7 +26,7 @@ class AnnotationSearchView(APIView):
         for k, v in self.request.QUERY_PARAMS.dict().items():
             params[k] = v.lower()
         results = NoteMappingType.process_result(
-            list(note_searcher.filter(**params).values_dict("_source"))
+            list(note_searcher.filter(**params).order_by("-created").values_dict("_source"))
         )
 
         return Response({'total': len(results), 'rows': results})
