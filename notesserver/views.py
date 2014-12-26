@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 
 from elasticsearch.exceptions import TransportError
-from annotator import es
+from elasticutils import get_es
 
 
 @api_view(['GET'])
@@ -28,7 +28,7 @@ def heartbeat(request):  # pylint: disable=unused-argument
     """
     ElasticSearch is reachable and ready to handle requests.
     """
-    if es.conn.ping():
+    if get_es().ping():
         return Response({"OK": True})
     else:
         return Response({"OK": False, "check": "es"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -42,7 +42,7 @@ def selftest(request):  # pylint: disable=unused-argument
     """
     start = datetime.datetime.now()
     try:
-        es_status = es.conn.info()
+        es_status = get_es().info()
     except TransportError:
         return Response(
             {"es_error": traceback.format_exc()},

@@ -354,7 +354,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
 class AllowAllAnnotationViewTests(BaseAnnotationViewTests):
     """
-    Test annotator behavior when authorization is not enforced
+    Test service behavior when authorization is not enforced.
     """
 
     def test_create_no_payload(self):
