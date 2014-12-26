@@ -87,12 +87,10 @@ class BaseAnnotationViewTests(APITestCase):
         """
         Create annotation
         """
-        opts = {
-            'user': TEST_USER,
-        }
+        opts = self.payload.copy()
         opts.update(kwargs)
         url = reverse('api:v1:annotations')
-        response = self.client.post(url, self.payload, format='json')
+        response = self.client.post(url, opts, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         es.indices.refresh()
         return response.data.copy()
@@ -295,21 +293,21 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 #         response = self.client.delete(url, self.headers)
 #         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, "response should be 404 NOT FOUND")
 
-    # def test_search(self):
-    #     """
-    #     Tests for search method.
-    #     """
-    #     note_1 = self._create_annotation(text=u'First one')
-    #     note_2 = self._create_annotation(text=u'Second note')
-    #     note_3 = self._create_annotation(text=u'Third note')
+    def test_search(self):
+        """
+        Tests for search method.
+        """
+        note_1 = self._create_annotation(text=u'First one')
+        note_2 = self._create_annotation(text=u'Second note')
+        note_3 = self._create_annotation(text=u'Third note')
 
-    #     results = self._get_search_results()
-    #     self.assertEqual(results['total'], 3)
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 3)
 
-    #     results = self._get_search_results("text=Second")
-    #     self.assertEqual(results['total'], 1)
-    #     self.assertEqual(len(results['rows']), 1)
-    #     self.assertEqual(results['rows'][0]['text'], 'Second note')
+        results = self._get_search_results("text=Second")
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(len(results['rows']), 1)
+        self.assertEqual(results['rows'][0]['text'], 'Second note')
 
 #     def test_search_ordering(self):
 #         """
