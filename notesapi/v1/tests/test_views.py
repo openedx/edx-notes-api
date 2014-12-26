@@ -1,6 +1,7 @@
 import jwt
 from calendar import timegm
 from datetime import datetime, timedelta
+from time import sleep
 from mock import patch
 import unittest
 
@@ -73,6 +74,11 @@ class BaseAnnotationViewTests(APITestCase):
     def setUpClass(cls):
         get_es().indices.create(index=settings.ES_INDEXES['default'], ignore=400)
         get_es().indices.refresh()
+        for i in xrange(30):
+            if get_es().info()['status'] == 200:
+                return
+            sleep(0.5)
+        raise Exception("ES status is not 200")
 
     @classmethod
     def tearDownClass(cls):
