@@ -84,13 +84,11 @@ class AnnotationDetailView(APIView):
         Get an existing annotation.
         """
         note_id = self.kwargs.get('annotation_id')
+        if not note_searcher.filter(id=note_id).count():
+            return Response(False, status=status.HTTP_404_NOT_FOUND)
         results = NoteMappingType.process_result(
             list(note_searcher.filter(id=note_id).values_dict("_source"))
         )
-
-        if not results:
-            return Response(False, status=status.HTTP_404_NOT_FOUND)
-
         return Response(results[0])
 
     def put(self, *args, **kwargs):  # pylint: disable=unused-argument
@@ -130,9 +128,6 @@ class AnnotationDetailView(APIView):
             return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
 
         note.delete()
-        es_note.delete()
-
-        # FIXME
 
         # Annotation deleted successfully.
         return Response(status=status.HTTP_204_NO_CONTENT)
