@@ -2,10 +2,9 @@ import json
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from django.db.models.signals import post_save
+from django.db.models import signals
 from django.dispatch import receiver
-from elasticutils.contrib.django import Indexable, MappingType
-
+from elasticutils.contrib.django import Indexable, MappingType, get_es
 
 class Note(models.Model):
     user_id = models.CharField(max_length=255)
@@ -77,11 +76,22 @@ class Note(models.Model):
 
 
 
-@receiver(post_save, sender=Note)
+@receiver(signals.post_save, sender=Note)
 def update_in_index(sender, instance, **kw):
-        if settings.ES_DISABLED:
-            return
-        NoteMappingType.bulk_index([instance.as_dict()], id_field='id')
+    if settings.ES_DISABLED:
+        return
+    NoteMappingType.bulk_index([instance.as_dict()], id_field='id')
+
+
+@receiver(signals.post_delete, sender=Note)
+def delete_in_index(sender, instance, **kw):
+    if settings.ES_DISABLED:
+        return
+    get_es().delete(
+        index=settings.ES_INDEXES['default'],
+        doc_type=NoteMappingType.get_mapping_type_name(),
+        id=instance.id
+    )
 
 
 class NoteMappingType(MappingType, Indexable):

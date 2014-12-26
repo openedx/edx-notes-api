@@ -1,7 +1,6 @@
 import jwt
 from calendar import timegm
 from datetime import datetime, timedelta
-from time import sleep
 from mock import patch
 import unittest
 
@@ -274,25 +273,28 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 #         response = self.client.put(url, payload, format='json')
 #         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-#     def test_delete(self):
-#         """
-#         Ensure we can delete an existing annotation.
-#         """
-#         kwargs = dict(text=u"Bar", id='456')
-#         self._create_annotation(**kwargs)
-#         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 456})
-#         response = self.client.delete(url, self.headers)
+    def test_delete(self):
+        """
+        Ensure we can delete an existing annotation.
+        """
+        note = self._create_annotation()
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
 
-#         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
-#         self.assertEqual(self._get_annotation('456'), None, "annotation wasn't deleted in db")
+        response = self.client.delete(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
 
-#     def test_delete_notfound(self):
-#         """
-#         Case when no annotation is present with specific id when trying to delete.
-#         """
-#         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
-#         response = self.client.delete(url, self.headers)
-#         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, "response should be 404 NOT FOUND")
+        get_es().indices.refresh()
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_notfound(self):
+        """
+        Case when no annotation is present with specific id when trying to delete.
+        """
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        response = self.client.delete(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, "response should be 404 NOT FOUND")
 
     def test_search(self):
         """
