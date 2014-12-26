@@ -16,7 +16,6 @@ from notesapi.v1.models import NoteMappingType, note_searcher
 
 TEST_USER = "test_user_id"
 
-es = get_es()
 
 class BaseAnnotationViewTests(APITestCase):
     """
@@ -63,25 +62,25 @@ class BaseAnnotationViewTests(APITestCase):
 
     def tearDown(self):
         for note_id in note_searcher.all().values_list('id'):
-            es.delete(
+            get_es().delete(
                 index=settings.ES_INDEXES['default'],
                 doc_type=NoteMappingType.get_mapping_type_name(),
                 id=note_id[0][0]
             )
-        es.indices.refresh()
+        get_es().indices.refresh()
 
     @classmethod
     def setUpClass(cls):
-        es.indices.create(index=settings.ES_INDEXES['default'], ignore=400)
-        es.indices.refresh()
+        get_es().indices.create(index=settings.ES_INDEXES['default'], ignore=400)
+        get_es().indices.refresh()
 
     @classmethod
     def tearDownClass(cls):
         """
         * deletes the test index
         """
-        es.indices.delete(index=settings.ES_INDEXES['default'])
-        es.indices.refresh()
+        get_es().indices.delete(index=settings.ES_INDEXES['default'])
+        get_es().indices.refresh()
 
     def _create_annotation(self, refresh=True, **kwargs):
         """
@@ -92,14 +91,14 @@ class BaseAnnotationViewTests(APITestCase):
         url = reverse('api:v1:annotations')
         response = self.client.post(url, opts, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        es.indices.refresh()
+        get_es().indices.refresh()
         return response.data.copy()
 
     def _get_annotation(self, annotation_id):
         """
         Fetch annotation directly from elasticsearch.
         """
-        es.indices.refresh()
+        get_es().indices.refresh()
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation_id})
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -222,7 +221,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': data['id']})
         print payload
         response = self.client.put(url, payload, format='json')
-        es.indices.refresh()
+        get_es().indices.refresh()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         annotation = self._get_annotation(data['id'])
