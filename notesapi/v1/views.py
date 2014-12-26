@@ -10,9 +10,6 @@ from rest_framework.views import APIView
 
 from notesapi.v1.models import Note, NoteMappingType, note_searcher
 
-CREATE_FILTER_FIELDS = ('updated', 'created', 'consumer', 'id')
-UPDATE_FILTER_FIELDS = ('updated', 'created', 'user', 'consumer')
-
 log = logging.getLogger(__name__)
 
 
@@ -60,15 +57,10 @@ class AnnotationListView(APIView):
         if 'id' in self.request.DATA:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        filtered_payload = _filter_input(self.request.DATA, CREATE_FILTER_FIELDS)
-
-        if len(filtered_payload) == 0:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
         note = Note()
 
         try:
-            note.clean(filtered_payload)
+            note.clean(self.request.DATA)
         except ValidationError as error:
             log.debug(error)
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -116,13 +108,8 @@ class AnnotationDetailView(APIView):
         if note.user_id != self.request.DATA['user']:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        filtered_payload = _filter_input(self.request.DATA, UPDATE_FILTER_FIELDS)
-
-        # use id from URL, regardless of what arrives in JSON payload.
-        filtered_payload['id'] = note_id
-
         try:
-            note.clean(filtered_payload)
+            note.clean(self.request.DATA)
         except ValidationError as e:
             log.debug(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -149,16 +136,6 @@ class AnnotationDetailView(APIView):
 
         # Annotation deleted successfully.
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-def _filter_input(annotation, fields):
-    """
-    Pop given fields from annotation.
-    """
-    for field in fields:
-        annotation.pop(field, None)
-
-    return annotation
 
 
 def _convert_to_int(value, default=None):

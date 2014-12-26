@@ -25,11 +25,11 @@ class Note(models.Model):
         """
         Clean the note object or raises a ValidationError.
         """
-        if note is None:
-            raise ValidationError('Note must have a body.')
-
-        if type(note) is not dict:
+        if not isinstance(note, dict):
             raise ValidationError('Note must be a dictionary.')
+
+        if len(note) == 0:
+            raise ValidationError('Note must have a body.')
 
         self.text = note.get('text', '')
         self.quote = note.get('quote', '')
