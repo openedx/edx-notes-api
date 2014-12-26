@@ -71,6 +71,10 @@ class BaseAnnotationViewTests(APITestCase):
         es.indices.refresh()
 
     @classmethod
+    def setUpClass(cls):
+        es.indices.create(index=settings.ES_INDEXES['default'], ignore=400)
+
+    @classmethod
     def tearDownClass(cls):
         """
         * deletes the test index
@@ -344,92 +348,92 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
 
 
-# @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
-# class AllowAllAnnotationViewTests(BaseAnnotationViewTests):
-#     """
-#     Test annotator behavior when authorization is not enforced
-#     """
+@patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
+class AllowAllAnnotationViewTests(BaseAnnotationViewTests):
+    """
+    Test annotator behavior when authorization is not enforced
+    """
 
-#     def test_create_no_payload(self):
-#         """
-#         Test if no payload is sent when creating a note.
-#         """
-#         url = reverse('api:v1:annotations')
-#         response = self.client.post(url, {}, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_create_no_payload(self):
+        """
+        Test if no payload is sent when creating a note.
+        """
+        url = reverse('api:v1:annotations')
+        response = self.client.post(url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-# class TokenTests(BaseAnnotationViewTests):
-#     """
-#     Test token interactions
-#     """
-#     url = reverse('api:v1:annotations')
-#     token_data = {
-#         'aud': settings.CLIENT_ID,
-#         'sub': TEST_USER,
-#         'iat': timegm(datetime.utcnow().utctimetuple()),
-#         'exp': timegm((datetime.utcnow() + timedelta(seconds=300)).utctimetuple()),
-#     }
+class TokenTests(BaseAnnotationViewTests):
+    """
+    Test token interactions
+    """
+    url = reverse('api:v1:annotations')
+    token_data = {
+        'aud': settings.CLIENT_ID,
+        'sub': TEST_USER,
+        'iat': timegm(datetime.utcnow().utctimetuple()),
+        'exp': timegm((datetime.utcnow() + timedelta(seconds=300)).utctimetuple()),
+    }
 
-#     def _assert_403(self, token):
-#         """
-#         Asserts that request with this token will fail
-#         """
-#         self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
-#         response = self.client.get(self.url, self.headers)
-#         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    def _assert_403(self, token):
+        """
+        Asserts that request with this token will fail
+        """
+        self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
+        response = self.client.get(self.url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-#     def test_200(self):
-#         """
-#         Ensure we can read list of annotations
-#         """
-#         response = self.client.get(self.url, self.headers)
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_200(self):
+        """
+        Ensure we can read list of annotations
+        """
+        response = self.client.get(self.url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-#     def test_no_token(self):
-#         """
-#         403 when no token is provided
-#         """
-#         self.client._credentials = {}
-#         response = self.client.get(self.url, self.headers)
-#         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    def test_no_token(self):
+        """
+        403 when no token is provided
+        """
+        self.client._credentials = {}
+        response = self.client.get(self.url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-#     def test_malformed_token(self):
-#         """
-#         403 when token can not be decoded
-#         """
-#         self._assert_403("kuku")
+    def test_malformed_token(self):
+        """
+        403 when token can not be decoded
+        """
+        self._assert_403("kuku")
 
-#     def test_expired_token(self):
-#         """
-#         403 when token is expired
-#         """
-#         token = self.token_data.copy()
-#         token['exp'] = 1
-#         token = jwt.encode(token, settings.CLIENT_SECRET)
-#         self._assert_403(token)
+    def test_expired_token(self):
+        """
+        403 when token is expired
+        """
+        token = self.token_data.copy()
+        token['exp'] = 1
+        token = jwt.encode(token, settings.CLIENT_SECRET)
+        self._assert_403(token)
 
-#     def test_wrong_issuer(self):
-#         """
-#         403 when token's issuer is wrong
-#         """
-#         token = self.token_data.copy()
-#         token['aud'] = 'not Edx-notes'
-#         token = jwt.encode(token, settings.CLIENT_SECRET)
-#         self._assert_403(token)
+    def test_wrong_issuer(self):
+        """
+        403 when token's issuer is wrong
+        """
+        token = self.token_data.copy()
+        token['aud'] = 'not Edx-notes'
+        token = jwt.encode(token, settings.CLIENT_SECRET)
+        self._assert_403(token)
 
-#     def test_wrong_user(self):
-#         """
-#         403 when token's user is wrong
-#         """
-#         token = self.token_data.copy()
-#         token['sub'] = 'joe'
-#         token = jwt.encode(token, settings.CLIENT_SECRET)
-#         self._assert_403(token)
+    def test_wrong_user(self):
+        """
+        403 when token's user is wrong
+        """
+        token = self.token_data.copy()
+        token['sub'] = 'joe'
+        token = jwt.encode(token, settings.CLIENT_SECRET)
+        self._assert_403(token)
 
-#     def test_wrong_secret(self):
-#         """
-#         403 when token is signed by wrong secret
-#         """
-#         token = jwt.encode(self.token_data, "some secret")
-#         self._assert_403(token)
+    def test_wrong_secret(self):
+        """
+        403 when token is signed by wrong secret
+        """
+        token = jwt.encode(self.token_data, "some secret")
+        self._assert_403(token)
