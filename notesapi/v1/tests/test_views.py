@@ -229,49 +229,49 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
         self.assertEqual(response.data['text'], "Bar", "update annotation should be returned in response")
 
-#     def test_update_without_payload_id(self):
-#         """
-#         Test if update will be performed when there is no id in payload.
+    def test_update_without_payload_id(self):
+        """
+        Test if update will be performed when there is no id in payload.
 
-#         Tests if id is used from URL, regardless of what arrives in JSON payload.
-#         """
-#         self._create_annotation(text=u"Foo", id='123')
+        Tests if id is used from URL, regardless of what arrives in JSON payload.
+        """
+        note = self._create_annotation(text=u"Foo")
+        payload = self.payload.copy()
+        payload.update({'text': 'Bar'})
+        payload.update(self.headers)
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
+        response = self.client.put(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-#         payload = {'text': 'Bar'}
-#         payload.update(self.headers)
-#         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
-#         response = self.client.put(url, payload, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_note = self._get_annotation(note['id'])
+        self.assertEqual(updated_note['text'], "Bar", "annotation wasn't updated in db")
 
-#         annotation = self._get_annotation('123')
-#         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
+    def test_update_with_wrong_payload_id(self):
+        """
+        Test if update will be performed when there is wrong id in payload.
 
-#     def test_update_with_wrong_payload_id(self):
-#         """
-#         Test if update will be performed when there is wrong id in payload.
+        Tests if id is used from URL, regardless of what arrives in JSON payload.
+        """
+        note = self._create_annotation(text=u"Foo")
+        payload = self.payload.copy()
+        payload.update({'text': 'Bar', 'id': 'xxx'})
+        payload.update(self.headers)
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
+        response = self.client.put(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-#         Tests if id is used from URL, regardless of what arrives in JSON payload.
-#         """
-#         self._create_annotation(text=u"Foo", id='123')
+        updated_note = self._get_annotation(note['id'])
+        self.assertEqual(updated_note['text'], "Bar", "annotation wasn't updated in db")
 
-#         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
-#         payload = {'text': 'Bar', 'id': 'abc'}
-#         payload.update(self.headers)
-#         response = self.client.put(url, payload, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-#         annotation = self._get_annotation('123')
-#         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
-
-#     def test_update_notfound(self):
-#         """
-#         Test if annotation not exists with specified id and update was attempted on it.
-#         """
-#         payload = {'id': '123', 'text': 'Bar'}
-#         payload.update(self.headers)
-#         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
-#         response = self.client.put(url, payload, format='json')
-#         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    def test_update_notfound(self):
+        """
+        Test if annotation not exists with specified id and update was attempted on it.
+        """
+        payload = {'id': '123', 'text': 'Bar'}
+        payload.update(self.headers)
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
+        response = self.client.put(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete(self):
         """
