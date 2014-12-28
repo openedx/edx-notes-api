@@ -331,17 +331,17 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(results['rows'][1]['text'], 'Second note')
         self.assertEqual(results['rows'][2]['text'], 'First one')
 
-    # def test_search_unicode(self):
-    #     """
-    #     Tests searching of unicode strings.
-    #     """
-    #     self._create_annotation(text=u'Веселих свят')
+    def test_search_unicode(self):
+        """
+        Tests searching of unicode strings.
+        """
+        self._create_annotation(text=u'Веселих свят')
 
-    #     results = self._get_search_results(text=u"веселих".encode('utf-8'))
-    #     self.assertEqual(results['total'], 1)
+        results = self._get_search_results(text=u"веселих")
+        self.assertEqual(results['total'], 1)
 
-    #     results = self._get_search_results(text=u"свят")
-    #     self.assertEqual(results['total'], 1)
+        results = self._get_search_results(text=u"свят")
+        self.assertEqual(results['total'], 1)
 
     def test_read_all_no_annotations(self):
         """
