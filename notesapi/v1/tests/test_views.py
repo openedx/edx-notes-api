@@ -340,7 +340,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         results = self._get_search_results(text=u"веселих")
         self.assertEqual(results['total'], 1)
 
-        results = self._get_search_results(text=u"свят")
+        results = self._get_search_results(text=u"Свят")
         self.assertEqual(results['total'], 1)
 
     def test_read_all_no_annotations(self):
