@@ -1,4 +1,5 @@
 import jwt
+import urllib
 from calendar import timegm
 from datetime import datetime, timedelta
 from mock import patch
@@ -105,11 +106,12 @@ class BaseAnnotationViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         return response.data
 
-    def _get_search_results(self, qs=''):
+    def _get_search_results(self, **kwargs):
         """
-        Helper for search method.
+        Helper for search method. All keyword parameters are passed in GET
         """
-        url = reverse('api:v1:annotations_search') + '?user=' + str(TEST_USER) + '&{}'.format(qs)
+        kwargs.update({"user": TEST_USER})
+        url = reverse('api:v1:annotations_search') + '?{}'.format(urllib.urlencode(kwargs))
         result = self.client.get(url)
         return result.data
 
@@ -307,7 +309,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         results = self._get_search_results()
         self.assertEqual(results['total'], 3)
 
-        results = self._get_search_results("text=Second")
+        results = self._get_search_results(text="Second")
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(results['rows'][0]['text'], 'Second note')
