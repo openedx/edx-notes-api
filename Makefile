@@ -41,5 +41,8 @@ requirements:
 
 test.requirements: requirements
 	pip install -q -r requirements/test.txt --exists-action=w
+	@# unicode QUERY_PARAMS are being improperly decoded in test client
+	@# remove after https://github.com/tomchristie/django-rest-framework/issues/1891 is fixed
+	pip install -q -e git+https://github.com/tymofij/django-rest-framework.git@bugfix/test-unicode-query-params#egg=djangorestframework
 
 develop: test.requirements
