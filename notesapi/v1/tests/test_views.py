@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 import jwt
-import urllib
 from calendar import timegm
 from datetime import datetime, timedelta
 from mock import patch
@@ -7,6 +7,7 @@ import unittest
 
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.http import QueryDict
 
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -110,8 +111,9 @@ class BaseAnnotationViewTests(APITestCase):
         """
         Helper for search method. All keyword parameters are passed in GET
         """
-        kwargs.update({"user": TEST_USER})
-        url = reverse('api:v1:annotations_search') + '?{}'.format(urllib.urlencode(kwargs))
+        q = QueryDict("user=" + TEST_USER, mutable=True)
+        q.update(kwargs)
+        url = reverse('api:v1:annotations_search') + '?{}'.format(q.urlencode())
         result = self.client.get(url)
         return result.data
 
@@ -328,6 +330,18 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(results['rows'][0]['text'], 'Third note')
         self.assertEqual(results['rows'][1]['text'], 'Second note')
         self.assertEqual(results['rows'][2]['text'], 'First one')
+
+    # def test_search_unicode(self):
+    #     """
+    #     Tests searching of unicode strings.
+    #     """
+    #     self._create_annotation(text=u'Веселих свят')
+
+    #     results = self._get_search_results(text=u"веселих".encode('utf-8'))
+    #     self.assertEqual(results['total'], 1)
+
+    #     results = self._get_search_results(text=u"свят")
+    #     self.assertEqual(results['total'], 1)
 
     def test_read_all_no_annotations(self):
         """
