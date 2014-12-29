@@ -111,10 +111,10 @@ class NoteMappingType(MappingType, Indexable):
                 'user': charfield,
                 'course_id': charfield,
                 'usage_id': charfield,
-                'text': {'type': 'string', 'index': 'snowball', 'store': True},
-                'quote': {'type': 'string', 'index': 'snowball', 'store': True},
-                'created': charfield,
-                'updated': charfield,
+                'text': {'type': 'string', 'analyzer': 'snowball', 'store': True},
+                'quote': {'type': 'string', 'analyzer': 'snowball', 'store': True},
+                'created': {'type': 'date', 'store': True},
+                'updated': {'type': 'date', 'store': True},
             }
         }
 
