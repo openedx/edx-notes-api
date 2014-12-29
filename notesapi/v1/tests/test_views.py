@@ -15,6 +15,7 @@ from rest_framework.test import APITestCase
 from elasticutils.contrib.django import get_es
 from .helpers import get_id_token
 from notesapi.v1.models import NoteMappingType, note_searcher
+from notesapi.management.commands.create_index import Command as CreateIndexCommand
 
 TEST_USER = "test_user_id"
 
@@ -73,14 +74,14 @@ class BaseAnnotationViewTests(APITestCase):
 
     @classmethod
     def setUpClass(cls):
-        get_es().indices.create(index=settings.ES_INDEXES['default'], ignore=400)
+        CreateIndexCommand().handle(drop=True)
         get_es().indices.refresh()
         get_es().cluster.health(wait_for_status='yellow')
 
     @classmethod
     def tearDownClass(cls):
         """
-        * deletes the test index
+        deletes the test index
         """
         get_es().indices.delete(index=settings.ES_INDEXES['default'])
         get_es().indices.refresh()
