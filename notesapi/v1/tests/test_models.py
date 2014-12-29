@@ -1,6 +1,6 @@
 import json
 from unittest import TestCase
-from notesapi.v1.models import Note
+from notesapi.v1.models import Note, NoteMappingType
 from django.core.exceptions import ValidationError
 
 
@@ -42,7 +42,7 @@ class NoteTest(TestCase):
 
     def test_must_have_fields(self):
         note = Note()
-        for field in ['user', 'usage_id', 'course_id']:
+        for field in ['user', 'usage_id', 'course_id', 'ranges']:
             payload = self.note.copy()
             payload.pop(field)
 
@@ -53,3 +53,9 @@ class NoteTest(TestCase):
         note = Note()
         note.clean(self.note)
         note.save()
+
+    def test_extract_document(self):
+        note = Note()
+        note.clean(self.note)
+        note.save()
+        self.assertEqual(NoteMappingType.extract_document(note.id), note.as_dict())
