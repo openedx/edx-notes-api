@@ -328,6 +328,21 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(results['rows'][0]['text'], 'Second note')
 
+    def test_search_highlight(self):
+        """
+        Tests highlighting.
+        """
+        self._create_annotation(text=u'First note')
+        note_2 = self._create_annotation(text=u'Second note')
+
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 2)
+
+        results = self._get_search_results(text="first", highlight=True)
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(len(results['rows']), 1)
+        self.assertEqual(results['rows'][0]['text'], '<span>First</span> note')
+
     def test_search_ordering(self):
         """
         Tests ordering of search results.

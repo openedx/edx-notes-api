@@ -122,6 +122,11 @@ class NoteMappingType(MappingType, Indexable):
                 for k, v in item.items():
                     if k != 'ranges' and isinstance(v, list) and len(v) > 0:
                         data[i][k] = v[0]
+
+                    # Substitute the value of text field by highlighted result.
+                    if len(item.es_meta.highlight) and k == 'text':
+                        data[i][k] = item.es_meta.highlight['text'][0]
+
         return data
 
 note_searcher = NoteMappingType.search()
