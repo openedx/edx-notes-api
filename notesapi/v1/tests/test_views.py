@@ -236,7 +236,6 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         payload.update({'id': data['id'], 'text': 'Bar'})
         payload.update(self.headers)
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': data['id']})
-        print payload
         response = self.client.put(url, payload, format='json')
         get_es().indices.refresh()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -406,7 +405,6 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         url = reverse('api:v1:annotations')
         response = self.client.get(url, self.headers)
-        print response
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
 
