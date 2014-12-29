@@ -322,9 +322,9 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         Sorting is by descending order (most recent first).
         """
-        note_1 = self._create_annotation(text=u'First one')
-        note_2 = self._create_annotation(text=u'Second note')
-        note_3 = self._create_annotation(text=u'Third note')
+        self._create_annotation(text=u'First one')
+        self._create_annotation(text=u'Second note')
+        self._create_annotation(text=u'Third note')
 
         results = self._get_search_results()
         self.assertEqual(results['rows'][0]['text'], 'Third note')
@@ -339,9 +339,26 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         results = self._get_search_results(text=u"веселих")
         self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], u'Веселих свят')
 
         results = self._get_search_results(text=u"Свят")
+        self.assertEqual(results['rows'][0]['text'], u'Веселих свят')
+
+    def test_search_course(self):
+        """
+        Tests searching with course_id provided
+        """
+        self._create_annotation(text=u'First one', course_id="a")
+        self._create_annotation(text=u'Second note', course_id="a")
+        self._create_annotation(text=u'Third note', course_id="b")
+        self._create_annotation(text=u'Fourth note', course_id="c")
+
+        results = self._get_search_results(course_id="a")
+        self.assertEqual(results['total'], 2)
+
+        results = self._get_search_results(course_id="b")
         self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], u'Third note')
 
     def test_read_all_no_annotations(self):
         """
