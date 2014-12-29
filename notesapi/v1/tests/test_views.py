@@ -370,11 +370,25 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         results = self._get_search_results(text=u"Свят")
         self.assertEqual(results['rows'][0]['text'], u'Веселих свят')
 
+    def test_search_multiword(self):
+        """
+        Tests searching of complex words and word combinations
+        """
+        self._create_annotation(text=u'Totally different something')
+        self.assertEqual(self._get_search_results(text=u"TOTALLY")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"different")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"differ")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"total")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"totil")['total'], 0)
+        self.assertEqual(self._get_search_results(text=u"something")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"totally different")['total'], 1)
+
     def test_search_course(self):
         """
         Tests searching with course_id provided
         """
         self._create_annotation(text=u'First one', course_id="u'edX/DemoX/Demo_Course'")
+        self._create_annotation(text=u'Not shown', course_id="u'edx/demox/demo_course'")  # wrong case
         self._create_annotation(text=u'Second note', course_id="u'edX/DemoX/Demo_Course'")
         self._create_annotation(text=u'Third note', course_id="b")
         self._create_annotation(text=u'Fourth note', course_id="c")

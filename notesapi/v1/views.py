@@ -25,8 +25,8 @@ class AnnotationSearchView(APIView):
         params = self.request.QUERY_PARAMS.dict()
         for field in ('text', 'quote'):
             if field in params:
-                params[field] = params[field].lower()
-
+                params[field + "__match"] = params[field]
+                del params[field]
         if params.get('highlight'):
             params.pop('highlight')
             results = NoteMappingType.process_result(
@@ -37,7 +37,7 @@ class AnnotationSearchView(APIView):
             )
         else:
             results = NoteMappingType.process_result(
-                list(note_searcher.filter(**params).order_by("-created").values_dict("_source"))
+                list(note_searcher.query(**params).order_by("-created").values_dict("_source"))
             )
         return Response({'total': len(results), 'rows': results})
 
