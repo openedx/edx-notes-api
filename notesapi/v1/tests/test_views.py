@@ -374,12 +374,12 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Tests searching with course_id provided
         """
-        self._create_annotation(text=u'First one', course_id="a")
-        self._create_annotation(text=u'Second note', course_id="a")
+        self._create_annotation(text=u'First one', course_id="u'edX/DemoX/Demo_Course'")
+        self._create_annotation(text=u'Second note', course_id="u'edX/DemoX/Demo_Course'")
         self._create_annotation(text=u'Third note', course_id="b")
         self._create_annotation(text=u'Fourth note', course_id="c")
 
-        results = self._get_search_results(course_id="a")
+        results = self._get_search_results(course_id="u'edX/DemoX/Demo_Course'")
         self.assertEqual(results['total'], 2)
 
         results = self._get_search_results(course_id="b")
