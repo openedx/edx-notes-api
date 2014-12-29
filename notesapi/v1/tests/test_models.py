@@ -49,16 +49,6 @@ class NoteTest(TestCase):
             with self.assertRaises(ValidationError):
                 note.clean(payload)
 
-    def test_clean_many_ranges(self):
-        note = Note()
-
-        with self.assertRaises(ValidationError):
-            note.clean({
-                'text': 'foo',
-                'quote': 'bar',
-                'ranges': [{} for i in range(10)]  # Too many ranges.
-            })
-
     def test_save(self):
         note = Note()
         note.clean(self.note)
