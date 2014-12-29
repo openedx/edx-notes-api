@@ -45,24 +45,6 @@ class BaseAnnotationViewTests(APITestCase):
             ],
         }
 
-        self.expected_note = {
-            # "created": "2014-11-26T00:00:00+00:00",
-            # "updated": "2014-11-26T00:00:00+00:00",
-            "user": TEST_USER,
-            "usage_id": "test-usage-id",
-            "course_id": "test-course-id",
-            "text": "test note text",
-            "quote": "test note quote",
-            "ranges": [
-                {
-                    "start": "/p[1]",
-                    "end": "/p[1]",
-                    "startOffset": 0,
-                    "endOffset": 10,
-                }
-            ],
-        }
-
     def tearDown(self):
         for note_id in note_searcher.all().values_list('id'):
             get_es().delete(
@@ -140,7 +122,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         del annotation['updated']
         del annotation['created']
 
-        self.assertEqual(annotation, self.expected_note)
+        self.assertEqual(annotation, self.payload)
 
         expected_location = '/api/v1/annotations/{0}'.format(response.data['id'])
         self.assertTrue(
@@ -201,11 +183,41 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.expected_note['id'] = note_id
         annotation = response.data
+        del annotation['id']
         del annotation['updated']
         del annotation['created']
-        self.assertEqual(annotation, self.expected_note)
+        self.assertEqual(annotation, self.payload)
+
+    def test_create_multirange(self):
+        """
+        Create a note that has several ranges and read it
+        """
+        note = self.payload.copy()
+        ranges = [{
+                    "start": "/p[1]",
+                    "end": "/p[1]",
+                    "startOffset": 0,
+                    "endOffset": 10,
+                }, {
+                    "start": "/p[2]",
+                    "end": "/p[2]",
+                    "startOffset": 20,
+                    "endOffset": 22,
+                }
+            ]
+        note['ranges'] = ranges
+        note_id = self._create_annotation(**note)['id']
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note_id})
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        annotation = response.data
+        del annotation['id']
+        del annotation['updated']
+        del annotation['created']
+        self.assertEqual(annotation, note)
 
     def test_read_notfound(self):
         """
