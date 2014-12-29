@@ -16,5 +16,5 @@ after_success:
     - coveralls
 
 env:
-- ESVER=0.90.13
+- ESVER=0.90.11
 - ESVER=1.4.2
