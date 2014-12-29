@@ -76,11 +76,7 @@ def update_in_index(sender, instance, **kw):
 def delete_in_index(sender, instance, **kw):
     if settings.ES_DISABLED:
         return
-    get_es().delete(
-        index=settings.ES_INDEXES['default'],
-        doc_type=NoteMappingType.get_mapping_type_name(),
-        id=instance.id
-    )
+    NoteMappingType.unindex(id_=instance.id)
 
 
 class NoteMappingType(MappingType, Indexable):
