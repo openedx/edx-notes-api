@@ -12,7 +12,7 @@ test: clean
 		$(PACKAGES)
 
 run:
-	./manage.py runserver 0.0.0.0:18110
+	./manage.py runserver 0.0.0.0:8120
 
 shell:
 	./manage.py shell
