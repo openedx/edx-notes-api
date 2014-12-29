@@ -69,7 +69,7 @@ class Note(models.Model):
 def update_in_index(sender, instance, **kw):
     if settings.ES_DISABLED:
         return
-    NoteMappingType.bulk_index([instance.as_dict()], id_field='id')
+    NoteMappingType.index(instance.as_dict(), id_=instance.id, overwrite_existing=True)
 
 
 @receiver(signals.post_delete, sender=Note)
