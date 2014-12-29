@@ -332,7 +332,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         Tests highlighting.
         """
         self._create_annotation(text=u'First note')
-        note_2 = self._create_annotation(text=u'Second note')
+        self._create_annotation(text=u'Second note')
 
         results = self._get_search_results()
         self.assertEqual(results['total'], 2)
