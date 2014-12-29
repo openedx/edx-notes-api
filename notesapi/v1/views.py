@@ -22,12 +22,12 @@ class AnnotationSearchView(APIView):
         """
         Search annotations.
         """
-        params = {}
-        for k, v in self.request.QUERY_PARAMS.dict().items():
-            params[k] = v.lower()
+        params = self.request.QUERY_PARAMS.dict()
+        for field in ('text', 'quote'):
+            if field in params:
+                params[field] = params[field].lower()
 
         if params.get('highlight'):
-
             params.pop('highlight')
             results = NoteMappingType.process_result(
                 list(
@@ -35,12 +35,10 @@ class AnnotationSearchView(APIView):
                         .highlight("text", pre_tags=['<span>'], post_tags=['</span>'])
                 )
             )
-
         else:
             results = NoteMappingType.process_result(
                 list(note_searcher.filter(**params).order_by("-created").values_dict("_source"))
             )
-
         return Response({'total': len(results), 'rows': results})
 
 
