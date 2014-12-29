@@ -1,10 +1,10 @@
 language: python
 python: 2.7
 sudo: false
-services:
-    - elasticsearch
 
 install:
+    - scripts/travis/install.sh
+    - scripts/travis/setup.sh
     - pip install -r requirements/test.txt
     - git fetch origin master:refs/remotes/origin/master # https://github.com/edx/diff-cover#troubleshooting
     - pip install coveralls
