@@ -39,7 +39,7 @@ class Note(models.Model):
             raise ValidationError('Note must have a course_id and usage_id and user_id.')
 
         ranges = note.get('ranges')
-        if ranges is None:
+        if not ranges:
             raise ValidationError('Note must contain at least one range.')
 
         self.ranges = json.dumps(ranges)

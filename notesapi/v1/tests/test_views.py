@@ -176,8 +176,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Ensure we can get an existing annotation.
         """
-        note = self.payload
-        note_id = self._create_annotation(**note)['id']
+        note_id = self._create_annotation(**self.payload)['id']
 
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note_id})
         response = self.client.get(url, self.headers)
