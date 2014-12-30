@@ -28,7 +28,11 @@ class AnnotationSearchView(APIView):
                 params[field + "__match"] = params[field]
                 del params[field]
         if params.get('highlight'):
-            params.pop('highlight')
+
+            # Currently we do not use highlight_class and highlight_tag in service.
+            for param in ['highlight', 'highlight_class', 'highlight_tag']:
+                params.pop(param, None)
+
             results = NoteMappingType.process_result(
                 list(
                     note_searcher.query(**params).order_by("-created").values_dict("_source") \
