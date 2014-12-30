@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from rest_framework.test import APITestCase
 from elasticsearch.exceptions import TransportError
 
+
 class OperationalEndpointsTest(APITestCase):
     """
     Tests for operational endpoints.
@@ -40,6 +41,7 @@ class OperationalEndpointsTest(APITestCase):
                 "version": "1"
             }
         )
+
 
 class OperationalAuthEndpointsTest(APITestCase):
     """

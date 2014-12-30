@@ -6,14 +6,18 @@ from notesapi.v1.models import NoteMappingType
 
 
 class Command(BaseCommand):
+    """
+    Indexing and mapping commands.
+    """
     help = 'Creates index and the mapping.'
     option_list = BaseCommand.option_list + (
-        make_option('--drop',
+        make_option(
+            '--drop',
             action='store_true',
             dest='drop',
             default=False,
             help='Recreate index'),
-        )
+    )
 
     def handle(self, *args, **options):
         if options['drop']:

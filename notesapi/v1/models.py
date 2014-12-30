@@ -6,7 +6,11 @@ from django.db.models import signals
 from django.dispatch import receiver
 from elasticutils.contrib.django import Indexable, MappingType, get_es
 
+
 class Note(models.Model):
+    """
+    Annotation model.
+    """
     user_id = models.CharField(max_length=255)
     course_id = models.CharField(max_length=255)
     usage_id = models.CharField(max_length=255)
@@ -15,7 +19,6 @@ class Note(models.Model):
     ranges = models.TextField(default="")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
 
     def clean(self, note):
         """
@@ -64,16 +67,15 @@ class Note(models.Model):
         }
 
 
-
 @receiver(signals.post_save, sender=Note)
-def update_in_index(sender, instance, **kw):
+def update_in_index(sender, instance, **kwargs):
     if settings.ES_DISABLED:
         return
     NoteMappingType.index(instance.as_dict(), id_=instance.id, overwrite_existing=True)
 
 
 @receiver(signals.post_delete, sender=Note)
-def delete_in_index(sender, instance, **kw):
+def delete_in_index(sender, instance, **kwargs):
     if settings.ES_DISABLED:
         return
     NoteMappingType.unindex(id_=instance.id)
