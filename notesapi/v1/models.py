@@ -82,6 +82,10 @@ def delete_in_index(sender, instance, **kwargs):
 
 
 class NoteMappingType(MappingType, Indexable):
+    """
+    Mapping type for Note.
+    """
+
     @classmethod
     def get_model(cls):
         return Note
@@ -107,7 +111,9 @@ class NoteMappingType(MappingType, Indexable):
 
     @classmethod
     def extract_document(cls, obj_id, obj=None):
-        """Converts this instance into an Elasticsearch document"""
+        """
+        Converts this instance into an Elasticsearch document.
+        """
         if obj is None:
             obj = cls.get_model().objects.get(pk=obj_id)
 
@@ -115,6 +121,11 @@ class NoteMappingType(MappingType, Indexable):
 
     @staticmethod
     def process_result(data):
+        """
+        Prepares result for response.
+
+        Also prepares ranges field and highlighting.
+        """
         for i, item in enumerate(data):
             if isinstance(item, dict):
                 for k, v in item.items():
