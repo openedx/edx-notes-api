@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.db.models import signals
 from django.dispatch import receiver
-from elasticutils.contrib.django import Indexable, MappingType, get_es
+from elasticutils.contrib.django import Indexable, MappingType
 
 
 class Note(models.Model):

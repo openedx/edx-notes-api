@@ -46,15 +46,13 @@ class HasAccessToken(BasePermission):
                     if req_user == auth_user:
                         return True
                     else:
-                        logger.debug("Token user {auth_user} did not match {field} user {req_user}".format(
-                            auth_user=auth_user, field=request_field, req_user=req_user
-                        ))
+                        logger.debug("Token user %s did not match %s user %s", auth_user, request_field, req_user)
                         return False
             logger.info("No user was present to compare in GET, POST or DATA")
         except jwt.ExpiredSignature:
-            logger.debug("Token was expired: {}".format(token))
+            logger.debug("Token was expired: %s", token)
         except jwt.DecodeError:
-            logger.debug("Could not decode token {}".format(token))
+            logger.debug("Could not decode token %s", token)
         except TokenWrongIssuer:
-            logger.debug("Token has wrong issuer {}".format(token))
+            logger.debug("Token has wrong issuer %s", token)
         return False
