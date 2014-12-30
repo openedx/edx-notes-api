@@ -337,7 +337,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         results = self._get_search_results()
         self.assertEqual(results['total'], 2)
 
-        results = self._get_search_results(text="first", highlight=True)
+        results = self._get_search_results(text="first", highlight=True, highlight_class='class', highlight_tag='tag')
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(results['rows'][0]['text'], '<span>First</span> note')
