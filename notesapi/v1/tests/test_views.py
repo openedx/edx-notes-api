@@ -67,7 +67,7 @@ class BaseAnnotationViewTests(APITestCase):
         get_es().indices.delete(index=settings.ES_INDEXES['default'])
         get_es().indices.refresh()
 
-    def _create_annotation(self, refresh=True, **kwargs):
+    def _create_annotation(self, **kwargs):
         """
         Create annotation
         """
@@ -170,7 +170,6 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         Test if annotation 'updated' field is not used by API.
         """
         self.payload['updated'] = 'abc'
-        payload = self.payload
         response = self.client.post(reverse('api:v1:annotations'), self.payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
