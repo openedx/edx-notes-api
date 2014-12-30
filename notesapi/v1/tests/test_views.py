@@ -13,7 +13,7 @@ from rest_framework.test import APITestCase
 
 from elasticutils.contrib.django import get_es
 from .helpers import get_id_token
-from notesapi.v1.models import NoteMappingType, note_searcher
+from notesapi.v1.models import NoteMappingType, note_searcher, Note
 from notesapi.management.commands.create_index import Command as CreateIndexCommand
 
 TEST_USER = "test_user_id"
@@ -131,6 +131,29 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         self.assertEqual(response.data['user'], TEST_USER)
 
+    @patch('django.conf.settings.ES_DISABLED', True)
+    def test_create_es_disabled(self):
+        """
+        Ensure we can create note in database when elasticsearch is disabled.
+        """
+        url = reverse('api:v1:annotations')
+        response = self.client.post(url, self.payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        Note.objects.get(id=response.data['id'])
+        self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 0)
+
+    def test_delete_es_disabled(self):
+        """
+        Ensure we can create note in database when elasticsearch is disabled.
+        """
+        url = reverse('api:v1:annotations')
+        response = self.client.post(url, self.payload, format='json')
+        get_es().indices.refresh()
+        self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
+        with patch('django.conf.settings.ES_DISABLED', True):
+            Note.objects.get(id=response.data['id']).delete()
+        self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
+
     def test_create_ignore_created(self):
         """
         Test if annotation 'created' field is not used by API.
@@ -243,6 +266,19 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         annotation = self._get_annotation(data['id'])
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
         self.assertEqual(response.data['text'], "Bar", "update annotation should be returned in response")
+
+    def test_update_fail(self):
+        """
+        Ensure can not update an existing annotation with bad note.
+        """
+        data = self._create_annotation(text=u"Foo")
+
+        # Bad note. Only id and user is present.
+        payload = {'id': data['id'], 'user': TEST_USER}
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': data['id']})
+        response = self.client.put(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_without_payload_id(self):
         """
