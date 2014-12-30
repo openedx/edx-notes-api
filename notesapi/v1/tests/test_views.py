@@ -3,7 +3,6 @@ import jwt
 from calendar import timegm
 from datetime import datetime, timedelta
 from mock import patch
-import unittest
 
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -143,7 +142,6 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         annotation = self._get_annotation(response.data['id'])
         self.assertNotEqual(annotation['created'], 'abc', "annotation 'created' field should not be used by API")
 
-
     def test_create_ignore_updated(self):
         """
         Test if annotation 'updated' field is not used by API.
@@ -193,18 +191,21 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         Create a note that has several ranges and read it
         """
         note = self.payload.copy()
-        ranges = [{
-                    "start": "/p[1]",
-                    "end": "/p[1]",
-                    "startOffset": 0,
-                    "endOffset": 10,
-                }, {
-                    "start": "/p[2]",
-                    "end": "/p[2]",
-                    "startOffset": 20,
-                    "endOffset": 22,
-                }
-            ]
+        ranges = [
+            {
+                "start": "/p[1]",
+                "end": "/p[1]",
+                "startOffset": 0,
+                "endOffset": 10,
+            },
+            {
+                "start": "/p[2]",
+                "end": "/p[2]",
+                "startOffset": 20,
+                "endOffset": 22,
+            }
+        ]
+
         note['ranges'] = ranges
         note_id = self._create_annotation(**note)['id']
 
@@ -225,7 +226,6 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': 123})
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, "response should be 404 NOT FOUND")
-
 
     def test_update(self):
         """
@@ -315,9 +315,9 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Tests for search method.
         """
-        note_1 = self._create_annotation(text=u'First one')
-        note_2 = self._create_annotation(text=u'Second note')
-        note_3 = self._create_annotation(text=u'Third note')
+        self._create_annotation(text=u'First one')
+        self._create_annotation(text=u'Second note')
+        self._create_annotation(text=u'Third note')
 
         results = self._get_search_results()
         self.assertEqual(results['total'], 3)

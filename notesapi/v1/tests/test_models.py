@@ -1,4 +1,3 @@
-import json
 from unittest import TestCase
 from notesapi.v1.models import Note, NoteMappingType
 from django.core.exceptions import ValidationError

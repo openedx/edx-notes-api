@@ -1,6 +1,5 @@
 import logging
 
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
@@ -27,6 +26,7 @@ class AnnotationSearchView(APIView):
             if field in params:
                 params[field + "__match"] = params[field]
                 del params[field]
+
         if params.get('highlight'):
 
             # Currently we do not use highlight_class and highlight_tag in service.
@@ -35,14 +35,15 @@ class AnnotationSearchView(APIView):
 
             results = NoteMappingType.process_result(
                 list(
-                    note_searcher.query(**params).order_by("-created").values_dict("_source") \
-                        .highlight("text", pre_tags=['<span>'], post_tags=['</span>'])
+                    note_searcher.query(**params).order_by("-created").values_dict("_source")
+                    .highlight("text", pre_tags=['<span>'], post_tags=['</span>'])
                 )
             )
         else:
             results = NoteMappingType.process_result(
                 list(note_searcher.query(**params).order_by("-created").values_dict("_source"))
             )
+
         return Response({'total': len(results), 'rows': results})
 
 
