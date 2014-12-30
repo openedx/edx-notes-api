@@ -117,10 +117,6 @@ class AnnotationDetailView(APIView):
         except Note.DoesNotExist:
             return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
 
-        # changing user_id is not permitted
-        if note.user_id != self.request.DATA['user']:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
         try:
             note.clean(self.request.DATA)
         except ValidationError as e:
@@ -146,13 +142,3 @@ class AnnotationDetailView(APIView):
 
         # Annotation deleted successfully.
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-def _convert_to_int(value, default=None):
-    """
-    Convert given value to int.
-    """
-    try:
-        return int(value or default)
-    except ValueError:
-        return default
