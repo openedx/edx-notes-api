@@ -42,7 +42,6 @@ def get_logger_config(log_dir='/var/tmp',
     else:
         handlers = ['local']
 
-
     logger_config = {
         'version': 1,
         'disable_existing_loggers': False,
