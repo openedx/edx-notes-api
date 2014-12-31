@@ -2,7 +2,7 @@ Django==1.7.1
 requests==2.4.3
 djangorestframework==3.0.2
 django-rest-swagger==0.2.0
-elasticutils==0.10
+elasticutils==0.10.2
 elasticsearch==1.2.0
 django-cors-headers==0.13
 PyJWT==0.3.0
