@@ -47,6 +47,30 @@ STATIC_URL = '/static/'
 
 WSGI_APPLICATION = 'notesserver.wsgi.application'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stderr,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'elasticsearch.trace': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False
+        }
+    },
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'notesapi.v1.permissions.HasAccessToken'
