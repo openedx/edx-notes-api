@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from elasticutils.contrib.django import Indexable, MappingType
 
 
+
 class Note(models.Model):
     """
     Annotation model.
