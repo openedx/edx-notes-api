@@ -11,12 +11,12 @@ class Note(models.Model):
     """
     Annotation model.
     """
-    user_id = models.CharField(max_length=255)
+    user_id = models.CharField(max_length=255, help_text="Anonymized user id, not course specific")
     course_id = models.CharField(max_length=255)
-    usage_id = models.CharField(max_length=255)
-    text = models.TextField(default="")
+    usage_id = models.CharField(max_length=255, help_text="ID of XBlock where the text comes from")
     quote = models.TextField(default="")
-    ranges = models.TextField(default="")
+    text = models.TextField(default="", help_text="Student's thoughts on the quote")
+    ranges = models.TextField(default="", help_text="JSON, describes position of quote in the source text")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -122,9 +122,17 @@ class NoteMappingType(MappingType, Indexable):
     @staticmethod
     def process_result(data):
         """
+<<<<<<< HEAD
         Prepares result for response.
 
         Also prepares ranges field and highlighting.
+=======
+        Unlistifies the result and replaces `text` with highlihted one
+
+        Unlistification: ElasticUtils returns data as [{field:value,..}..] which is not what needed.
+        this function reverses the effect to get the original value.
+        Also filed https://github.com/mozilla/elasticutils/pull/285 to make it unnecessary.
+>>>>>>> specify ElastiUtils more precisely, add docstrings
         """
         for i, item in enumerate(data):
             if isinstance(item, dict):
