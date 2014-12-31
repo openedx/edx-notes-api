@@ -1,5 +1,4 @@
 from .common import *
-from notesserver.settings.logger import get_logger_config
 
 DATABASES = {
     'default': {
@@ -12,5 +11,3 @@ DISABLE_TOKEN_CHECK = False
 INSTALLED_APPS += ('django_nose',)
 
 ES_INDEXES = {'default': 'notes_index_test'}
-
-LOGGING = get_logger_config()
