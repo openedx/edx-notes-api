@@ -1,6 +1,9 @@
 import yaml
 
 from .common import *  # pylint: disable=unused-wildcard-import, wildcard-import
+from notesserver.settings.logger import get_logger_config
+
+LOGGING = get_logger_config()
 
 ###############################################################################
 # Explicitly declare here in case someone changes common.py.

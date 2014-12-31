@@ -1,4 +1,5 @@
 from .common import *
+from notesserver.settings.logger import get_logger_config
 
 DEBUG = True
 
@@ -10,3 +11,5 @@ DATABASES = {
         'NAME': 'default.db',
     }
 }
+
+LOGGING = get_logger_config(debug=DEBUG, dev_env=True, local_loglevel='DEBUG')
