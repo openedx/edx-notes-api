@@ -61,18 +61,3 @@ class NoteTest(TestCase):
 
     def test_get_model(self):
         self.assertIsInstance(NoteMappingType.get_model()(), Note)
-
-    def test_get_mapping(self):
-        expected_mapping = {
-            'properties': {
-                'id': {'type': 'string', 'index': 'not_analyzed', 'store': True},
-                'user': {'type': 'string', 'index': 'not_analyzed', 'store': True},
-                'course_id': {'type': 'string', 'index': 'not_analyzed', 'store': True},
-                'usage_id': {'type': 'string', 'index': 'not_analyzed', 'store': True},
-                'text': {'type': 'string', 'analyzer': 'snowball', 'store': True},
-                'quote': {'type': 'string', 'analyzer': 'snowball', 'store': True},
-                'created': {'type': 'date', 'store': True},
-                'updated': {'type': 'date', 'store': True},
-            }
-        }
-        self.assertEqual(NoteMappingType.get_mapping(), expected_mapping)
