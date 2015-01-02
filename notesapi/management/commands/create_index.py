@@ -16,13 +16,15 @@ class Command(BaseCommand):
             action='store_true',
             dest='drop',
             default=False,
-            help='Recreate index'),
+            help='Recreate index'
+        ),
     )
 
     def handle(self, *args, **options):
         if options['drop']:
             # drop existing
-            get_es().indices.delete(index=settings.ES_INDEXES['default'], ignore=404)
+            get_es().indices.delete(index=settings.ES_INDEXES['default'])
+
         get_es().indices.create(
             index=settings.ES_INDEXES['default'],
             body={
@@ -30,5 +32,4 @@ class Command(BaseCommand):
                     NoteMappingType.get_mapping_type_name(): NoteMappingType.get_mapping()
                 }
             },
-            ignore=400  # ignore when present
         )
