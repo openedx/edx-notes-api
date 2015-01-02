@@ -1,5 +1,7 @@
 import traceback
 import datetime
+
+from django.db import connection
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -25,12 +27,17 @@ def root(request):  # pylint: disable=unused-argument
 @permission_classes([AllowAny])
 def heartbeat(request):  # pylint: disable=unused-argument
     """
-    ElasticSearch is reachable and ready to handle requests.
+    ElasticSearch and database are reachable and ready to handle requests.
     """
-    if get_es().ping():
-        return Response({"OK": True})
-    else:
+    try:
+        db_status()
+    except Exception:
+        return Response({"OK": False, "check": "db"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    if not get_es().ping():
         return Response({"OK": False, "check": "es"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response({"OK": True})
 
 
 @api_view(['GET'])
@@ -40,6 +47,7 @@ def selftest(request):  # pylint: disable=unused-argument
     Manual test endpoint.
     """
     start = datetime.datetime.now()
+
     try:
         es_status = get_es().info()
     except TransportError:
@@ -48,10 +56,29 @@ def selftest(request):  # pylint: disable=unused-argument
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
+    try:
+        db_status()
+        database = "OK"
+    except Exception:
+        return Response(
+            {"db_error": traceback.format_exc()},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
     end = datetime.datetime.now()
     delta = end - start
 
     return Response({
         "es": es_status,
+        "db": database,
         "time_elapsed": int(delta.total_seconds() * 1000)  # In milliseconds.
     })
+
+
+def db_status():
+    """
+    Return database status.
+    """
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT 1")
+        cursor.fetchone()
