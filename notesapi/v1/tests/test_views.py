@@ -55,7 +55,7 @@ class BaseAnnotationViewTests(APITestCase):
 
     @classmethod
     def setUpClass(cls):
-        CreateIndexCommand().handle(drop=True)
+        CreateIndexCommand().handle()
         get_es().indices.refresh()
         get_es().cluster.health(wait_for_status='yellow')
 
