@@ -12,4 +12,4 @@ DATABASES = {
     }
 }
 
-LOGGING = get_logger_config(debug=DEBUG, dev_env=True, local_loglevel='DEBUG')
+LOGGING = get_logger_config(debug=DEBUG)
