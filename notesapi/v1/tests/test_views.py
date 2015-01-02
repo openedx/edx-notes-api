@@ -55,7 +55,15 @@ class BaseAnnotationViewTests(APITestCase):
 
     @classmethod
     def setUpClass(cls):
-        CreateIndexCommand().handle()
+        get_es().indices.delete(index=settings.ES_INDEXES['default'], ignore=404)
+        get_es().indices.create(
+            index=settings.ES_INDEXES['default'],
+            body={
+                'mappings': {
+                    NoteMappingType.get_mapping_type_name(): NoteMappingType.get_mapping()
+                }
+            },
+        )
         get_es().indices.refresh()
         get_es().cluster.health(wait_for_status='yellow')
 
