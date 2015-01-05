@@ -152,14 +152,16 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
     def test_delete_es_disabled(self):
         """
-        Ensure we can create note in database when elasticsearch is disabled.
+        Ensure we can delete note in database when elasticsearch is disabled.
         """
         url = reverse('api:v1:annotations')
         response = self.client.post(url, self.payload, format='json')
         get_es().indices.refresh()
         self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
+
         with patch('django.conf.settings.ES_DISABLED', True):
             Note.objects.get(id=response.data['id']).delete()
+
         self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
 
     def test_create_ignore_created(self):
