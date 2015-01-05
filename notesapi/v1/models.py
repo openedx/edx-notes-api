@@ -12,9 +12,8 @@ class Note(models.Model):
     """
     Annotation model.
     """
-    # no indexes here because retrieval is taken care of by ElasticSearch
-    user_id = models.CharField(max_length=255, help_text="Anonymized user id, not course specific")
-    course_id = models.CharField(max_length=255)
+    user_id = models.CharField(max_length=255, db_index=True, help_text="Anonymized user id, not course specific")
+    course_id = models.CharField(max_length=255, db_index=True)
     usage_id = models.CharField(max_length=255, help_text="ID of XBlock where the text comes from")
     quote = models.TextField(default="")
     text = models.TextField(default="", help_text="Student's thoughts on the quote")
