@@ -335,7 +335,6 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'First one')
         self._create_annotation(text=u'Second note')
         note = self._create_annotation(text=u'Third note')
-        del note['id']
         del note['created']
         del note['updated']
 
