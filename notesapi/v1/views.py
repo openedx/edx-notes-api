@@ -72,12 +72,11 @@ class AnnotationListView(APIView):
         if 'id' in self.request.DATA:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        note = Note()
-
         try:
-            note.clean(self.request.DATA)
+            note = Note.create(self.request.DATA)
+            note.full_clean()
         except ValidationError as error:
-            log.debug(error)
+            log.debug(error, exc_info=True)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         note.save()
@@ -118,9 +117,10 @@ class AnnotationDetailView(APIView):
             return Response('Annotation not found! No update performed.', status=status.HTTP_404_NOT_FOUND)
 
         try:
-            note.clean(self.request.DATA)
-        except ValidationError as e:
-            log.debug(e)
+            note.text = self.request.data['text']
+            note.full_clean()
+        except KeyError as error:
+            log.debug(error, exc_info=True)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         note.save()
