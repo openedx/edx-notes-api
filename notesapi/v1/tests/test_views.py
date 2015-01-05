@@ -332,11 +332,12 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Tests for search method.
         """
-        self._create_annotation(text=u'First one')
+        note = self._create_annotation(text=u'First one')
         self._create_annotation(text=u'Second note')
         self._create_annotation(text=u'Third note')
 
         results = self._get_search_results()
+        self.assertEqual(results['rows'][0], note)
         self.assertEqual(results['total'], 3)
 
         results = self._get_search_results(text="Second")
