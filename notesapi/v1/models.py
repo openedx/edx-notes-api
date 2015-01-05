@@ -18,36 +18,30 @@ class Note(models.Model):
     usage_id = models.CharField(max_length=255, help_text="ID of XBlock where the text comes from")
     quote = models.TextField(default="")
     text = models.TextField(default="", help_text="Student's thoughts on the quote")
-    ranges = models.TextField(default="", help_text="JSON, describes position of quote in the source text")
+    ranges = models.TextField(help_text="JSON, describes position of quote in the source text")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    def clean(self, note):
+    @classmethod
+    def create(cls, note_dict):
         """
-        Clean the note object or raises a ValidationError.
+        Create the note object.
         """
-        if not isinstance(note, dict):
+        if not isinstance(note_dict, dict):
             raise ValidationError('Note must be a dictionary.')
 
-        if len(note) == 0:
+        if len(note_dict) == 0:
             raise ValidationError('Note must have a body.')
 
-        self.text = note.get('text', '')
-        self.quote = note.get('quote', '')
+        ranges = note_dict.get('ranges', list())
 
-        try:
-            self.course_id = note['course_id']
-            self.usage_id = note['usage_id']
-            if not self.user_id:
-                self.user_id = note['user']
-        except KeyError as error:
-            raise ValidationError('Note must have a course_id and usage_id and user_id.')
-
-        ranges = note.get('ranges')
-        if not ranges:
+        if len(ranges) < 1:
             raise ValidationError('Note must contain at least one range.')
 
-        self.ranges = json.dumps(ranges)
+        note_dict['ranges'] = json.dumps(ranges)
+        note_dict['user_id'] = note_dict.pop('user', None)
+
+        return cls(**note_dict)
 
     def as_dict(self):
         """

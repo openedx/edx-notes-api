@@ -166,7 +166,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Test if annotation 'created' field is not used by API.
         """
-        self.payload['created'] = 'abc'
+        self.payload['created'] = '2015-01-05T11:46:58.837059+00:00'
         response = self.client.post(reverse('api:v1:annotations'), self.payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -177,7 +177,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         Test if annotation 'updated' field is not used by API.
         """
-        self.payload['updated'] = 'abc'
+        self.payload['updated'] = '2015-01-05T11:46:58.837059+00:00'
         response = self.client.post(reverse('api:v1:annotations'), self.payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -458,7 +458,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         """
         for i in xrange(5):
             kwargs = {'text': 'Foo_{}'.format(i)}
-            self._create_annotation(refresh=False, **kwargs)
+            self._create_annotation(**kwargs)
 
         url = reverse('api:v1:annotations')
         response = self.client.get(url, self.headers)
