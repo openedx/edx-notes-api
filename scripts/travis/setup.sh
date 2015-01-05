@@ -18,5 +18,6 @@ pushd elasticsearch-$ESVER
     else
         echo "launching with -d option." >&2
         ./bin/elasticsearch -d
+        pip install elasticsearch==1.3.0
     fi
 popd
