@@ -1,13 +1,14 @@
 import traceback
 import datetime
+
+from django.db import connection
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes
 
 from elasticsearch.exceptions import TransportError
-from annotator import es
+from elasticutils import get_es
 
 
 @api_view(['GET'])
@@ -26,12 +27,17 @@ def root(request):  # pylint: disable=unused-argument
 @permission_classes([AllowAny])
 def heartbeat(request):  # pylint: disable=unused-argument
     """
-    ElasticSearch is reachable and ready to handle requests.
+    ElasticSearch and database are reachable and ready to handle requests.
     """
-    if es.conn.ping():
-        return Response({"OK": True})
-    else:
+    try:
+        db_status()
+    except Exception:
+        return Response({"OK": False, "check": "db"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    if not get_es().ping():
         return Response({"OK": False, "check": "es"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response({"OK": True})
 
 
 @api_view(['GET'])
@@ -41,11 +47,21 @@ def selftest(request):  # pylint: disable=unused-argument
     Manual test endpoint.
     """
     start = datetime.datetime.now()
+
     try:
-        es_status = es.conn.info()
+        es_status = get_es().info()
     except TransportError:
         return Response(
             {"es_error": traceback.format_exc()},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+    try:
+        db_status()
+        database = "OK"
+    except Exception:
+        return Response(
+            {"db_error": traceback.format_exc()},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -54,5 +70,15 @@ def selftest(request):  # pylint: disable=unused-argument
 
     return Response({
         "es": es_status,
+        "db": database,
         "time_elapsed": int(delta.total_seconds() * 1000)  # In milliseconds.
     })
+
+
+def db_status():
+    """
+    Return database status.
+    """
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT 1")
+        cursor.fetchone()
