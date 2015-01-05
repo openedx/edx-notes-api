@@ -469,6 +469,14 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
 
+    def test_read_all_no_query_param(self):
+        """
+        Tests list all annotations when course_id query param is not present.
+        """
+        url = reverse('api:v1:annotations')
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
 class AllowAllAnnotationViewTests(BaseAnnotationViewTests):

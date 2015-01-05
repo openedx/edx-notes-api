@@ -58,7 +58,7 @@ class AnnotationListView(APIView):
         """
         params = self.request.QUERY_PARAMS.dict()
 
-        if 'course_id' and 'user' not in params:
+        if 'course_id' not in params:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:
