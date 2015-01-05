@@ -445,9 +445,10 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
     def test_read_all_no_annotations(self):
         """
-        Tests list all annotations endpoint when no annotations are present in elasticsearch.
+        Tests list all annotations endpoint when no annotations are present in database.
         """
         url = reverse('api:v1:annotations')
+        self.headers["course_id"] = "a/b/c"
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
@@ -457,10 +458,13 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         Tests list all annotations.
         """
         for i in xrange(5):
-            kwargs = {'text': 'Foo_{}'.format(i)}
+            kwargs = {'text': 'Foo_{}'.format(i),
+
+            }
             self._create_annotation(**kwargs)
 
         url = reverse('api:v1:annotations')
+        self.headers["course_id"] = "test-course-id"
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
@@ -505,6 +509,7 @@ class TokenTests(BaseAnnotationViewTests):
         """
         Ensure we can read list of annotations
         """
+        self.headers["course_id"] = "test-course-id"
         response = self.client.get(self.url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

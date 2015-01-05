@@ -57,11 +57,16 @@ class AnnotationListView(APIView):
         Get a list of all annotations.
         """
         params = self.request.QUERY_PARAMS.dict()
-        results = NoteMappingType.process_result(
-            list(note_searcher.filter(**params).values_dict("_source"))
-        )
 
-        return Response(results)
+        if 'course_id' and 'user' not in params:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            results = Note.objects.filter(course_id=params['course_id'], user_id=params['user'])
+        except Note.DoesNotExist:
+            pass
+
+        return Response([result.as_dict() for result in results])
 
     def post(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -98,12 +103,13 @@ class AnnotationDetailView(APIView):
         Get an existing annotation.
         """
         note_id = self.kwargs.get('annotation_id')
-        if not note_searcher.filter(id=note_id).count():
-            return Response(False, status=status.HTTP_404_NOT_FOUND)
-        results = NoteMappingType.process_result(
-            list(note_searcher.filter(id=note_id).values_dict("_source"))
-        )
-        return Response(results[0])
+
+        try:
+            note = Note.objects.get(id=note_id)
+        except Note.DoesNotExist:
+            return Response('Annotation not found!', status=status.HTTP_404_NOT_FOUND)
+
+        return Response(note.as_dict())
 
     def put(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
