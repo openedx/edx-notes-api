@@ -1,5 +1,5 @@
 from unittest import TestCase
-from notesapi.v1.models import Note, NoteMappingType
+from notesapi.v1.models import Note
 from django.core.exceptions import ValidationError
 
 
@@ -47,11 +47,3 @@ class NoteTest(TestCase):
             with self.assertRaises(ValidationError):
                 note = Note.create(payload)
                 note.full_clean()
-
-    def test_extract_document(self):
-        note = Note.create(self.note_dict.copy())
-        note.save()
-        self.assertEqual(NoteMappingType.extract_document(note.id), note.as_dict())
-
-    def test_get_model(self):
-        self.assertIsInstance(NoteMappingType.get_model()(), Note)

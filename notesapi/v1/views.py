@@ -1,4 +1,5 @@
 import logging
+import json
 
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
@@ -7,7 +8,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from notesapi.v1.models import Note, NoteMappingType, note_searcher
+from notesapi.v1.models import Note
+from haystack.query import SearchQuerySet
 
 log = logging.getLogger(__name__)
 
@@ -22,27 +24,20 @@ class AnnotationSearchView(APIView):
         Search annotations.
         """
         params = self.request.QUERY_PARAMS.dict()
-        for field in ('text', 'quote'):
-            if field in params:
-                params[field + "__match"] = params[field]
-                del params[field]
+        query = SearchQuerySet().models(Note).filter(
+            **{f:v for (f,v) in params.items() if f in ('user', 'course_id', 'usage_id', 'text')}
+        ).order_by('-updated')
 
         if params.get('highlight'):
+            query = query.highlight()
 
-            # Currently we do not use highlight_class and highlight_tag in service.
-            for param in ['highlight', 'highlight_class', 'highlight_tag']:
-                params.pop(param, None)
-
-            results = NoteMappingType.process_result(
-                list(
-                    note_searcher.query(**params).order_by("-created").values_dict("_source")
-                    .highlight("text", pre_tags=['<span>'], post_tags=['</span>'])
-                )
-            )
-        else:
-            results = NoteMappingType.process_result(
-                list(note_searcher.query(**params).order_by("-created").values_dict("_source"))
-            )
+        results = []
+        for item in query:
+            note_dict = item.get_stored_fields()
+            note_dict['range'] = json.loads(item.ranges)
+            if params.get('highlight'):
+                note_dict['text'] = item.highlighted[0]
+            results.append(note_dict)
 
         return Response({'total': len(results), 'rows': results})
 

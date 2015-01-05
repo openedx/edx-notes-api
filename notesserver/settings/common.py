@@ -18,9 +18,14 @@ SECRET_KEY = '*^owi*4%!%9=#h@app!l^$jz8(c*q297^)4&4yn^#_m#fq=z#l'
 CLIENT_ID = 'edx-notes-id'
 CLIENT_SECRET = 'edx-notes-secret'
 
-ES_URLS = ['http://localhost:9200']
-ES_INDEXES = {'default': 'notes_index'}
-ES_DISABLED = False
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'notes_index',
+    },
+}
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 # Number of rows to return by default in result.
 RESULTS_DEFAULT_SIZE = 25
@@ -41,6 +46,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_swagger',
     'corsheaders',
+    'haystack',
     'notesapi',
     'notesapi.v1',
 )

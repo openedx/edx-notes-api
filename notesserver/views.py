@@ -8,7 +8,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
 from elasticsearch.exceptions import TransportError
-from elasticutils import get_es
+from haystack import connections
+
+
+def get_es():
+    return connections['default'].get_backend().conn
 
 
 @api_view(['GET'])

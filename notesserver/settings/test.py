@@ -10,7 +10,13 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 DISABLE_TOKEN_CHECK = False
 INSTALLED_APPS += ('django_nose',)
 
-ES_INDEXES = {'default': 'notes_index_test'}
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'notes_index_test',
+    },
+}
 
 LOGGING = {
     'version': 1,

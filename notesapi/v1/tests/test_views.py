@@ -4,6 +4,7 @@ from calendar import timegm
 from datetime import datetime, timedelta
 from mock import patch
 
+from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.http import QueryDict
@@ -11,10 +12,9 @@ from django.http import QueryDict
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from elasticutils.contrib.django import get_es
 from .helpers import get_id_token
-from notesapi.v1.models import NoteMappingType, note_searcher, Note
-from notesapi.management.commands.create_index import Command as CreateIndexCommand
+from notesapi.v1.models import Note
+
 
 TEST_USER = "test_user_id"
 
@@ -24,6 +24,9 @@ class BaseAnnotationViewTests(APITestCase):
     Abstract class for testing annotation views.
     """
     def setUp(self):
+        call_command('clear_index', interactive=False)
+        call_command('update_index')
+
         token = get_id_token(TEST_USER)
         self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
         self.headers = {"user": TEST_USER}
@@ -44,37 +47,6 @@ class BaseAnnotationViewTests(APITestCase):
             ],
         }
 
-    def tearDown(self):
-        for note_id in note_searcher.all().values_list('id'):
-            get_es().delete(
-                index=settings.ES_INDEXES['default'],
-                doc_type=NoteMappingType.get_mapping_type_name(),
-                id=note_id[0][0]
-            )
-        get_es().indices.refresh()
-
-    @classmethod
-    def setUpClass(cls):
-        get_es().indices.delete(index=settings.ES_INDEXES['default'], ignore=404)
-        get_es().indices.create(
-            index=settings.ES_INDEXES['default'],
-            body={
-                'mappings': {
-                    NoteMappingType.get_mapping_type_name(): NoteMappingType.get_mapping()
-                }
-            },
-        )
-        get_es().indices.refresh()
-        get_es().cluster.health(wait_for_status='yellow')
-
-    @classmethod
-    def tearDownClass(cls):
-        """
-        deletes the test index
-        """
-        get_es().indices.delete(index=settings.ES_INDEXES['default'])
-        get_es().indices.refresh()
-
     def _create_annotation(self, **kwargs):
         """
         Create annotation
@@ -84,14 +56,14 @@ class BaseAnnotationViewTests(APITestCase):
         url = reverse('api:v1:annotations')
         response = self.client.post(url, opts, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        get_es().indices.refresh()
+        call_command('update_index')
         return response.data.copy()
 
     def _get_annotation(self, annotation_id):
         """
         Fetch annotation directly from elasticsearch.
         """
-        get_es().indices.refresh()
+        call_command('update_index')
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation_id})
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -139,30 +111,30 @@ class AnnotationViewTests(BaseAnnotationViewTests):
 
         self.assertEqual(response.data['user'], TEST_USER)
 
-    @patch('django.conf.settings.ES_DISABLED', True)
-    def test_create_es_disabled(self):
-        """
-        Ensure we can create note in database when elasticsearch is disabled.
-        """
-        url = reverse('api:v1:annotations')
-        response = self.client.post(url, self.payload, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        Note.objects.get(id=response.data['id'])
-        self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 0)
+    # @patch('django.conf.settings.ES_DISABLED', True)
+    # def test_create_es_disabled(self):
+    #     """
+    #     Ensure we can create note in database when elasticsearch is disabled.
+    #     """
+    #     url = reverse('api:v1:annotations')
+    #     response = self.client.post(url, self.payload, format='json')
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    #     Note.objects.get(id=response.data['id'])
+    #     self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 0)
 
-    def test_delete_es_disabled(self):
-        """
-        Ensure we can delete note in database when elasticsearch is disabled.
-        """
-        url = reverse('api:v1:annotations')
-        response = self.client.post(url, self.payload, format='json')
-        get_es().indices.refresh()
-        self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
+    # def test_delete_es_disabled(self):
+    #     """
+    #     Ensure we can delete note in database when elasticsearch is disabled.
+    #     """
+    #     url = reverse('api:v1:annotations')
+    #     response = self.client.post(url, self.payload, format='json')
+    #     call_command('update_index')
+    #     self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
 
-        with patch('django.conf.settings.ES_DISABLED', True):
-            Note.objects.get(id=response.data['id']).delete()
+    #     with patch('django.conf.settings.ES_DISABLED', True):
+    #         Note.objects.get(id=response.data['id']).delete()
 
-        self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
+    #     self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
 
     def test_create_ignore_created(self):
         """
@@ -269,7 +241,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         payload.update(self.headers)
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': data['id']})
         response = self.client.put(url, payload, format='json')
-        get_es().indices.refresh()
+        call_command('update_index')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         annotation = self._get_annotation(data['id'])
@@ -343,7 +315,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         response = self.client.delete(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
 
-        get_es().indices.refresh()
+        call_command('update_index')
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -382,10 +354,11 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         results = self._get_search_results()
         self.assertEqual(results['total'], 2)
 
+        # FIXME class and tag
         results = self._get_search_results(text="first", highlight=True, highlight_class='class', highlight_tag='tag')
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
-        self.assertEqual(results['rows'][0]['text'], '<span>First</span> note')
+        self.assertEqual(results['rows'][0]['text'], '<em>First</em> note')
 
     def test_search_ordering(self):
         """

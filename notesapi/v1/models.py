@@ -4,8 +4,6 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.db.models import signals
 from django.dispatch import receiver
-from elasticutils.contrib.django import Indexable, MappingType
-
 
 
 class Note(models.Model):
@@ -60,79 +58,3 @@ class Note(models.Model):
             'created': created,
             'updated': updated,
         }
-
-
-@receiver(signals.post_save, sender=Note)
-def update_in_index(sender, instance, **kwargs):
-    if settings.ES_DISABLED:
-        return
-    NoteMappingType.index(instance.as_dict(), id_=instance.id, overwrite_existing=True)
-
-
-@receiver(signals.post_delete, sender=Note)
-def delete_in_index(sender, instance, **kwargs):
-    if settings.ES_DISABLED:
-        return
-    NoteMappingType.unindex(id_=instance.id)
-
-
-class NoteMappingType(MappingType, Indexable):
-    """
-    Mapping type for Note.
-    """
-
-    @classmethod
-    def get_model(cls):
-        return Note
-
-    @classmethod
-    def get_mapping(cls):
-        """
-        Returns an Elasticsearch mapping for Note MappingType
-        """
-        charfield = {'type': 'string', 'index': 'not_analyzed', 'store': True}
-        return {
-            'properties': {
-                'id': charfield,
-                'user': charfield,
-                'course_id': charfield,
-                'usage_id': charfield,
-                'text': {'type': 'string', 'analyzer': 'snowball', 'store': True},
-                'quote': {'type': 'string', 'analyzer': 'snowball', 'store': True},
-                'created': {'type': 'date', 'store': True},
-                'updated': {'type': 'date', 'store': True},
-            }
-        }
-
-    @classmethod
-    def extract_document(cls, obj_id, obj=None):
-        """
-        Converts this instance into an Elasticsearch document.
-        """
-        if obj is None:
-            obj = cls.get_model().objects.get(pk=obj_id)
-
-        return obj.as_dict()
-
-    @staticmethod
-    def process_result(data):
-        """
-        Unlistifies the result and replaces `text` with highlihted one
-
-        Unlistification: ElasticUtils returns data as [{field:value,..}..] which is not what needed.
-        this function reverses the effect to get the original value.
-        Also filed https://github.com/mozilla/elasticutils/pull/285 to make it unnecessary.
-        """
-        for i, item in enumerate(data):
-            if isinstance(item, dict):
-                for k, v in item.items():
-                    if k != 'ranges' and isinstance(v, list) and len(v) > 0:
-                        data[i][k] = v[0]
-
-                    # Substitute the value of text field by highlighted result.
-                    if len(item.es_meta.highlight) and k == 'text':
-                        data[i][k] = item.es_meta.highlight['text'][0]
-
-        return data
-
-note_searcher = NoteMappingType.search()
