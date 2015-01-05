@@ -1,6 +1,7 @@
 from haystack import indexes
 from .models import Note
 
+
 class NoteIndex(indexes.SearchIndex, indexes.Indexable):
     user = indexes.CharField(model_attr='user_id', indexed=False)
     course_id = indexes.CharField(model_attr='course_id', indexed=False)

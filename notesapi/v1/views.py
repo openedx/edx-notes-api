@@ -25,7 +25,7 @@ class AnnotationSearchView(APIView):
         """
         params = self.request.QUERY_PARAMS.dict()
         query = SearchQuerySet().models(Note).filter(
-            **{f:v for (f,v) in params.items() if f in ('user', 'course_id', 'usage_id', 'text')}
+            **{f: v for (f, v) in params.items() if f in ('user', 'course_id', 'usage_id', 'text')}
         ).order_by('-updated')
 
         if params.get('highlight'):

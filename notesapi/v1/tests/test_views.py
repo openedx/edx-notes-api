@@ -433,9 +433,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         Tests list all annotations.
         """
         for i in xrange(5):
-            kwargs = {'text': 'Foo_{}'.format(i),
-
-            }
+            kwargs = {'text': 'Foo_{}'.format(i)}
             self._create_annotation(**kwargs)
 
         url = reverse('api:v1:annotations')
