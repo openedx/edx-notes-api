@@ -394,15 +394,22 @@ class AnnotationSearchlViewTests(BaseAnnotationViewTests):
         """
         Tests ordering of search results.
 
-        Sorting is by descending order (most recent first).
+        Sorting is by descending order by updated field (most recent first).
         """
         self._create_annotation(text=u'First one')
-        self._create_annotation(text=u'Second note')
+        note = self._create_annotation(text=u'Second note')
         self._create_annotation(text=u'Third note')
 
+        payload = self.payload.copy()
+        payload.update({'id': note['id'], 'text': 'Updated Second Note'})
+        payload.update(self.headers)
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
+        response = self.client.put(url, payload, format='json')
+        call_command('update_index')
+
         results = self._get_search_results()
-        self.assertEqual(results['rows'][0]['text'], 'Third note')
-        self.assertEqual(results['rows'][1]['text'], 'Second note')
+        self.assertEqual(results['rows'][0]['text'], 'Updated Second Note')
+        self.assertEqual(results['rows'][1]['text'], 'Third note')
         self.assertEqual(results['rows'][2]['text'], 'First one')
 
     @unittest.skipIf(settings.ES_DISABLED, "Unicode support in MySQL is limited")
