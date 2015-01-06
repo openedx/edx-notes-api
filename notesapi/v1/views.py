@@ -23,7 +23,11 @@ class AnnotationSearchView(APIView):
     Search annotations.
     """
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
-        if settings.ES_DISABLED:
+        """
+        Search annotations in most appropriate storage
+        """
+        # search in DB when ES is not available or there is no need to bother it
+        if settings.ES_DISABLED or 'text' not in self.request.QUERY_PARAMS.dict():
             results = self.get_from_db(*args, **kwargs)
         else:
             results = self.get_from_es(*args, **kwargs)
