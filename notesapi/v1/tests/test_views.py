@@ -87,9 +87,9 @@ class BaseAnnotationViewTests(APITestCase):
         return result.data
 
 
-class AnnotationViewTests(BaseAnnotationViewTests):
+class AnnotationListViewTests(BaseAnnotationViewTests):
     """
-    Test annotation views, checking permissions
+    Test annotation creation and listing by user and course
     """
 
     def test_create_note(self):
@@ -156,22 +156,6 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         annotation = self._get_annotation(note['id'])
         self.assertEqual(annotation['text'], 'test note text')
 
-    def test_read(self):
-        """
-        Ensure we can get an existing annotation.
-        """
-        note_id = self._create_annotation(**self.payload)['id']
-
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note_id})
-        response = self.client.get(url, self.headers)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        annotation = response.data
-        del annotation['id']
-        del annotation['updated']
-        del annotation['created']
-        self.assertEqual(annotation, self.payload)
-
     def test_create_multirange(self):
         """
         Create a note that has several ranges and read it
@@ -204,6 +188,59 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         del annotation['updated']
         del annotation['created']
         self.assertEqual(annotation, note)
+
+    def test_read_all_no_annotations(self):
+        """
+        Tests list all annotations endpoint when no annotations are present in database.
+        """
+        url = reverse('api:v1:annotations')
+        self.headers["course_id"] = "a/b/c"
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
+
+    def test_read_all(self):
+        """
+        Tests list all annotations.
+        """
+        for i in xrange(5):
+            kwargs = {'text': 'Foo_{}'.format(i)}
+            self._create_annotation(**kwargs)
+
+        url = reverse('api:v1:annotations')
+        self.headers["course_id"] = "test-course-id"
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
+
+    def test_read_all_no_query_param(self):
+        """
+        Tests list all annotations when course_id query param is not present.
+        """
+        url = reverse('api:v1:annotations')
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class AnnotationDetailViewTests(BaseAnnotationViewTests):
+    """
+    Test one annotation updating, reading and deleting
+    """
+    def test_read(self):
+        """
+        Ensure we can get an existing annotation.
+        """
+        note_id = self._create_annotation(**self.payload)['id']
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note_id})
+        response = self.client.get(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        annotation = response.data
+        del annotation['id']
+        del annotation['updated']
+        del annotation['created']
+        self.assertEqual(annotation, self.payload)
 
     def test_read_notfound(self):
         """
@@ -310,6 +347,11 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         response = self.client.delete(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, "response should be 404 NOT FOUND")
 
+
+class AnnotationSearchlViewTests(BaseAnnotationViewTests):
+    """
+    Test annotation searching by user, course_id, usage_id and text
+    """
     def test_search(self):
         """
         Tests for search method.
@@ -407,38 +449,6 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         results = self._get_search_results(course_id="b")
         self.assertEqual(results['total'], 1)
         self.assertEqual(results['rows'][0]['text'], u'Third note')
-
-    def test_read_all_no_annotations(self):
-        """
-        Tests list all annotations endpoint when no annotations are present in database.
-        """
-        url = reverse('api:v1:annotations')
-        self.headers["course_id"] = "a/b/c"
-        response = self.client.get(url, self.headers)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
-
-    def test_read_all(self):
-        """
-        Tests list all annotations.
-        """
-        for i in xrange(5):
-            kwargs = {'text': 'Foo_{}'.format(i)}
-            self._create_annotation(**kwargs)
-
-        url = reverse('api:v1:annotations')
-        self.headers["course_id"] = "test-course-id"
-        response = self.client.get(url, self.headers)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
-
-    def test_read_all_no_query_param(self):
-        """
-        Tests list all annotations when course_id query param is not present.
-        """
-        url = reverse('api:v1:annotations')
-        response = self.client.get(url, self.headers)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
