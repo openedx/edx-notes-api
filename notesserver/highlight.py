@@ -1,6 +1,7 @@
 """
 django-haystack does not support passing additional highlighting parameters
-to backends, so we use our subclassed one which does.
+to backends, so we use our subclassed SearchQuerySet which does,
+and subclassed ElasticsearchSearchBackend which passes them to ES
 """
 
 import haystack
