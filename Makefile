@@ -9,7 +9,6 @@ else
 test_settings = notesserver.settings.test
 endif
 
-
 test: clean
 	./manage.py test --settings=$(test_settings) --with-coverage --with-ignore-docstrings \
 		--exclude-dir=notesserver/settings --cover-inclusive --cover-branches \
@@ -42,7 +41,7 @@ diff-quality:
 coverage: diff-coverage diff-quality
 
 create-index:
-	python manage.py create_index
+	python manage.py rebuild_index
 
 requirements:
 	pip install -q -r requirements/base.txt --exists-action=w

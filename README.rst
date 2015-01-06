@@ -16,8 +16,7 @@ The edX Notes API is designed to be compatible with the
 Getting Started
 ---------------
 
-1. You'll need a recent version `ElasticSearch <http://elasticsearch.org>`__ (>=1.0.0)
-installed.
+1. You'll need an `ElasticSearch <http://elasticsearch.org>`__ installed.
 
 2. Install the requirements:
 
