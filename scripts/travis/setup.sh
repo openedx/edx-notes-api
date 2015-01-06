@@ -7,7 +7,12 @@
 
 set -e
 
-echo "Starting Elasticsearch $ESVER" >&2
+if [[ $ESVER == "-" ]];
+then
+    exit 0
+fi
+
+echo "Starting ElasticSearch $ESVER" >&2
 pushd elasticsearch-$ESVER
     # Elasticsearch 0.90 daemonizes automatically, but 1.0+ requires
     # a -d argument.

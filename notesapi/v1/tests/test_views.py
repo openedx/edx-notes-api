@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import jwt
+import unittest
 from calendar import timegm
 from datetime import datetime, timedelta
 from mock import patch
 
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.http import QueryDict
 
@@ -15,8 +17,13 @@ from rest_framework.test import APITestCase
 from .helpers import get_id_token
 from notesapi.v1.models import Note
 
-
 TEST_USER = "test_user_id"
+
+if not settings.ES_DISABLED:
+    import haystack
+else:
+    def call_command(*args, **kwargs):
+        pass
 
 
 class BaseAnnotationViewTests(APITestCase):
@@ -110,31 +117,6 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         )
 
         self.assertEqual(response.data['user'], TEST_USER)
-
-    # @patch('django.conf.settings.ES_DISABLED', True)
-    # def test_create_es_disabled(self):
-    #     """
-    #     Ensure we can create note in database when elasticsearch is disabled.
-    #     """
-    #     url = reverse('api:v1:annotations')
-    #     response = self.client.post(url, self.payload, format='json')
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    #     Note.objects.get(id=response.data['id'])
-    #     self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 0)
-
-    # def test_delete_es_disabled(self):
-    #     """
-    #     Ensure we can delete note in database when elasticsearch is disabled.
-    #     """
-    #     url = reverse('api:v1:annotations')
-    #     response = self.client.post(url, self.payload, format='json')
-    #     call_command('update_index')
-    #     self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
-
-    #     with patch('django.conf.settings.ES_DISABLED', True):
-    #         Note.objects.get(id=response.data['id']).delete()
-
-    #     self.assertEqual(note_searcher.filter(id=response.data['id']).count(), 1)
 
     def test_create_ignore_created(self):
         """
@@ -350,6 +332,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(results['rows'][0]['text'], 'Second note')
 
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
     def test_search_highlight(self):
         """
         Tests highlighting.
@@ -381,6 +364,7 @@ class AnnotationViewTests(BaseAnnotationViewTests):
         self.assertEqual(results['rows'][1]['text'], 'Second note')
         self.assertEqual(results['rows'][2]['text'], 'First one')
 
+    @unittest.skipIf(settings.ES_DISABLED, "Unicode support in MySQL is limited")
     def test_search_unicode(self):
         """
         Tests searching of unicode strings.

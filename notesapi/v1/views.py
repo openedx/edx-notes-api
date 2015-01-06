@@ -1,6 +1,8 @@
 import logging
 import json
 
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
@@ -9,7 +11,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from notesapi.v1.models import Note
-from haystack.query import SearchQuerySet
+
+if not settings.ES_DISABLED:
+    from haystack.query import SearchQuerySet
 
 log = logging.getLogger(__name__)
 
@@ -18,10 +22,33 @@ class AnnotationSearchView(APIView):
     """
     Search annotations.
     """
-
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
+        if settings.ES_DISABLED:
+            results = self.get_from_db(*args, **kwargs)
+        else:
+            results = self.get_from_es(*args, **kwargs)
+        return Response({'total': len(results), 'rows': results})
+
+    def get_from_db(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
-        Search annotations.
+        Search annotations in database
+        """
+        params = self.request.QUERY_PARAMS.dict()
+        query = Note.objects.filter(
+            **{f: v for (f, v) in params.items() if f in ('course_id', 'usage_id')}
+        ).order_by('-updated')
+
+        if 'user' in params:
+            query = query.filter(user_id=params['user'])
+
+        if 'text' in params:
+            query = query.filter(text__icontains=params['text'])
+
+        return [note.as_dict() for note in query]
+
+    def get_from_es(self, *args, **kwargs):  # pylint: disable=unused-argument
+        """
+        Search annotations in ElasticSearch
         """
         params = self.request.QUERY_PARAMS.dict()
         query = SearchQuerySet().models(Note).filter(
@@ -40,7 +67,7 @@ class AnnotationSearchView(APIView):
                 note_dict['text'] = item.highlighted[0]
             results.append(note_dict)
 
-        return Response({'total': len(results), 'rows': results})
+        return results
 
 
 class AnnotationListView(APIView):

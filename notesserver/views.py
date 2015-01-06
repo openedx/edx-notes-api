@@ -2,17 +2,27 @@ import traceback
 import datetime
 
 from django.db import connection
+from django.conf import settings
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
 from elasticsearch.exceptions import TransportError
-from haystack import connections
 
+if not settings.ES_DISABLED:
+    from haystack import connections
 
-def get_es():
-    return connections['default'].get_backend().conn
+    def get_es():
+        return connections['default'].get_backend().conn
+else:
+    from mock import Mock
+
+    def get_es():
+        return Mock(
+            ping=lambda: True,
+            info=lambda: {},
+        )
 
 
 @api_view(['GET'])

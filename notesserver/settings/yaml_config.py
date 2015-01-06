@@ -17,3 +17,7 @@ with open(CONFIG_ROOT / "edx-notes-api.yml") as yaml_file:
     config_from_yaml = yaml.load(yaml_file)
 
 vars().update(config_from_yaml)
+
+if ES_DISABLED:
+    HAYSTACK_CONNECTIONS = {}
+    INSTALLED_APPS.remove('haystack')

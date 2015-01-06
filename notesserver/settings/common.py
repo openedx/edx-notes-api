@@ -18,6 +18,7 @@ SECRET_KEY = '*^owi*4%!%9=#h@app!l^$jz8(c*q297^)4&4yn^#_m#fq=z#l'
 CLIENT_ID = 'edx-notes-id'
 CLIENT_SECRET = 'edx-notes-secret'
 
+ES_DISABLED = False
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
@@ -41,7 +42,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_swagger',
@@ -49,7 +50,7 @@ INSTALLED_APPS = (
     'haystack',
     'notesapi',
     'notesapi.v1',
-)
+]
 
 STATIC_URL = '/static/'
 
