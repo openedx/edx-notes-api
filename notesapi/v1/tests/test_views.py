@@ -401,11 +401,16 @@ class AnnotationSearchlViewTests(BaseAnnotationViewTests):
         results = self._get_search_results()
         self.assertEqual(results['total'], 2)
 
-        # FIXME class and tag
-        results = self._get_search_results(text="first", highlight=True, highlight_class='class', highlight_tag='tag')
+        results = self._get_search_results(text="first", highlight=True)
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(results['rows'][0]['text'], '<em>First</em> note')
+
+        results = self._get_search_results(text="first", highlight=True, highlight_tag='tag')
+        self.assertEqual(results['rows'][0]['text'], '<tag>First</tag> note')
+
+        results = self._get_search_results(text="first", highlight=True, highlight_tag='tag', highlight_class='klass')
+        self.assertEqual(results['rows'][0]['text'], '<tag class="klass">First</tag> note')
 
     def test_search_ordering(self):
         """

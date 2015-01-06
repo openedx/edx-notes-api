@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from notesapi.v1.models import Note
 
 if not settings.ES_DISABLED:
-    from haystack.query import SearchQuerySet
+    from notesserver.highlight import SearchQuerySet
 
 log = logging.getLogger(__name__)
 
@@ -60,7 +60,16 @@ class AnnotationSearchView(APIView):
         ).order_by('-updated')
 
         if params.get('highlight'):
-            query = query.highlight()
+            tag = params.get('highlight_tag', 'em')
+            klass = params.get('highlight_class')
+            opts = {
+                'pre_tags': ['<{tag}{klass_str}>'.format(
+                    tag=tag,
+                    klass_str=' class="{}"'.format(klass) if klass else ''
+                )],
+                'post_tags': ['</{tag}>'.format(tag=tag)],
+            }
+            query = query.highlight(**opts)
 
         results = []
         for item in query:

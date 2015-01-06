@@ -12,7 +12,7 @@ INSTALLED_APPS += ('django_nose',)
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'ENGINE': 'notesserver.highlight.ElasticsearchSearchEngine',
         'URL': 'http://127.0.0.1:9200/',
         'INDEX_NAME': 'notes_index_test',
     },

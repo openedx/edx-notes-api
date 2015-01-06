@@ -12,7 +12,7 @@ endif
 test: clean
 	./manage.py test --settings=$(test_settings) --with-coverage --with-ignore-docstrings \
 		--exclude-dir=notesserver/settings --cover-inclusive --cover-branches \
-		--ignore-files=search_indexes.py \
+		--ignore-files=search_indexes.py --ignore-files=highlight.py\
 		--cover-html --cover-html-dir=build/coverage/html/ \
 		--cover-xml --cover-xml-file=build/coverage/coverage.xml \
 		$(foreach package,$(PACKAGES),--cover-package=$(package)) \
