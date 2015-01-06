@@ -20,8 +20,11 @@ else:
 
     def get_es():
         return Mock(
-            ping=lambda: True,
-            info=lambda: {},
+            ping=lambda: False,
+            info=lambda: {
+                'ok': False,
+                'status': 503,
+            },
         )
 
 

@@ -7,7 +7,6 @@ from mock import patch
 
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.http import QueryDict
 

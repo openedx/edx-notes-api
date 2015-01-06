@@ -1,6 +1,7 @@
-import datetime
 import base64
+import datetime
 from mock import patch, Mock
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import DatabaseError
 from rest_framework.test import APITestCase
@@ -16,8 +17,12 @@ class OperationalEndpointsTest(APITestCase):
         Heartbeat endpoint success.
         """
         response = self.client.get(reverse('heartbeat'))
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.data, {"OK": True})
+        if settings.ES_DISABLED:
+            self.assertEquals(response.status_code, 500)
+            self.assertEquals(response.data, {"OK": False, 'check': 'es'})
+        else:
+            self.assertEquals(response.status_code, 200)
+            self.assertEquals(response.data, {"OK": True})
 
     @patch('notesserver.views.get_es')
     def test_heartbeat_failure_es(self, mocked_get_es):
