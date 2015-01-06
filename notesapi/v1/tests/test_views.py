@@ -67,23 +67,13 @@ class BaseAnnotationViewTests(APITestCase):
 
     def _get_annotation(self, annotation_id):
         """
-        Fetch annotation directly from elasticsearch.
+        Fetch annotation
         """
         call_command('update_index')
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation_id})
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         return response.data
-
-    def _get_search_results(self, **kwargs):
-        """
-        Helper for search method. All keyword parameters are passed in GET
-        """
-        q = QueryDict("user=" + TEST_USER, mutable=True)
-        q.update(kwargs)
-        url = reverse('api:v1:annotations_search') + '?{}'.format(q.urlencode())
-        result = self.client.get(url)
-        return result.data
 
 
 class AnnotationListViewTests(BaseAnnotationViewTests):
@@ -192,9 +182,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         """
         Tests list all annotations endpoint when no annotations are present in database.
         """
-        url = reverse('api:v1:annotations')
-        self.headers["course_id"] = "a/b/c"
-        response = self.client.get(url, self.headers)
+        headers = self.headers.copy()
+        headers["course_id"] = "a/b/c"
+        response = self.client.get(reverse('api:v1:annotations'), headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
 
@@ -206,18 +196,35 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
             kwargs = {'text': 'Foo_{}'.format(i)}
             self._create_annotation(**kwargs)
 
-        url = reverse('api:v1:annotations')
-        self.headers["course_id"] = "test-course-id"
-        response = self.client.get(url, self.headers)
+        headers = self.headers.copy()
+        headers["course_id"] = "test-course-id"
+        response = self.client.get(reverse('api:v1:annotations'), headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
+
+    def test_read_all_ordering(self):
+        """
+        Tests ordering of listing of all notes.
+
+        Sorting is by descending order (most recent first).
+        """
+        self._create_annotation(text=u'First one')
+        self._create_annotation(text=u'Second note')
+        self._create_annotation(text=u'Third note')
+
+        headers = self.headers.copy()
+        headers["course_id"] = "test-course-id"
+        results = self.client.get(reverse('api:v1:annotations'), headers).data
+
+        self.assertEqual(results[0]['text'], 'Third note')
+        self.assertEqual(results[1]['text'], 'Second note')
+        self.assertEqual(results[2]['text'], 'First one')
 
     def test_read_all_no_query_param(self):
         """
         Tests list all annotations when course_id query param is not present.
         """
-        url = reverse('api:v1:annotations')
-        response = self.client.get(url, self.headers)
+        response = self.client.get(reverse('api:v1:annotations'), self.headers)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
@@ -351,6 +358,16 @@ class AnnotationSearchlViewTests(BaseAnnotationViewTests):
     """
     Test annotation searching by user, course_id, usage_id and text
     """
+    def _get_search_results(self, **kwargs):
+        """
+        Helper for search method. All keyword parameters are passed in GET
+        """
+        q = QueryDict("user=" + TEST_USER, mutable=True)
+        q.update(kwargs)
+        url = reverse('api:v1:annotations_search') + '?{}'.format(q.urlencode())
+        result = self.client.get(url)
+        return result.data
+
     def test_search(self):
         """
         Tests for search method.

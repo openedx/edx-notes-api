@@ -88,10 +88,7 @@ class AnnotationListView(APIView):
         if 'course_id' not in params:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            results = Note.objects.filter(course_id=params['course_id'], user_id=params['user'])
-        except Note.DoesNotExist:
-            pass
+        results = Note.objects.filter(course_id=params['course_id'], user_id=params['user']).order_by('-updated')
 
         return Response([result.as_dict() for result in results])
 
