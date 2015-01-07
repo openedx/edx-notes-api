@@ -8,3 +8,4 @@ django-cors-headers==0.13
 PyJWT==0.3.0
 MySQL-python==1.2.5  # GPL License
 gunicorn==19.1.1     # MIT
+path.py==3.0.1
