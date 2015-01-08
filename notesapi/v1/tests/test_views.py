@@ -93,6 +93,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
         annotation = response.data.copy()
         self.assertIn('id', annotation)
+        self.assertEqual(type(annotation['id']), str)
         del annotation['id']
         del annotation['updated']
         del annotation['created']
@@ -243,6 +244,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         annotation = response.data
+        self.assertEqual(type(annotation['id']), str)
         del annotation['id']
         del annotation['updated']
         del annotation['created']
