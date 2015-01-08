@@ -48,7 +48,7 @@ class Note(models.Model):
         updated = self.updated.isoformat() if self.updated else None
 
         return {
-            'id': self.pk,
+            'id': str(self.pk),
             'user': self.user_id,
             'course_id': self.course_id,
             'usage_id': self.usage_id,

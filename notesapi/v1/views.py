@@ -75,7 +75,7 @@ class AnnotationSearchView(APIView):
         for item in query:
             note_dict = item.get_stored_fields()
             note_dict['ranges'] = json.loads(item.ranges)
-            note_dict['id'] = item.pk
+            note_dict['id'] = str(item.pk)
             if params.get('highlight'):
                 note_dict['text'] = item.highlighted[0]
             results.append(note_dict)
