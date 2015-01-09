@@ -12,7 +12,7 @@ TIME_ZONE = 'UTC'
 
 # This value needs to be overriden in production.
 SECRET_KEY = '*^owi*4%!%9=#h@app!l^$jz8(c*q297^)4&4yn^#_m#fq=z#l'
-ALLOWED_HOSTS = ['localhost','*.edx.org']
+ALLOWED_HOSTS = ['localhost', '*.edx.org']
 
 # ID and Secret used for authenticating JWT Auth Tokens
 # should match those configured for `edx-notes` Client in EdX's /admin/oauth2/client/

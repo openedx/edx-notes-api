@@ -31,7 +31,6 @@ class BaseAnnotationViewTests(APITestCase):
     """
     def setUp(self):
         call_command('clear_index', interactive=False)
-        call_command('update_index')
 
         token = get_id_token(TEST_USER)
         self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
@@ -62,14 +61,12 @@ class BaseAnnotationViewTests(APITestCase):
         url = reverse('api:v1:annotations')
         response = self.client.post(url, opts, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        call_command('update_index')
         return response.data.copy()
 
     def _get_annotation(self, annotation_id):
         """
         Fetch annotation
         """
-        call_command('update_index')
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': annotation_id})
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -268,7 +265,6 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         payload.update(self.headers)
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': data['id']})
         response = self.client.put(url, payload, format='json')
-        call_command('update_index')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         annotation = self._get_annotation(data['id'])
@@ -341,8 +337,6 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
 
         response = self.client.delete(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
-
-        call_command('update_index')
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
         response = self.client.get(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -429,7 +423,6 @@ class AnnotationSearchlViewTests(BaseAnnotationViewTests):
         payload.update(self.headers)
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
         response = self.client.put(url, payload, format='json')
-        call_command('update_index')
 
         results = self._get_search_results()
         self.assertEqual(results['rows'][0]['text'], 'Updated Second Note')

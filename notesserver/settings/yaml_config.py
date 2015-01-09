@@ -16,7 +16,7 @@ EDXNOTES_CONFIG_ROOT = os.environ.get('EDXNOTES_CONFIG_ROOT')
 
 if not EDXNOTES_CONFIG_ROOT:
     raise ImproperlyConfigured("EDXNOTES_CONFIG_ROOT must be defined in the environment.")
-                                      
+
 CONFIG_ROOT = path(EDXNOTES_CONFIG_ROOT)
 
 with open(CONFIG_ROOT / "edx-notes-api.yml") as yaml_file:
