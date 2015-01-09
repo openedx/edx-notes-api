@@ -386,6 +386,24 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(results['rows'][0]['text'], 'Second note')
 
+    def test_search_deleted(self):
+        """
+        Tests for search method to not return deleted notes.
+        """
+        note = self._create_annotation(text=u'To-be-deleted one')
+        self._create_annotation(text=u'Second one')
+
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 2)
+
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
+        response = self.client.delete(url, self.headers)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
+
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], 'Second one')
+
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
     def test_search_highlight(self):
         """
