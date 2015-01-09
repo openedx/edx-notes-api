@@ -350,7 +350,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, "response should be 404 NOT FOUND")
 
 
-class AnnotationSearchlViewTests(BaseAnnotationViewTests):
+class AnnotationSearchViewTests(BaseAnnotationViewTests):
     """
     Test annotation searching by user, course_id, usage_id and text
     """
