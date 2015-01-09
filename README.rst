@@ -11,7 +11,7 @@ Overview
 --------
 
 The edX Notes API is designed to be compatible with the
-`Annotator <http://annotatorjs.org/>`__.
+`Annotator <http://annotatorjs.org/>`__. Can be run with up to date ElasticSearch or legacy 0.90.x.
 
 Getting Started
 ---------------
@@ -35,6 +35,19 @@ Getting Started
    ::
 
        $ make run
+
+Configuration:
+--------------
+
+``CLIENT_ID`` - OAuth2 Client ID, which is to be found in ``aud`` field of IDTokens which authorize users
+
+``CLIENT_SECRET`` - secret with which IDTokens should be encoded
+
+``ES_DISABLED`` - set to True when you need to run the service without ElasticSearch support.
+                  e.g if it became corrupted and you're rebuilding the index, while still serving users
+                  through MySQL
+
+``HAYSTACK_CONNECTIONS['default']['url']`` - Your ElasticSearch URL
 
 Running Tests
 -------------
