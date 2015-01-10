@@ -20,10 +20,10 @@ else:
 
     def get_es():
         return Mock(
-            ping=lambda: False,
+            ping=lambda: None,
             info=lambda: {
-                'ok': False,
-                'status': 503,
+                'ok': None,
+                'status': 203,  # request processed, information may be from another source
             },
         )
 
