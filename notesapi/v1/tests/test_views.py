@@ -560,7 +560,7 @@ class TokenTests(BaseAnnotationViewTests):
 
     def test_wrong_issuer(self):
         """
-        403 when token's issuer is wrong
+        403 when token's intended audience is wrong
         """
         token = self.token_data.copy()
         token['aud'] = 'not Edx-notes'
@@ -582,3 +582,12 @@ class TokenTests(BaseAnnotationViewTests):
         """
         token = jwt.encode(self.token_data, "some secret")
         self._assert_403(token)
+
+    def test_multifield_user(self):
+        """
+        403 when user in GET matches token, but in POST does not
+        """
+        url = reverse('api:v1:annotations')
+        self.payload['user'] = 'other-user'
+        response = self.client.post(url + "?user=" + TEST_USER, self.payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
