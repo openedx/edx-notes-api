@@ -575,6 +575,13 @@ class TokenTests(BaseAnnotationViewTests):
         token = jwt.encode(token, settings.CLIENT_SECRET)
         self._assert_403(token)
 
+    def test_no_user(self):
+        """
+        403 when user is not present in request
+        """
+        del self.headers['user']
+        self._assert_403(jwt.encode(self.token_data, settings.CLIENT_SECRET))
+
     def test_wrong_secret(self):
         """
         403 when token is signed by wrong secret
