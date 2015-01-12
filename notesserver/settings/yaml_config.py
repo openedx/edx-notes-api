@@ -24,6 +24,20 @@ with open(CONFIG_ROOT / "edx-notes-api.yml") as yaml_file:
 
 vars().update(config_from_yaml)
 
+#
+# Support environment overrides for migrations
+DB_OVERRIDES = dict(
+    PASSWORD=environ.get('DB_MIGRATION_PASS', DATABASES['default']['PASSWORD']),
+    ENGINE=environ.get('DB_MIGRATION_ENGINE', DATABASES['default']['ENGINE']),
+    USER=environ.get('DB_MIGRATION_USER', DATABASES['default']['USER']),
+    NAME=environ.get('DB_MIGRATION_NAME', DATABASES['default']['NAME']),
+    HOST=environ.get('DB_MIGRATION_HOST', DATABASES['default']['HOST']),
+    PORT=environ.get('DB_MIGRATION_PORT', DATABASES['default']['PORT']),
+)
+
+for override, value in DB_OVERRIDES.iteritems():
+    DATABASES['default'][override] = value
+
 if ES_DISABLED:
     HAYSTACK_CONNECTIONS = {}
     INSTALLED_APPS.remove('haystack')
