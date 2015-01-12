@@ -14,7 +14,6 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from .helpers import get_id_token
-from notesapi.v1.models import Note
 
 TEST_USER = "test_user_id"
 
@@ -440,7 +439,7 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         payload.update({'id': note['id'], 'text': 'Updated Second Note'})
         payload.update(self.headers)
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
-        response = self.client.put(url, payload, format='json')
+        self.client.put(url, payload, format='json')
 
         results = self._get_search_results()
         self.assertEqual(results['rows'][0]['text'], 'Updated Second Note')

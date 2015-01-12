@@ -4,7 +4,6 @@ from unittest import skipIf
 from mock import patch, Mock
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.db import DatabaseError
 from rest_framework.test import APITestCase
 from elasticsearch.exceptions import TransportError
 
