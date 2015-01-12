@@ -1,5 +1,6 @@
 import base64
 import datetime
+from unittest import skipIf
 from mock import patch, Mock
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -17,13 +18,10 @@ class OperationalEndpointsTest(APITestCase):
         Heartbeat endpoint success.
         """
         response = self.client.get(reverse('heartbeat'))
-        if settings.ES_DISABLED:
-            self.assertEquals(response.status_code, 500)
-            self.assertEquals(response.data, {"OK": False, 'check': 'es'})
-        else:
-            self.assertEquals(response.status_code, 200)
-            self.assertEquals(response.data, {"OK": True})
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.data, {"OK": True})
 
+    @skipIf(settings.ES_DISABLED, "Do not test if Elasticsearch service is disabled.")
     @patch('notesserver.views.get_es')
     def test_heartbeat_failure_es(self, mocked_get_es):
         """
@@ -65,6 +63,7 @@ class OperationalEndpointsTest(APITestCase):
         response = self.client.get(reverse('selftest'))
         self.assertEquals(response.status_code, 200)
 
+    @skipIf(settings.ES_DISABLED, "Do not test if Elasticsearch service is disabled.")
     @patch('notesserver.views.datetime', datetime=Mock(wraps=datetime.datetime))
     @patch('notesserver.views.get_es')
     def test_selftest_data(self, mocked_get_es, mocked_datetime):
@@ -84,6 +83,24 @@ class OperationalEndpointsTest(APITestCase):
             }
         )
 
+    @patch('django.conf.settings.ES_DISABLED', True)
+    @patch('notesserver.views.datetime', datetime=Mock(wraps=datetime.datetime))
+    def test_selftest_data_es_disabled(self, mocked_datetime):
+        """
+        Test returned data on success.
+        """
+        mocked_datetime.datetime.now.return_value = datetime.datetime(2014, 12, 11)
+        response = self.client.get(reverse('selftest'))
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(
+            response.data,
+            {
+                "db": "OK",
+                "time_elapsed": 0.0
+            }
+        )
+
+    @skipIf(settings.ES_DISABLED, "Do not test if Elasticsearch service is disabled.")
     @patch('notesserver.views.get_es')
     def test_selftest_failure_es(self, mocked_get_es):
         """

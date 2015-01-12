@@ -15,17 +15,6 @@ if not settings.ES_DISABLED:
 
     def get_es():
         return connections['default'].get_backend().conn
-else:
-    from mock import Mock
-
-    def get_es():
-        return Mock(
-            ping=lambda: None,
-            info=lambda: {
-                'ok': None,
-                'status': 203,  # request processed, information may be from another source
-            },
-        )
 
 
 @api_view(['GET'])
@@ -51,7 +40,7 @@ def heartbeat(request):  # pylint: disable=unused-argument
     except Exception:
         return Response({"OK": False, "check": "db"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    if not get_es().ping():
+    if not settings.ES_DISABLED and not get_es().ping():
         return Response({"OK": False, "check": "es"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return Response({"OK": True})
@@ -65,13 +54,14 @@ def selftest(request):  # pylint: disable=unused-argument
     """
     start = datetime.datetime.now()
 
-    try:
-        es_status = get_es().info()
-    except TransportError:
-        return Response(
-            {"es_error": traceback.format_exc()},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+    if not settings.ES_DISABLED:
+        try:
+            es_status = get_es().info()
+        except TransportError:
+            return Response(
+                {"es_error": traceback.format_exc()},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     try:
         db_status()
@@ -85,11 +75,15 @@ def selftest(request):  # pylint: disable=unused-argument
     end = datetime.datetime.now()
     delta = end - start
 
-    return Response({
-        "es": es_status,
+    response = {
         "db": database,
         "time_elapsed": int(delta.total_seconds() * 1000)  # In milliseconds.
-    })
+    }
+
+    if not settings.ES_DISABLED:
+        response['es'] = es_status
+
+    return Response(response)
 
 
 def db_status():
