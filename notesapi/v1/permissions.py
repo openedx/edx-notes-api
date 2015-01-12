@@ -40,21 +40,26 @@ class HasAccessToken(BasePermission):
             auth_user = data['sub']
             if data['aud'] != settings.CLIENT_ID:
                 raise TokenWrongIssuer
+            user_found = False
             for request_field in ('GET', 'POST', 'DATA'):
                 if 'user' in getattr(request, request_field):
                     req_user = getattr(request, request_field)['user']
                     if req_user == auth_user:
-                        return True
+                        user_found = True
+                        # but we do not break or return here,
+                        # because `user` may be present in more than one field (GET, POST)
+                        # and we must make sure that all of them are correct
                     else:
-                        logger.debug("Token user {auth_user} did not match {field} user {req_user}".format(
-                            auth_user=auth_user, field=request_field, req_user=req_user
-                        ))
+                        logger.debug("Token user %s did not match %s user %s", auth_user, request_field, req_user)
                         return False
-            logger.info("No user was present to compare in GET, POST or DATA")
+            if user_found:
+                return True
+            else:
+                logger.info("No user was present to compare in GET, POST or DATA")
         except jwt.ExpiredSignature:
-            logger.debug("Token was expired: {}".format(token))
+            logger.debug("Token was expired: %s", token)
         except jwt.DecodeError:
-            logger.debug("Could not decode token {}".format(token))
+            logger.debug("Could not decode token %s", token)
         except TokenWrongIssuer:
-            logger.debug("Token has wrong issuer {}".format(token))
+            logger.debug("Token has wrong issuer %s", token)
         return False
