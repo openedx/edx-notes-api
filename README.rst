@@ -55,6 +55,13 @@ Running Tests
 Run ``make validate`` install the requirements, run the tests, and run
 lint.
 
+How To Resync The Index
+-----------------------
+edX Notes Store uses `Haystack <http://haystacksearch.org/>`_ which comes with several management commands.
+
+Please read more about ``update_index`` management command
+`here <http://django-haystack.readthedocs.org/en/latest/management_commands.html#update-index>`_.
+
 License
 -------
 

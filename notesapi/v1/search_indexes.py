@@ -16,5 +16,17 @@ class NoteIndex(indexes.SearchIndex, indexes.Indexable):
         return Note
 
     def index_queryset(self, using=None):
-        """Used when the entire index for model is updated."""
+        """
+        Used when the entire index for model is updated.
+        """
         return self.get_model().objects.all()
+
+    def get_updated_field(self):
+        """
+        Get the field name that represents the updated date for the Note model.
+
+        This is used by the reindex command to filter out results from the QuerySet, enabling to reindex only
+        recent records. This method returns a string of the Note's field name that contains the date that the model
+        was updated.
+        """
+        return 'updated'
