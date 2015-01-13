@@ -104,6 +104,16 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
         self.assertEqual(response.data['user'], TEST_USER)
 
+    def test_create_blank_text(self):
+        """
+        Ensure we can create a new note with empty text field.
+        """
+        url = reverse('api:v1:annotations')
+        self.payload['text'] = ''
+        response = self.client.post(url, self.payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['text'], '')
+
     def test_create_ignore_created(self):
         """
         Test if annotation 'created' field is not used by API.

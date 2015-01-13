@@ -11,7 +11,7 @@ class Note(models.Model):
     course_id = models.CharField(max_length=255, db_index=True)
     usage_id = models.CharField(max_length=255, help_text="ID of XBlock where the text comes from")
     quote = models.TextField(default="")
-    text = models.TextField(default="", help_text="Student's thoughts on the quote")
+    text = models.TextField(default="", blank=True, help_text="Student's thoughts on the quote")
     ranges = models.TextField(help_text="JSON, describes position of quote in the source text")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
