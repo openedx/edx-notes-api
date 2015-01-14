@@ -3,6 +3,7 @@ import yaml
 from .common import *  # pylint: disable=unused-wildcard-import, wildcard-import
 from path import path
 from django.core.exceptions import ImproperlyConfigured
+from os import environ
 
 ###############################################################################
 # Explicitly declare here in case someone changes common.py.
