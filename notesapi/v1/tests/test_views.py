@@ -71,6 +71,16 @@ class BaseAnnotationViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         return response.data
 
+    def _get_search_results(self, **kwargs):
+        """
+        Helper for search method. All keyword parameters are passed in GET
+        """
+        q = QueryDict("user=" + TEST_USER, mutable=True)
+        q.update(kwargs)
+        url = reverse('api:v1:annotations_search') + '?{}'.format(q.urlencode())
+        result = self.client.get(url)
+        return result.data
+
 
 class AnnotationListViewTests(BaseAnnotationViewTests):
     """
@@ -363,15 +373,6 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
     """
     Test annotation searching by user, course_id, usage_id and text
     """
-    def _get_search_results(self, **kwargs):
-        """
-        Helper for search method. All keyword parameters are passed in GET
-        """
-        q = QueryDict("user=" + TEST_USER, mutable=True)
-        q.update(kwargs)
-        url = reverse('api:v1:annotations_search') + '?{}'.format(q.urlencode())
-        result = self.client.get(url)
-        return result.data
 
     def test_search(self):
         """

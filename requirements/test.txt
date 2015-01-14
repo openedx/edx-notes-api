@@ -8,3 +8,4 @@ nose-ignore-docstring==0.2
 pep8==1.5.7
 pylint==1.4.0
 diff-cover==0.7.2
+factory_boy==2.4.1
