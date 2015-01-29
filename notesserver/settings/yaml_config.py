@@ -20,7 +20,7 @@ if not EDXNOTES_CONFIG_ROOT:
 
 CONFIG_ROOT = path(EDXNOTES_CONFIG_ROOT)
 
-with open(CONFIG_ROOT / "edx-notes-api.yml") as yaml_file:
+with open(CONFIG_ROOT / "edx_notes_api.yml") as yaml_file:
     config_from_yaml = yaml.load(yaml_file)
 
 vars().update(config_from_yaml)
