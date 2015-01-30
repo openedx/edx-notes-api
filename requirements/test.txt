@@ -6,6 +6,6 @@ coverage==3.7.1
 nose-exclude==0.2.0
 nose-ignore-docstring==0.2
 pep8==1.5.7
-pylint==1.4.0
+pylint==1.4.1
 diff-cover==0.7.2
 factory_boy==2.4.1
