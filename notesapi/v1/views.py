@@ -156,6 +156,7 @@ class AnnotationDetailView(APIView):
 
         try:
             note.text = self.request.data['text']
+            note.tags = json.dumps(self.request.data['tags'])
             note.full_clean()
         except KeyError as error:
             log.debug(error, exc_info=True)
