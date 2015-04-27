@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import jwt
 import unittest
+import ddt
 from calendar import timegm
 from datetime import datetime, timedelta
 from mock import patch
@@ -49,6 +50,7 @@ class BaseAnnotationViewTests(APITestCase):
                     "endOffset": 10,
                 }
             ],
+            "tags": ["pink", "lady"]
         }
 
     def _create_annotation(self, **kwargs):
@@ -61,6 +63,20 @@ class BaseAnnotationViewTests(APITestCase):
         response = self.client.post(url, opts, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         return response.data.copy()
+
+    def _do_annotation_update(self, data, updated_fields):
+        """
+        Helper method for updating an annotation.
+
+        Returns the response and the updated annotation.
+        """
+        payload = self.payload.copy()
+        payload.update(updated_fields)
+        payload.update(self.headers)
+        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': data['id']})
+        response = self.client.put(url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        return response, self._get_annotation(data['id'])
 
     def _get_annotation(self, annotation_id):
         """
@@ -123,6 +139,16 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         response = self.client.post(url, self.payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['text'], '')
+
+    def test_create_no_tags(self):
+        """
+        Ensure we can create a new note with empty list of tags.
+        """
+        url = reverse('api:v1:annotations')
+        self.payload['tags'] = []
+        response = self.client.post(url, self.payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['tags'], [])
 
     def test_create_ignore_created(self):
         """
@@ -245,6 +271,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
+@ddt.ddt
 class AnnotationDetailViewTests(BaseAnnotationViewTests):
     """
     Test one annotation updating, reading and deleting
@@ -279,16 +306,28 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         Ensure we can update an existing annotation.
         """
         data = self._create_annotation(text=u"Foo")
-        payload = self.payload.copy()
-        payload.update({'id': data['id'], 'text': 'Bar'})
-        payload.update(self.headers)
-        url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': data['id']})
-        response = self.client.put(url, payload, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        annotation = self._get_annotation(data['id'])
+        response, annotation = self._do_annotation_update(data, {'id': data['id'], 'text': 'Bar'})
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
         self.assertEqual(response.data['text'], "Bar", "update annotation should be returned in response")
+
+    @ddt.data(
+        (["new", "tags"], ["new", "tags"]),
+        ([], []),
+        (None, [u"pink", u"lady"]),
+    )
+    @ddt.unpack
+    def test_update_tags(self, updated_tags, expected_tags):
+        """
+        Test that we can update tags on an existing annotation.
+        """
+        data = self._create_annotation()
+        # If no tags are sent in the update, previously present tags should remain.
+        if updated_tags is None:
+            response, annotation = self._do_annotation_update(data, {'id': data['id']})
+        else:
+            response, annotation = self._do_annotation_update(data, {'id': data['id'], 'tags': updated_tags})
+        self.assertEqual(annotation["tags"], expected_tags)
+        self.assertEqual(response.data["tags"], expected_tags)
 
     def test_update_fail(self):
         """

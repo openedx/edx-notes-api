@@ -20,6 +20,7 @@ class NoteTest(TestCase):
                     "endOffset": 10,
                 }
             ],
+            "tags": [u"apple", u"pear"],
         }
 
     def test_create_valid_note(self):
@@ -47,3 +48,13 @@ class NoteTest(TestCase):
             with self.assertRaises(ValidationError):
                 note = Note.create(payload)
                 note.full_clean()
+
+    def test_default_tags_value(self):
+        """ Test that a note without explicit tags has an empty list for the tags value """
+        payload = self.note_dict.copy()
+        payload.pop("tags")
+        note = Note.create(payload)
+        note.full_clean()
+        note.save()
+        self.assertEqual("[]", note.tags)
+        self.assertEqual([], note.as_dict()["tags"])

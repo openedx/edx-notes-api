@@ -15,6 +15,7 @@ class Note(models.Model):
     ranges = models.TextField(help_text="JSON, describes position of quote in the source text")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    tags = models.TextField(help_text="JSON, list of comma-separated tags", default="[]")
 
     @classmethod
     def create(cls, note_dict):
@@ -34,6 +35,7 @@ class Note(models.Model):
 
         note_dict['ranges'] = json.dumps(ranges)
         note_dict['user_id'] = note_dict.pop('user', None)
+        note_dict['tags'] = json.dumps(note_dict.get('tags', list()))
 
         return cls(**note_dict)
 
@@ -43,7 +45,6 @@ class Note(models.Model):
         """
         created = self.created.isoformat() if self.created else None
         updated = self.updated.isoformat() if self.updated else None
-
         return {
             'id': str(self.pk),
             'user': self.user_id,
@@ -54,4 +55,5 @@ class Note(models.Model):
             'ranges': json.loads(self.ranges),
             'created': created,
             'updated': updated,
+            'tags': json.loads(self.tags)
         }

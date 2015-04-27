@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'corsheaders',
     'haystack',
-    'notesapi',
     'notesapi.v1',
 ]
 
