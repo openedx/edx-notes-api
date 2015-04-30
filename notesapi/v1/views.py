@@ -74,6 +74,8 @@ class AnnotationSearchView(APIView):
         for item in query:
             note_dict = item.get_stored_fields()
             note_dict['ranges'] = json.loads(item.ranges)
+            # If ./manage.py rebuild_index has not been run after tags were added, item.tags will be None.
+            note_dict['tags'] = json.loads(item.tags) if item.tags else []
             note_dict['id'] = str(item.pk)
             if item.highlighted:
                 note_dict['text'] = item.highlighted[0]
