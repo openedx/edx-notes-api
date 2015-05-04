@@ -417,8 +417,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Tests for search method.
         """
-        self._create_annotation(text=u'First one')
-        self._create_annotation(text=u'Second note')
+        self._create_annotation(text=u'First one', tags=[])
+        self._create_annotation(text=u'Second note', tags=[u'tag1', u'tag2'])
         note = self._create_annotation(text=u'Third note')
         del note['created']
         del note['updated']
@@ -430,10 +430,16 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(last_note, note)
         self.assertEqual(results['total'], 3)
 
-        results = self._get_search_results(text="Second")
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(len(results['rows']), 1)
-        self.assertEqual(results['rows'][0]['text'], 'Second note')
+        def search_and_verify(searchText, expectedText, expectedTags):
+            """ Test the results from a specific text search operation """
+            results = self._get_search_results(text=searchText)
+            self.assertEqual(results['total'], 1)
+            self.assertEqual(len(results['rows']), 1)
+            self.assertEqual(results['rows'][0]['text'], expectedText)
+            self.assertEqual(results['rows'][0]['tags'], expectedTags)
+
+        search_and_verify("First", "First one", [])
+        search_and_verify("Second", "Second note", ["tag1", "tag2"])
 
     def test_search_deleted(self):
         """

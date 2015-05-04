@@ -11,6 +11,7 @@ class NoteIndex(indexes.SearchIndex, indexes.Indexable):
     ranges = indexes.CharField(model_attr='ranges', indexed=False)
     created = indexes.DateTimeField(model_attr='created')
     updated = indexes.DateTimeField(model_attr='updated')
+    tags = indexes.CharField(model_attr='tags')
 
     def get_model(self):
         return Note
