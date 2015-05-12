@@ -4,10 +4,13 @@ import json
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from haystack.query import SQ
 
 from notesapi.v1.models import Note
 
@@ -45,7 +48,7 @@ class AnnotationSearchView(APIView):
             query = query.filter(user_id=params['user'])
 
         if 'text' in params:
-            query = query.filter(text__icontains=params['text'])
+            query = query.filter(Q(text__icontains=params['text']) | Q(tags__icontains=params['text']))
 
         return [note.as_dict() for note in query]
 
@@ -55,8 +58,12 @@ class AnnotationSearchView(APIView):
         """
         params = self.request.QUERY_PARAMS.dict()
         query = SearchQuerySet().models(Note).filter(
-            **{f: v for (f, v) in params.items() if f in ('user', 'course_id', 'usage_id', 'text')}
-        ).order_by('-updated')
+            **{f: v for (f, v) in params.items() if f in ('user', 'course_id', 'usage_id')}
+        )
+
+        if 'text' in params:
+            clean_text = query.query.clean(params['text'])
+            query = query.filter(SQ(data=clean_text))
 
         if params.get('highlight'):
             tag = params.get('highlight_tag', 'em')
@@ -64,7 +71,7 @@ class AnnotationSearchView(APIView):
             opts = {
                 'pre_tags': ['<{tag}{klass_str}>'.format(
                     tag=tag,
-                    klass_str=' class="{}"'.format(klass) if klass else ''
+                    klass_str=' class=\\"{}\\"'.format(klass) if klass else ''
                 )],
                 'post_tags': ['</{tag}>'.format(tag=tag)],
             }
@@ -78,7 +85,9 @@ class AnnotationSearchView(APIView):
             note_dict['tags'] = json.loads(item.tags) if item.tags else []
             note_dict['id'] = str(item.pk)
             if item.highlighted:
-                note_dict['text'] = item.highlighted[0]
+                note_dict['text'] = item.highlighted[0].decode('unicode_escape')
+            if item.highlighted_tags:
+                note_dict['tags'] = json.loads(item.highlighted_tags[0])
             results.append(note_dict)
 
         return results

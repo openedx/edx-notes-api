@@ -39,12 +39,29 @@ class ElasticsearchSearchBackend(OrigElasticsearchSearchBackend):
             highlight_options = {
                 'fields': {
                     content_field: {'store': 'yes'},
-                }
+                    'tags': {'store': 'yes'},
+                },
             }
             if isinstance(highlight, dict):
                 highlight_options.update(highlight)
             res['highlight'] = highlight_options
         return res
+
+    def _process_results(
+            self, raw_results, highlight=False, result_class=None, distance_point=None, geo_sort=False
+    ):
+        """
+        Overrides _process_results from Haystack's ElasticsearchSearchBackend to add highlighted tags to the result
+        """
+        result = super(ElasticsearchSearchBackend, self)._process_results(
+            raw_results, highlight, result_class, distance_point, geo_sort
+        )
+
+        for i, raw_result in enumerate(raw_results.get('hits', {}).get('hits', [])):
+            if 'highlight' in raw_result:
+                result['results'][i].highlighted_tags = raw_result['highlight'].get('tags', '')
+
+        return result
 
 
 class ElasticsearchSearchEngine(OrigElasticsearchSearchEngine):

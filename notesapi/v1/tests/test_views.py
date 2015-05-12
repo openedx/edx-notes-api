@@ -10,6 +10,7 @@ from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.http import QueryDict
+from django.test.utils import override_settings
 
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -481,11 +482,13 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         results = self._get_search_results(text="first", highlight=True, highlight_tag='tag', highlight_class='klass')
         self.assertEqual(results['rows'][0]['text'], '<tag class="klass">First</tag> note')
 
-    def test_search_ordering(self):
-        """
-        Tests ordering of search results.
 
-        Sorting is by descending order by updated field (most recent first).
+    @override_settings(ES_DISABLED=True)
+    def test_search_ordering_in_db(self):
+        """
+        Tests ordering of search results from MySQL.
+
+        MySQL sorting is by descending order by updated field (most recent first).
         """
         self._create_annotation(text=u'First one')
         note = self._create_annotation(text=u'Second note')
@@ -501,6 +504,24 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(results['rows'][0]['text'], 'Updated Second Note')
         self.assertEqual(results['rows'][1]['text'], 'Third note')
         self.assertEqual(results['rows'][2]['text'], 'First one')
+
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do relevance ordering")
+    def test_search_ordering_in_es(self):
+        """
+        Tests order of search results from ElasticSearch.
+
+        ElasticSearch sorting is based on the computed relevance of each hit.
+        """
+        self._create_annotation(text=u'fox of the foxes')
+        self._create_annotation(text=u'a very long entry that contains the word fox')
+        self._create_annotation(text=u'the lead fox')
+        self._create_annotation(text=u'does not mention the word')
+
+        results = self._get_search_results(text='fox')
+        self.assertEqual(results['total'], 3)
+        self.assertEqual(results['rows'][0]['text'], 'fox of the foxes')
+        self.assertEqual(results['rows'][1]['text'], 'the lead fox')
+        self.assertEqual(results['rows'][2]['text'], 'a very long entry that contains the word fox')
 
     @unittest.skipIf(settings.ES_DISABLED, "Unicode support in MySQL is limited")
     def test_search_unicode(self):
@@ -545,6 +566,103 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         results = self._get_search_results(course_id="b")
         self.assertEqual(results['total'], 1)
         self.assertEqual(results['rows'][0]['text'], u'Third note')
+
+    def test_search_tag(self):
+        """
+        Tests searching for tags
+        """
+        self._create_annotation(text=u'First note', tags=[u'foo', u'bar'])
+        self._create_annotation(text=u'Another one', tags=[u'bar'])
+        self._create_annotation(text=u'A third note', tags=[u'bar', u'baz'])
+        self._create_annotation(text=u'One final note', tags=[])
+
+        results = self._get_search_results(text='Foo')
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], 'First note')
+
+        results = self._get_search_results(text='bar')
+        self.assertEqual(results['total'], 3)
+        self._has_text(results['rows'], ['First note', 'Another one', 'A third note'])
+
+        results = self._get_search_results(text='baz')
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], 'A third note')
+
+    def test_search_tag_or_text(self):
+        """
+        Tests that searches can match against tags or text
+        """
+        self._search_tag_or_text()
+
+    @override_settings(ES_DISABLED=True)
+    def test_search_tag_or_text_in_db(self):
+        """
+        Tests that searches can match against tags or text without ElasticSearch
+        """
+        self._search_tag_or_text()
+
+    def _search_tag_or_text(self):
+        """
+        Tests that searches can match against tags or text
+        """
+        self._create_annotation(text=u'A great comment', tags=[])
+        self._create_annotation(text=u'Another comment', tags=['good'])
+        self._create_annotation(text=u'Not as good', tags=['comment'])
+        self._create_annotation(text=u'Last note', tags=[])
+
+        results = self._get_search_results(text='note')
+        self.assertEqual(results['total'], 1)
+        self._has_text(results['rows'], ['Last note'])
+
+        results = self._get_search_results(text='good')
+        self.assertEquals(results['total'], 2)
+        self._has_text(results['rows'], ['Another comment', 'Not as good'])
+
+        results = self._get_search_results(text='comment')
+        self.assertEquals(results['total'], 3)
+        self._has_text(results['rows'], ['A great comment', 'Another comment', 'Not as good'])
+
+    def _has_text(self, rows, expected):
+        """
+        Tests that the set of expected text is exactly the text in rows, ignoring order.
+        """
+        self.assertEqual(set(row['text'] for row in rows), set(expected))
+
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do data templating")
+    def test_search_across_tag_and_text(self):
+        """
+        Tests that searches can match if some terms are in the text and the rest are in the tags.
+        """
+        self._create_annotation(text=u'Comment with foo', tags=[u'bar'])
+        self._create_annotation(text=u'Another comment', tags=[u'foo'])
+        self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
+
+        results = self._get_search_results(text='foo bar')
+        self.assertEqual(results['total'], 2)
+        self.assertEqual(results['rows'][0]['text'], 'Comment with foo')
+        self.assertEqual(results['rows'][1]['text'], 'A longer comment with bar')
+
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
+    def test_search_highlight_tag(self):
+        """
+        Tests highlighting in tags
+        """
+        self._create_annotation(text=u'First note', tags=[u'foo', u'bar'])
+        self._create_annotation(text=u'Second note', tags=[u'baz'])
+
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 2)
+
+        results = self._get_search_results(text="bar", highlight=True)
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(len(results['rows']), 1)
+        self.assertEqual(results['rows'][0]['tags'], ['foo', '<em>bar</em>'])
+
+        results = self._get_search_results(text="bar", highlight=True, highlight_tag='tag')
+        self.assertEqual(results['rows'][0]['tags'], ['foo', '<tag>bar</tag>'])
+
+        results = self._get_search_results(text="bar", highlight=True, highlight_tag='tag', highlight_class='klass')
+        self.assertEqual(results['rows'][0]['tags'], ['foo', '<tag class="klass">bar</tag>'])
 
 
 @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
