@@ -74,3 +74,7 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-annotator-auth-token',
 )
+
+TEMPLATE_DIRS = (
+    'templates',
+)
