@@ -41,7 +41,7 @@ class HasAccessToken(BasePermission):
             if data['aud'] != settings.CLIENT_ID:
                 raise TokenWrongIssuer
             user_found = False
-            for request_field in ('GET', 'POST', 'DATA'):
+            for request_field in ('GET', 'POST', 'data'):
                 if 'user' in getattr(request, request_field):
                     req_user = getattr(request, request_field)['user']
                     if req_user == auth_user:
