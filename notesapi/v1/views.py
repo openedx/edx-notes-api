@@ -7,12 +7,14 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 
 from rest_framework import status
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from haystack.query import SQ
 
 from notesapi.v1.models import Note
+from notesapi.utils import NotesSerializer, NotesElasticSearchSerializer
 
 if not settings.ES_DISABLED:
     from notesserver.highlight import SearchQuerySet
@@ -20,20 +22,20 @@ if not settings.ES_DISABLED:
 log = logging.getLogger(__name__)
 
 
-class AnnotationSearchView(APIView):
+class AnnotationSearchView(GenericAPIView):
     """
     Search annotations.
     """
+
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
         Search annotations in most appropriate storage
         """
         # search in DB when ES is not available or there is no need to bother it
         if settings.ES_DISABLED or 'text' not in self.request.query_params.dict():
-            results = self.get_from_db(*args, **kwargs)
+            return self.get_from_db(*args, **kwargs)
         else:
-            results = self.get_from_es(*args, **kwargs)
-        return Response({'total': len(results), 'rows': results})
+            return self.get_from_es(*args, **kwargs)
 
     def get_from_db(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -50,7 +52,10 @@ class AnnotationSearchView(APIView):
         if 'text' in params:
             query = query.filter(Q(text__icontains=params['text']) | Q(tags__icontains=params['text']))
 
-        return [note.as_dict() for note in query]
+        page = self.paginate_queryset(query)
+        serializer = NotesSerializer(page, many=True)
+        response = self.get_paginated_response(serializer.data)
+        return response
 
     def get_from_es(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -77,26 +82,17 @@ class AnnotationSearchView(APIView):
             }
             query = query.highlight(**opts)
 
-        results = []
-        for item in query:
-            note_dict = item.get_stored_fields()
-            note_dict['ranges'] = json.loads(item.ranges)
-            # If ./manage.py rebuild_index has not been run after tags were added, item.tags will be None.
-            note_dict['tags'] = json.loads(item.tags) if item.tags else []
-            note_dict['id'] = str(item.pk)
-            if item.highlighted:
-                note_dict['text'] = item.highlighted[0].decode('unicode_escape')
-            if item.highlighted_tags:
-                note_dict['tags'] = json.loads(item.highlighted_tags[0])
-            results.append(note_dict)
-
-        return results
+        page = self.paginate_queryset(query)
+        serializer = NotesElasticSearchSerializer(page, many=True)
+        response = self.get_paginated_response(serializer.data)
+        return response
 
 
-class AnnotationListView(APIView):
+class AnnotationListView(GenericAPIView):
     """
     List all annotations or create.
     """
+    serializer_class = NotesSerializer
 
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -107,9 +103,11 @@ class AnnotationListView(APIView):
         if 'course_id' not in params:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        results = Note.objects.filter(course_id=params['course_id'], user_id=params['user']).order_by('-updated')
-
-        return Response([result.as_dict() for result in results])
+        notes = Note.objects.filter(course_id=params['course_id'], user_id=params['user']).order_by('-updated')
+        page = self.paginate_queryset(notes)
+        serializer = self.get_serializer(page, many=True)
+        response = self.get_paginated_response(serializer.data)
+        return response
 
     def post(self, *args, **kwargs):  # pylint: disable=unused-argument
         """

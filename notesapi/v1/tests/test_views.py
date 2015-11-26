@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import urlparse
 import jwt
 import unittest
 import ddt
@@ -9,7 +10,6 @@ from mock import patch
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.http import QueryDict
 from django.test.utils import override_settings
 
 from rest_framework import status
@@ -98,7 +98,59 @@ class BaseAnnotationViewTests(APITestCase):
         result = self.client.get(url, data=data)
         return result.data
 
+    def verify_pagination_info(
+            self, response, total_annotations, num_pages, annotations_per_page, current_page, previous_page, next_page
+    ):
+        """
+        Verify the pagination information.
 
+        Argument:
+            response: response from api
+            total_annotations: total annotations in the response
+            num_pages: total number of pages in response
+            annotations_per_page: annotations on current page
+            current_page: current page number
+            previous_page: previous page number
+            next_page: next page number
+        """
+        def get_page_value(url, current_page):
+            """
+            Return page value extracted from url.
+            """
+            if url is None:
+                return None
+
+            parsed = urlparse.urlparse(url)
+            query_params = urlparse.parse_qs(parsed.query)
+
+            # If current_page is 2 then DRF will not include `page` query param in previous url.
+            # So return page 1 if current page equals to 2 and `page` key is missing from url.
+            if 'page' not in query_params and current_page == 2:
+                return 1
+
+            page = query_params['page'][0]
+            return page if page is None else int(page)
+
+        self.assertEqual(response['count'], total_annotations)
+        self.assertEqual(response['num_pages'], num_pages)
+        self.assertEqual(len(response['results']), annotations_per_page)
+        self.assertEqual(response['current'], current_page)
+        self.assertEqual(get_page_value(response['previous'], response['current']), previous_page)
+        self.assertEqual(get_page_value(response['next'], response['current']), next_page)
+
+    def get_annotations(self, query_parameters=None, expected_status=200):
+        """
+        Helper method for sending a GET to the server. Verifies the expected status and returns the response.
+        """
+        data = {"user": TEST_USER, 'course_id': 'test-course-id'}
+        if query_parameters:
+            data.update(query_parameters)
+        response = self.client.get(reverse('api:v1:annotations'), data=data)
+        self.assertEqual(expected_status, response.status_code)
+        return response.data
+
+
+@ddt.ddt
 class AnnotationListViewTests(BaseAnnotationViewTests):
     """
     Test annotation creation and listing by user and course
@@ -230,7 +282,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         headers["course_id"] = "a/b/c"
         response = self.client.get(reverse('api:v1:annotations'), headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
+        self.assertDictContainsSubset(
+            {'count': 0, 'results': []}, response.data, "no annotation should be returned in response"
+        )
 
     def test_read_all(self):
         """
@@ -244,7 +298,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         headers["course_id"] = "test-course-id"
         response = self.client.get(reverse('api:v1:annotations'), headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
+        self.assertEqual(response.data['count'], 5, "five annotations should be returned in response")
 
     def test_read_all_ordering(self):
         """
@@ -260,9 +314,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         headers["course_id"] = "test-course-id"
         results = self.client.get(reverse('api:v1:annotations'), headers).data
 
-        self.assertEqual(results[0]['text'], 'Third note')
-        self.assertEqual(results[1]['text'], 'Second note')
-        self.assertEqual(results[2]['text'], 'First one')
+        self.assertEqual(results['results'][0]['text'], 'Third note')
+        self.assertEqual(results['results'][1]['text'], 'Second note')
+        self.assertEqual(results['results'][2]['text'], 'First one')
 
     def test_read_all_no_query_param(self):
         """
@@ -270,6 +324,74 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         """
         response = self.client.get(reverse('api:v1:annotations'), self.headers)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @ddt.unpack
+    @ddt.data(
+        {'page': 1, 'annotations_per_page': 10, 'previous_page': None, 'next_page': 2},
+        {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3},
+        {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None}
+    )
+    def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page):
+        """
+        Verify that pagination info is correct when we have data spanned on multiple pages.
+        """
+        total_annotations = 23
+        for aid in range(total_annotations):
+            self._create_annotation(text=u'annotation {}'.format(aid))
+
+        response = self.get_annotations(query_parameters={'page': page})
+        self.verify_pagination_info(
+            response,
+            total_annotations=total_annotations,
+            num_pages=3,
+            annotations_per_page=annotations_per_page,
+            current_page=page,
+            previous_page=previous_page,
+            next_page=next_page
+        )
+
+    def test_pagination_single_page(self):
+        """
+        Verify that pagination info is correct when we have a single page of data.
+        """
+        total_annotations = 6
+        for aid in range(total_annotations):
+            self._create_annotation(text=u'annotation {}'.format(aid))
+
+        response = self.get_annotations()
+        self.verify_pagination_info(
+            response,
+            total_annotations=total_annotations,
+            num_pages=1,
+            annotations_per_page=total_annotations,
+            current_page=1,
+            previous_page=None,
+            next_page=None
+        )
+
+    @ddt.unpack
+    @ddt.data(
+        {'page_size': 2, 'annotations_per_page': 2, 'num_pages': 8, 'next_page': 2},
+        {'page_size': 15, 'annotations_per_page': 15, 'num_pages': 1, 'next_page': None},
+    )
+    def test_pagination_page_size(self, page_size, annotations_per_page, num_pages, next_page):
+        """
+        Verify that requests for different page_size returns correct pagination info.
+        """
+        total_annotations = 15
+        for aid in range(total_annotations):
+            self._create_annotation(text=u'annotation {}'.format(aid))
+
+        response = self.get_annotations(query_parameters={'page_size': page_size})
+        self.verify_pagination_info(
+            response,
+            total_annotations=total_annotations,
+            num_pages=num_pages,
+            annotations_per_page=annotations_per_page,
+            current_page=1,
+            previous_page=None,
+            next_page=next_page
+        )
 
 
 @ddt.ddt
@@ -409,6 +531,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, "response should be 404 NOT FOUND")
 
 
+@ddt.ddt
 class AnnotationSearchViewTests(BaseAnnotationViewTests):
     """
     Test annotation searching by user, course_id, usage_id and text
@@ -425,19 +548,19 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         del note['updated']
 
         results = self._get_search_results()
-        last_note = results['rows'][0]
+        last_note = results['results'][0]
         del last_note['created']
         del last_note['updated']
         self.assertEqual(last_note, note)
-        self.assertEqual(results['total'], 3)
+        self.assertEqual(results['count'], 3)
 
         def search_and_verify(searchText, expectedText, expectedTags):
             """ Test the results from a specific text search operation """
             results = self._get_search_results(text=searchText)
-            self.assertEqual(results['total'], 1)
-            self.assertEqual(len(results['rows']), 1)
-            self.assertEqual(results['rows'][0]['text'], expectedText)
-            self.assertEqual(results['rows'][0]['tags'], expectedTags)
+            self.assertEqual(results['count'], 1)
+            self.assertEqual(len(results['results']), 1)
+            self.assertEqual(results['results'][0]['text'], expectedText)
+            self.assertEqual(results['results'][0]['tags'], expectedTags)
 
         search_and_verify("First", "First one", [])
         search_and_verify("Second", "Second note", ["tag1", "tag2"])
@@ -450,15 +573,15 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Second one')
 
         results = self._get_search_results()
-        self.assertEqual(results['total'], 2)
+        self.assertEqual(results['count'], 2)
 
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
         response = self.client.delete(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
 
         results = self._get_search_results()
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], 'Second one')
+        self.assertEqual(results['count'], 1)
+        self.assertEqual(results['results'][0]['text'], 'Second one')
 
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
     def test_search_highlight(self):
@@ -469,18 +592,18 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Second note')
 
         results = self._get_search_results()
-        self.assertEqual(results['total'], 2)
+        self.assertEqual(results['count'], 2)
 
         results = self._get_search_results(text="first", highlight=True)
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(len(results['rows']), 1)
-        self.assertEqual(results['rows'][0]['text'], '<em>First</em> note')
+        self.assertEqual(results['count'], 1)
+        self.assertEqual(len(results['results']), 1)
+        self.assertEqual(results['results'][0]['text'], '<em>First</em> note')
 
         results = self._get_search_results(text="first", highlight=True, highlight_tag='tag')
-        self.assertEqual(results['rows'][0]['text'], '<tag>First</tag> note')
+        self.assertEqual(results['results'][0]['text'], '<tag>First</tag> note')
 
         results = self._get_search_results(text="first", highlight=True, highlight_tag='tag', highlight_class='klass')
-        self.assertEqual(results['rows'][0]['text'], '<tag class="klass">First</tag> note')
+        self.assertEqual(results['results'][0]['text'], '<tag class="klass">First</tag> note')
 
 
     @override_settings(ES_DISABLED=True)
@@ -501,9 +624,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.client.put(url, payload, format='json')
 
         results = self._get_search_results()
-        self.assertEqual(results['rows'][0]['text'], 'Updated Second Note')
-        self.assertEqual(results['rows'][1]['text'], 'Third note')
-        self.assertEqual(results['rows'][2]['text'], 'First one')
+        self.assertEqual(results['results'][0]['text'], 'Updated Second Note')
+        self.assertEqual(results['results'][1]['text'], 'Third note')
+        self.assertEqual(results['results'][2]['text'], 'First one')
 
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do relevance ordering")
     def test_search_ordering_in_es(self):
@@ -518,10 +641,10 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'does not mention the word')
 
         results = self._get_search_results(text='fox')
-        self.assertEqual(results['total'], 3)
-        self.assertEqual(results['rows'][0]['text'], 'fox of the foxes')
-        self.assertEqual(results['rows'][1]['text'], 'the lead fox')
-        self.assertEqual(results['rows'][2]['text'], 'a very long entry that contains the word fox')
+        self.assertEqual(results['count'], 3)
+        self.assertEqual(results['results'][0]['text'], 'fox of the foxes')
+        self.assertEqual(results['results'][1]['text'], 'the lead fox')
+        self.assertEqual(results['results'][2]['text'], 'a very long entry that contains the word fox')
 
     @unittest.skipIf(settings.ES_DISABLED, "Unicode support in MySQL is limited")
     def test_search_unicode(self):
@@ -530,25 +653,25 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         self._create_annotation(text=u'Веселих свят')
 
-        results = self._get_search_results(text=u"веселих")
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], u'Веселих свят')
+        response = self._get_search_results(text=u"веселих")
+        self.assertEqual(response['count'], 1)
+        self.assertEqual(response['results'][0]['text'], u'Веселих свят')
 
-        results = self._get_search_results(text=u"Свят")
-        self.assertEqual(results['rows'][0]['text'], u'Веселих свят')
+        response = self._get_search_results(text=u"Свят")
+        self.assertEqual(response['results'][0]['text'], u'Веселих свят')
 
     def test_search_multiword(self):
         """
         Tests searching of complex words and word combinations
         """
         self._create_annotation(text=u'Totally different something')
-        self.assertEqual(self._get_search_results(text=u"TOTALLY")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"different")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"differ")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"total")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"totil")['total'], 0)
-        self.assertEqual(self._get_search_results(text=u"something")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"totally different")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"TOTALLY")['count'], 1)
+        self.assertEqual(self._get_search_results(text=u"different")['count'], 1)
+        self.assertEqual(self._get_search_results(text=u"differ")['count'], 1)
+        self.assertEqual(self._get_search_results(text=u"total")['count'], 1)
+        self.assertEqual(self._get_search_results(text=u"totil")['count'], 0)
+        self.assertEqual(self._get_search_results(text=u"something")['count'], 1)
+        self.assertEqual(self._get_search_results(text=u"totally different")['count'], 1)
 
     def test_search_course(self):
         """
@@ -561,11 +684,11 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Fourth note', course_id="c")
 
         results = self._get_search_results(course_id="u'edX/DemoX/Demo_Course'")
-        self.assertEqual(results['total'], 2)
+        self.assertEqual(results['count'], 2)
 
         results = self._get_search_results(course_id="b")
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], u'Third note')
+        self.assertEqual(results['count'], 1)
+        self.assertEqual(results['results'][0]['text'], u'Third note')
 
     def test_search_tag(self):
         """
@@ -577,16 +700,16 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'One final note', tags=[])
 
         results = self._get_search_results(text='Foo')
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], 'First note')
+        self.assertEqual(results['count'], 1)
+        self.assertEqual(results['results'][0]['text'], 'First note')
 
         results = self._get_search_results(text='bar')
-        self.assertEqual(results['total'], 3)
-        self._has_text(results['rows'], ['First note', 'Another one', 'A third note'])
+        self.assertEqual(results['count'], 3)
+        self._has_text(results['results'], ['First note', 'Another one', 'A third note'])
 
         results = self._get_search_results(text='baz')
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], 'A third note')
+        self.assertEqual(results['count'], 1)
+        self.assertEqual(results['results'][0]['text'], 'A third note')
 
     def test_search_tag_or_text(self):
         """
@@ -611,16 +734,16 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Last note', tags=[])
 
         results = self._get_search_results(text='note')
-        self.assertEqual(results['total'], 1)
-        self._has_text(results['rows'], ['Last note'])
+        self.assertEqual(results['count'], 1)
+        self._has_text(results['results'], ['Last note'])
 
         results = self._get_search_results(text='good')
-        self.assertEquals(results['total'], 2)
-        self._has_text(results['rows'], ['Another comment', 'Not as good'])
+        self.assertEquals(results['count'], 2)
+        self._has_text(results['results'], ['Another comment', 'Not as good'])
 
         results = self._get_search_results(text='comment')
-        self.assertEquals(results['total'], 3)
-        self._has_text(results['rows'], ['A great comment', 'Another comment', 'Not as good'])
+        self.assertEquals(results['count'], 3)
+        self._has_text(results['results'], ['A great comment', 'Another comment', 'Not as good'])
 
     def _has_text(self, rows, expected):
         """
@@ -638,9 +761,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
 
         results = self._get_search_results(text='foo bar')
-        self.assertEqual(results['total'], 2)
-        self.assertEqual(results['rows'][0]['text'], 'Comment with foo')
-        self.assertEqual(results['rows'][1]['text'], 'A longer comment with bar')
+        self.assertEqual(results['count'], 2)
+        self.assertEqual(results['results'][0]['text'], 'Comment with foo')
+        self.assertEqual(results['results'][1]['text'], 'A longer comment with bar')
 
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
     def test_search_highlight_tag(self):
@@ -651,18 +774,86 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Second note', tags=[u'baz'])
 
         results = self._get_search_results()
-        self.assertEqual(results['total'], 2)
+        self.assertEqual(results['count'], 2)
 
         results = self._get_search_results(text="bar", highlight=True)
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(len(results['rows']), 1)
-        self.assertEqual(results['rows'][0]['tags'], ['foo', '<em>bar</em>'])
+        self.assertEqual(results['count'], 1)
+        self.assertEqual(len(results['results']), 1)
+        self.assertEqual(results['results'][0]['tags'], ['foo', '<em>bar</em>'])
 
         results = self._get_search_results(text="bar", highlight=True, highlight_tag='tag')
-        self.assertEqual(results['rows'][0]['tags'], ['foo', '<tag>bar</tag>'])
+        self.assertEqual(results['results'][0]['tags'], ['foo', '<tag>bar</tag>'])
 
         results = self._get_search_results(text="bar", highlight=True, highlight_tag='tag', highlight_class='klass')
-        self.assertEqual(results['rows'][0]['tags'], ['foo', '<tag class="klass">bar</tag>'])
+        self.assertEqual(results['results'][0]['tags'], ['foo', '<tag class="klass">bar</tag>'])
+
+    @ddt.unpack
+    @ddt.data(
+        {'page': 1, 'annotations_per_page': 10, 'previous_page': None, 'next_page': 2},
+        {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3},
+        {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None}
+    )
+    def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page):
+        """
+        Verify that pagination info is correct when we have data spanned on multiple pages.
+        """
+        total_annotations = 23
+        for aid in range(total_annotations):
+            self._create_annotation(text=u'annotation {}'.format(aid))
+
+        response = self._get_search_results(page=page)
+        self.verify_pagination_info(
+            response,
+            total_annotations=total_annotations,
+            num_pages=3,
+            annotations_per_page=annotations_per_page,
+            current_page=page,
+            previous_page=previous_page,
+            next_page=next_page
+        )
+
+    def test_pagination_single_page(self):
+        """
+        Verify that pagination info is correct when we have a single page of data.
+        """
+        total_annotations = 6
+        for aid in range(total_annotations):
+            self._create_annotation(text=u'annotation {}'.format(aid))
+
+        response = self._get_search_results()
+        self.verify_pagination_info(
+            response,
+            total_annotations=total_annotations,
+            num_pages=1,
+            annotations_per_page=total_annotations,
+            current_page=1,
+            previous_page=None,
+            next_page=None
+        )
+
+    @ddt.unpack
+    @ddt.data(
+        {'page_size': 2, 'annotations_per_page': 2, 'num_pages': 8, 'next_page': 2},
+        {'page_size': 15, 'annotations_per_page': 15, 'num_pages': 1, 'next_page': None},
+    )
+    def test_pagination_page_size(self, page_size, annotations_per_page, num_pages, next_page):
+        """
+        Verify that requests for different page_size returns correct pagination info.
+        """
+        total_annotations = 15
+        for aid in range(total_annotations):
+            self._create_annotation(text=u'annotation {}'.format(aid))
+
+        response = self._get_search_results(page_size=page_size)
+        self.verify_pagination_info(
+            response,
+            total_annotations=total_annotations,
+            num_pages=num_pages,
+            annotations_per_page=annotations_per_page,
+            current_page=1,
+            previous_page=None,
+            next_page=next_page
+        )
 
 
 @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
