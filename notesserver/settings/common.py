@@ -63,7 +63,8 @@ LOGGING = get_logger_config()
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'notesapi.v1.permissions.HasAccessToken'
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'notesapi.utils.NotesPaginator',
 }
 
 CORS_ORIGIN_ALLOW_ALL = True

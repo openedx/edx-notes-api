@@ -31,18 +31,18 @@ class UpdateIndexTest(BaseAnnotationViewTests):
         end = datetime.datetime.now()
 
         results = self._get_search_results(text='note')
-        self.assertEqual(results, {'rows': [], 'total': 0})
+        self.assertDictContainsSubset({'results': [], 'count': 0}, results)
 
         # When second note was created.
         call_command('update_index', start_date=second_start.isoformat(), end_date=second_end.isoformat(), verbosity=0)
         results = self._get_search_results(text='note')
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], 'Second note')
+        self.assertEqual(results['count'], 1)
+        self.assertEqual(results['results'][0]['text'], 'Second note')
 
         # All notes.
         call_command('update_index', start_date=start.isoformat(), end_date=end.isoformat(), verbosity=0)
         results = self._get_search_results(text='note')
-        self.assertEqual(results['total'], 3)
+        self.assertEqual(results['count'], 3)
 
     @factory.django.mute_signals(signals.post_delete)
     def test_delete(self):
@@ -55,7 +55,7 @@ class UpdateIndexTest(BaseAnnotationViewTests):
         self._create_annotation(text=u'Third note')
 
         results = self._get_search_results(text='note')
-        self.assertEqual(results['total'], 3)
+        self.assertEqual(results['count'], 3)
 
         # Delete first note.
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': first_note['id']})
@@ -75,5 +75,5 @@ class UpdateIndexTest(BaseAnnotationViewTests):
         results = self._get_search_results(text='note')
 
         # When remove flag is provided, start and end flags do not play any role.
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], 'Third note')
+        self.assertEqual(results['count'], 1)
+        self.assertEqual(results['results'][0]['text'], 'Third note')
