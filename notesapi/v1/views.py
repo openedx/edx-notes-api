@@ -29,7 +29,7 @@ class AnnotationSearchView(APIView):
         Search annotations in most appropriate storage
         """
         # search in DB when ES is not available or there is no need to bother it
-        if settings.ES_DISABLED or 'text' not in self.request.QUERY_PARAMS.dict():
+        if settings.ES_DISABLED or 'text' not in self.request.query_params.dict():
             results = self.get_from_db(*args, **kwargs)
         else:
             results = self.get_from_es(*args, **kwargs)
@@ -39,7 +39,7 @@ class AnnotationSearchView(APIView):
         """
         Search annotations in database
         """
-        params = self.request.QUERY_PARAMS.dict()
+        params = self.request.query_params.dict()
         query = Note.objects.filter(
             **{f: v for (f, v) in params.items() if f in ('course_id', 'usage_id')}
         ).order_by('-updated')
@@ -56,7 +56,7 @@ class AnnotationSearchView(APIView):
         """
         Search annotations in ElasticSearch
         """
-        params = self.request.QUERY_PARAMS.dict()
+        params = self.request.query_params.dict()
         query = SearchQuerySet().models(Note).filter(
             **{f: v for (f, v) in params.items() if f in ('user', 'course_id', 'usage_id')}
         )
@@ -102,7 +102,7 @@ class AnnotationListView(APIView):
         """
         Get a list of all annotations.
         """
-        params = self.request.QUERY_PARAMS.dict()
+        params = self.request.query_params.dict()
 
         if 'course_id' not in params:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -117,11 +117,11 @@ class AnnotationListView(APIView):
 
         Returns 400 request if bad payload is sent or it was empty object.
         """
-        if 'id' in self.request.DATA:
+        if 'id' in self.request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            note = Note.create(self.request.DATA)
+            note = Note.create(self.request.data)
             note.full_clean()
         except ValidationError as error:
             log.debug(error, exc_info=True)

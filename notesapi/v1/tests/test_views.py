@@ -92,10 +92,10 @@ class BaseAnnotationViewTests(APITestCase):
         """
         Helper for search method. All keyword parameters are passed in GET
         """
-        q = QueryDict("user=" + TEST_USER, mutable=True)
-        q.update(kwargs)
-        url = reverse('api:v1:annotations_search') + '?{}'.format(q.urlencode())
-        result = self.client.get(url)
+        data = {"user": TEST_USER}
+        data.update(kwargs)
+        url = reverse('api:v1:annotations_search')
+        result = self.client.get(url, data=data)
         return result.data
 
 
