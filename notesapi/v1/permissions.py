@@ -21,7 +21,7 @@ class HasAccessToken(BasePermission):
         "typ": "JWT"
     }
     Claims {
-        "sub": "<USER_ID>",
+        "sub": "<USER ANONYMOUS ID>",
         "exp": <EXPIRATION TIMESTAMP>,
         "iat": <ISSUED TIMESTAMP>,
         "aud": "<CLIENT ID"

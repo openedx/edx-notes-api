@@ -18,7 +18,8 @@ class NotesPaginator(pagination.PageNumberPagination):
         Annotate the response with pagination information.
         """
         return Response({
-            'current': self.page.number,
+            'start': (self.page.number - 1) * self.get_page_size(self.request),
+            'current_page': self.page.number,
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
             'count': self.page.paginator.count,
