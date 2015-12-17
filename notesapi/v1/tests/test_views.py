@@ -117,7 +117,8 @@ class BaseAnnotationViewTests(APITestCase):
             annotations_per_page,
             current_page,
             previous_page,
-            next_page
+            next_page,
+            start
     ):
         """
         Verify the pagination information.
@@ -130,6 +131,7 @@ class BaseAnnotationViewTests(APITestCase):
             current_page: current page number
             previous_page: previous page number
             next_page: next page number
+            start: start of the current page
         """
         def get_page_value(url, current_page):
             """
@@ -152,9 +154,10 @@ class BaseAnnotationViewTests(APITestCase):
         self.assertEqual(response['count'], total_annotations)
         self.assertEqual(response['num_pages'], num_pages)
         self.assertEqual(len(response['results']), annotations_per_page)
-        self.assertEqual(response['current'], current_page)
-        self.assertEqual(get_page_value(response['previous'], response['current']), previous_page)
-        self.assertEqual(get_page_value(response['next'], response['current']), next_page)
+        self.assertEqual(response['current_page'], current_page)
+        self.assertEqual(get_page_value(response['previous'], response['current_page']), previous_page)
+        self.assertEqual(get_page_value(response['next'], response['current_page']), next_page)
+        self.assertEqual(response['start'], start)
 
     # pylint: disable=too-many-arguments
     def verify_list_view_pagination(
@@ -165,7 +168,8 @@ class BaseAnnotationViewTests(APITestCase):
             annotations_per_page,
             current_page,
             previous_page,
-            next_page
+            next_page,
+            start
     ):
         """
         Verify pagination information for AnnotationListView
@@ -182,7 +186,8 @@ class BaseAnnotationViewTests(APITestCase):
             annotations_per_page=annotations_per_page,
             current_page=current_page,
             previous_page=previous_page,
-            next_page=next_page
+            next_page=next_page,
+            start=start
         )
 
     # pylint: disable=too-many-arguments
@@ -194,7 +199,8 @@ class BaseAnnotationViewTests(APITestCase):
             annotations_per_page,
             current_page,
             previous_page,
-            next_page
+            next_page,
+            start
     ):
         """
         Verify pagination information for AnnotationSearchView
@@ -211,7 +217,8 @@ class BaseAnnotationViewTests(APITestCase):
             annotations_per_page=annotations_per_page,
             current_page=current_page,
             previous_page=previous_page,
-            next_page=next_page
+            next_page=next_page,
+            start=start
         )
 
 
@@ -392,11 +399,12 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
     @ddt.unpack
     @ddt.data(
-        {'page': 1, 'annotations_per_page': 10, 'previous_page': None, 'next_page': 2},
-        {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3},
-        {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None}
+        {'page': 1, 'annotations_per_page': 10, 'previous_page': None, 'next_page': 2, 'start': 0},
+        {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3, 'start': 10},
+        {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None, 'start': 20}
     )
-    def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page):
+    # pylint: disable=too-many-arguments
+    def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page, start):
         """
         Verify that pagination info is correct when we have data spanned on multiple pages.
         """
@@ -407,7 +415,8 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
             annotations_per_page=annotations_per_page,
             current_page=page,
             previous_page=previous_page,
-            next_page=next_page
+            next_page=next_page,
+            start=start
         )
 
     def test_pagination_single_page(self):
@@ -421,7 +430,8 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
             annotations_per_page=6,
             current_page=1,
             previous_page=None,
-            next_page=None
+            next_page=None,
+            start=0
         )
 
     @ddt.unpack
@@ -440,7 +450,29 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
             annotations_per_page=annotations_per_page,
             current_page=1,
             previous_page=None,
-            next_page=next_page
+            next_page=next_page,
+            start=0
+        )
+
+    @ddt.unpack
+    @ddt.data(
+        {'page': 1, 'start': 0, 'previous_page': None, 'next_page': 2},
+        {'page': 2, 'start': 5, 'previous_page': 1, 'next_page': 3},
+        {'page': 3, 'start': 10, 'previous_page': 2, 'next_page': None},
+    )
+    def test_pagination_page_start(self, page, start, previous_page, next_page):
+        """
+        Verify that start value is correct for different pages.
+        """
+        self.verify_list_view_pagination(
+            query_parameters={'page': page, 'page_size': 5},
+            total_annotations=15,
+            num_pages=3,
+            annotations_per_page=5,
+            current_page=page,
+            previous_page=previous_page,
+            next_page=next_page,
+            start=start
         )
 
 
@@ -839,11 +871,12 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
 
     @ddt.unpack
     @ddt.data(
-        {'page': 1, 'annotations_per_page': 10, 'previous_page': None, 'next_page': 2},
-        {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3},
-        {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None}
+        {'page': 1, 'annotations_per_page': 10, 'previous_page': None, 'next_page': 2, 'start': 0},
+        {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3, 'start': 10},
+        {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None, 'start': 20}
     )
-    def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page):
+    # pylint: disable=too-many-arguments
+    def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page, start):
         """
         Verify that pagination info is correct when we have data spanned on multiple pages.
         """
@@ -854,7 +887,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
             annotations_per_page=annotations_per_page,
             current_page=page,
             previous_page=previous_page,
-            next_page=next_page
+            next_page=next_page,
+            start=start
         )
 
     def test_pagination_single_page(self):
@@ -868,7 +902,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
             annotations_per_page=6,
             current_page=1,
             previous_page=None,
-            next_page=None
+            next_page=None,
+            start=0
         )
 
     @ddt.unpack
@@ -887,7 +922,29 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
             annotations_per_page=annotations_per_page,
             current_page=1,
             previous_page=None,
-            next_page=next_page
+            next_page=next_page,
+            start=0
+        )
+
+    @ddt.unpack
+    @ddt.data(
+        {'page': 1, 'start': 0, 'previous_page': None, 'next_page': 2},
+        {'page': 2, 'start': 5, 'previous_page': 1, 'next_page': 3},
+        {'page': 3, 'start': 10, 'previous_page': 2, 'next_page': None},
+    )
+    def test_pagination_page_start(self, page, start, previous_page, next_page):
+        """
+        Verify that start value is correct for different pages.
+        """
+        self.verify_search_view_pagination(
+            query_parameters={'page': page, 'page_size': 5},
+            total_annotations=15,
+            num_pages=3,
+            annotations_per_page=5,
+            current_page=page,
+            previous_page=previous_page,
+            next_page=next_page,
+            start=start
         )
 
 
