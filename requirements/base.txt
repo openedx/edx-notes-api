@@ -2,8 +2,8 @@ Django==1.8.7
 requests==2.4.3
 djangorestframework==3.2.3
 django-rest-swagger==0.2.0
-django-haystack==2.3.1
-elasticsearch==0.4.5  # only 0.4 works for ES 0.90
+django-haystack==2.4.1
+elasticsearch>=1.0.0,<2.0.0
 django-cors-headers==1.1.0
 PyJWT==0.3.0
 MySQL-python==1.2.5  # GPL License
