@@ -151,9 +151,9 @@ class BaseAnnotationViewTests(APITestCase):
             page = query_params['page'][0]
             return page if page is None else int(page)
 
-        self.assertEqual(response['count'], total_annotations)
+        self.assertEqual(response['total'], total_annotations)
         self.assertEqual(response['num_pages'], num_pages)
-        self.assertEqual(len(response['results']), annotations_per_page)
+        self.assertEqual(len(response['rows']), annotations_per_page)
         self.assertEqual(response['current_page'], current_page)
         self.assertEqual(get_page_value(response['previous'], response['current_page']), previous_page)
         self.assertEqual(get_page_value(response['next'], response['current_page']), next_page)
@@ -355,7 +355,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         response = self.client.get(reverse('api:v1:annotations'), headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertDictContainsSubset(
-            {'count': 0, 'results': []}, response.data, "no annotation should be returned in response"
+            {'total': 0, 'rows': []}, response.data, "no annotation should be returned in response"
         )
 
     def test_read_all(self):
@@ -370,7 +370,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         headers["course_id"] = "test-course-id"
         response = self.client.get(reverse('api:v1:annotations'), headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 5, "five annotations should be returned in response")
+        self.assertEqual(response.data['total'], 5, "five annotations should be returned in response")
 
     def test_read_all_ordering(self):
         """
@@ -386,9 +386,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         headers["course_id"] = "test-course-id"
         results = self.client.get(reverse('api:v1:annotations'), headers).data
 
-        self.assertEqual(results['results'][0]['text'], 'Third note')
-        self.assertEqual(results['results'][1]['text'], 'Second note')
-        self.assertEqual(results['results'][2]['text'], 'First one')
+        self.assertEqual(results['rows'][0]['text'], 'Third note')
+        self.assertEqual(results['rows'][1]['text'], 'Second note')
+        self.assertEqual(results['rows'][2]['text'], 'First one')
 
     def test_read_all_no_query_param(self):
         """
@@ -630,19 +630,19 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         del note['updated']
 
         results = self._get_search_results()
-        last_note = results['results'][0]
+        last_note = results['rows'][0]
         del last_note['created']
         del last_note['updated']
         self.assertEqual(last_note, note)
-        self.assertEqual(results['count'], 3)
+        self.assertEqual(results['total'], 3)
 
         def search_and_verify(searchText, expectedText, expectedTags):
             """ Test the results from a specific text search operation """
             results = self._get_search_results(text=searchText)
-            self.assertEqual(results['count'], 1)
-            self.assertEqual(len(results['results']), 1)
-            self.assertEqual(results['results'][0]['text'], expectedText)
-            self.assertEqual(results['results'][0]['tags'], expectedTags)
+            self.assertEqual(results['total'], 1)
+            self.assertEqual(len(results['rows']), 1)
+            self.assertEqual(results['rows'][0]['text'], expectedText)
+            self.assertEqual(results['rows'][0]['tags'], expectedTags)
 
         search_and_verify("First", "First one", [])
         search_and_verify("Second", "Second note", ["tag1", "tag2"])
@@ -655,15 +655,15 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Second one')
 
         results = self._get_search_results()
-        self.assertEqual(results['count'], 2)
+        self.assertEqual(results['total'], 2)
 
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note['id']})
         response = self.client.delete(url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, "response should be 204 NO CONTENT")
 
         results = self._get_search_results()
-        self.assertEqual(results['count'], 1)
-        self.assertEqual(results['results'][0]['text'], 'Second one')
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], 'Second one')
 
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
     def test_search_highlight(self):
@@ -674,18 +674,18 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Second note')
 
         results = self._get_search_results()
-        self.assertEqual(results['count'], 2)
+        self.assertEqual(results['total'], 2)
 
         results = self._get_search_results(text="first", highlight=True)
-        self.assertEqual(results['count'], 1)
-        self.assertEqual(len(results['results']), 1)
-        self.assertEqual(results['results'][0]['text'], '<em>First</em> note')
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(len(results['rows']), 1)
+        self.assertEqual(results['rows'][0]['text'], '<em>First</em> note')
 
         results = self._get_search_results(text="first", highlight=True, highlight_tag='tag')
-        self.assertEqual(results['results'][0]['text'], '<tag>First</tag> note')
+        self.assertEqual(results['rows'][0]['text'], '<tag>First</tag> note')
 
         results = self._get_search_results(text="first", highlight=True, highlight_tag='tag', highlight_class='klass')
-        self.assertEqual(results['results'][0]['text'], '<tag class="klass">First</tag> note')
+        self.assertEqual(results['rows'][0]['text'], '<tag class="klass">First</tag> note')
 
 
     @override_settings(ES_DISABLED=True)
@@ -706,9 +706,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.client.put(url, payload, format='json')
 
         results = self._get_search_results()
-        self.assertEqual(results['results'][0]['text'], 'Updated Second Note')
-        self.assertEqual(results['results'][1]['text'], 'Third note')
-        self.assertEqual(results['results'][2]['text'], 'First one')
+        self.assertEqual(results['rows'][0]['text'], 'Updated Second Note')
+        self.assertEqual(results['rows'][1]['text'], 'Third note')
+        self.assertEqual(results['rows'][2]['text'], 'First one')
 
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do relevance ordering")
     def test_search_ordering_in_es(self):
@@ -723,10 +723,10 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'does not mention the word')
 
         results = self._get_search_results(text='fox')
-        self.assertEqual(results['count'], 3)
-        self.assertEqual(results['results'][0]['text'], 'fox of the foxes')
-        self.assertEqual(results['results'][1]['text'], 'the lead fox')
-        self.assertEqual(results['results'][2]['text'], 'a very long entry that contains the word fox')
+        self.assertEqual(results['total'], 3)
+        self.assertEqual(results['rows'][0]['text'], 'fox of the foxes')
+        self.assertEqual(results['rows'][1]['text'], 'the lead fox')
+        self.assertEqual(results['rows'][2]['text'], 'a very long entry that contains the word fox')
 
     @unittest.skipIf(settings.ES_DISABLED, "Unicode support in MySQL is limited")
     def test_search_unicode(self):
@@ -736,24 +736,24 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Веселих свят')
 
         response = self._get_search_results(text=u"веселих")
-        self.assertEqual(response['count'], 1)
-        self.assertEqual(response['results'][0]['text'], u'Веселих свят')
+        self.assertEqual(response['total'], 1)
+        self.assertEqual(response['rows'][0]['text'], u'Веселих свят')
 
         response = self._get_search_results(text=u"Свят")
-        self.assertEqual(response['results'][0]['text'], u'Веселих свят')
+        self.assertEqual(response['rows'][0]['text'], u'Веселих свят')
 
     def test_search_multiword(self):
         """
         Tests searching of complex words and word combinations
         """
         self._create_annotation(text=u'Totally different something')
-        self.assertEqual(self._get_search_results(text=u"TOTALLY")['count'], 1)
-        self.assertEqual(self._get_search_results(text=u"different")['count'], 1)
-        self.assertEqual(self._get_search_results(text=u"differ")['count'], 1)
-        self.assertEqual(self._get_search_results(text=u"total")['count'], 1)
-        self.assertEqual(self._get_search_results(text=u"totil")['count'], 0)
-        self.assertEqual(self._get_search_results(text=u"something")['count'], 1)
-        self.assertEqual(self._get_search_results(text=u"totally different")['count'], 1)
+        self.assertEqual(self._get_search_results(text=u"TOTALLY")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"different")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"differ")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"total")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"totil")['total'], 0)
+        self.assertEqual(self._get_search_results(text=u"something")['total'], 1)
+        self.assertEqual(self._get_search_results(text=u"totally different")['total'], 1)
 
     def test_search_course(self):
         """
@@ -766,11 +766,11 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Fourth note', course_id="c")
 
         results = self._get_search_results(course_id="u'edX/DemoX/Demo_Course'")
-        self.assertEqual(results['count'], 2)
+        self.assertEqual(results['total'], 2)
 
         results = self._get_search_results(course_id="b")
-        self.assertEqual(results['count'], 1)
-        self.assertEqual(results['results'][0]['text'], u'Third note')
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], u'Third note')
 
     def test_search_tag(self):
         """
@@ -782,16 +782,16 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'One final note', tags=[])
 
         results = self._get_search_results(text='Foo')
-        self.assertEqual(results['count'], 1)
-        self.assertEqual(results['results'][0]['text'], 'First note')
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], 'First note')
 
         results = self._get_search_results(text='bar')
-        self.assertEqual(results['count'], 3)
-        self._has_text(results['results'], ['First note', 'Another one', 'A third note'])
+        self.assertEqual(results['total'], 3)
+        self._has_text(results['rows'], ['First note', 'Another one', 'A third note'])
 
         results = self._get_search_results(text='baz')
-        self.assertEqual(results['count'], 1)
-        self.assertEqual(results['results'][0]['text'], 'A third note')
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(results['rows'][0]['text'], 'A third note')
 
     def test_search_tag_or_text(self):
         """
@@ -816,16 +816,16 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Last note', tags=[])
 
         results = self._get_search_results(text='note')
-        self.assertEqual(results['count'], 1)
-        self._has_text(results['results'], ['Last note'])
+        self.assertEqual(results['total'], 1)
+        self._has_text(results['rows'], ['Last note'])
 
         results = self._get_search_results(text='good')
-        self.assertEquals(results['count'], 2)
-        self._has_text(results['results'], ['Another comment', 'Not as good'])
+        self.assertEquals(results['total'], 2)
+        self._has_text(results['rows'], ['Another comment', 'Not as good'])
 
         results = self._get_search_results(text='comment')
-        self.assertEquals(results['count'], 3)
-        self._has_text(results['results'], ['A great comment', 'Another comment', 'Not as good'])
+        self.assertEquals(results['total'], 3)
+        self._has_text(results['rows'], ['A great comment', 'Another comment', 'Not as good'])
 
     def _has_text(self, rows, expected):
         """
@@ -843,9 +843,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
 
         results = self._get_search_results(text='foo bar')
-        self.assertEqual(results['count'], 2)
-        self.assertEqual(results['results'][0]['text'], 'Comment with foo')
-        self.assertEqual(results['results'][1]['text'], 'A longer comment with bar')
+        self.assertEqual(results['total'], 2)
+        self.assertEqual(results['rows'][0]['text'], 'Comment with foo')
+        self.assertEqual(results['rows'][1]['text'], 'A longer comment with bar')
 
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
     def test_search_highlight_tag(self):
@@ -856,18 +856,18 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._create_annotation(text=u'Second note', tags=[u'baz'])
 
         results = self._get_search_results()
-        self.assertEqual(results['count'], 2)
+        self.assertEqual(results['total'], 2)
 
         results = self._get_search_results(text="bar", highlight=True)
-        self.assertEqual(results['count'], 1)
-        self.assertEqual(len(results['results']), 1)
-        self.assertEqual(results['results'][0]['tags'], ['foo', '<em>bar</em>'])
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(len(results['rows']), 1)
+        self.assertEqual(results['rows'][0]['tags'], ['foo', '<em>bar</em>'])
 
         results = self._get_search_results(text="bar", highlight=True, highlight_tag='tag')
-        self.assertEqual(results['results'][0]['tags'], ['foo', '<tag>bar</tag>'])
+        self.assertEqual(results['rows'][0]['tags'], ['foo', '<tag>bar</tag>'])
 
         results = self._get_search_results(text="bar", highlight=True, highlight_tag='tag', highlight_class='klass')
-        self.assertEqual(results['results'][0]['tags'], ['foo', '<tag class="klass">bar</tag>'])
+        self.assertEqual(results['rows'][0]['tags'], ['foo', '<tag class="klass">bar</tag>'])
 
     @ddt.unpack
     @ddt.data(

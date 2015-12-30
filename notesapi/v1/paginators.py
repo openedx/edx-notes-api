@@ -22,7 +22,7 @@ class NotesPaginator(pagination.PageNumberPagination):
             'current_page': self.page.number,
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
-            'count': self.page.paginator.count,
+            'total': self.page.paginator.count,
             'num_pages': self.page.paginator.num_pages,
-            'results': data
+            'rows': data
         })
