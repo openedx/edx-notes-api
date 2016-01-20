@@ -145,14 +145,9 @@ class AnnotationSearchView(GenericAPIView):
             query = query.filter(SQ(data=clean_text))
 
         if params.get('highlight'):
-            tag = params.get('highlight_tag', 'em')
-            klass = params.get('highlight_class')
             opts = {
-                'pre_tags': ['<{tag}{klass_str}>'.format(
-                    tag=tag,
-                    klass_str=' class=\\"{}\\"'.format(klass) if klass else ''
-                )],
-                'post_tags': ['</{tag}>'.format(tag=tag)],
+                'pre_tags': ['{elasticsearch_highlight_start}'],
+                'post_tags': ['{elasticsearch_highlight_end}'],
             }
             query = query.highlight(**opts)
 
