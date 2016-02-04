@@ -56,7 +56,7 @@ class NotesElasticSearchSerializer(serializers.Serializer):  # pylint: disable=a
         Return note text.
         """
         if note.highlighted:
-            return note.highlighted[0].decode('unicode_escape')
+            return note.highlighted[0]
         return note.text
 
     def get_ranges(self, note):
