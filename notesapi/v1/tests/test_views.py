@@ -18,6 +18,7 @@ from rest_framework.test import APITestCase
 from .helpers import get_id_token
 
 TEST_USER = "test_user_id"
+TEST_OTHER_USER = "test_other_user_id"
 
 if not settings.ES_DISABLED:
     import haystack
@@ -65,6 +66,16 @@ class BaseAnnotationViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         return response.data.copy()
 
+    def _create_annotation_without_assert(self, **kwargs):
+        """
+        Create annotation but do not check for 201
+        """
+        opts = self.payload.copy()
+        opts.update(kwargs)
+        url = reverse('api:v1:annotations')
+        response = self.client.post(url, opts, format='json')
+        return response
+
     def _do_annotation_update(self, data, updated_fields):
         """
         Helper method for updating an annotation.
@@ -98,7 +109,7 @@ class BaseAnnotationViewTests(APITestCase):
         result = self.client.get(url, data=data)
         return result.data
 
-
+@ddt.ddt
 class AnnotationListViewTests(BaseAnnotationViewTests):
     """
     Test annotation creation and listing by user and course
@@ -221,6 +232,62 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         del annotation['updated']
         del annotation['created']
         self.assertEqual(annotation, note)
+
+    @ddt.data(
+        (6, False),
+        (4, True)
+    )
+    @ddt.unpack
+    def test_create_maximum_allowed(self, num_notes, should_create):
+        """
+        Tests user can not create more than allowed notes/annotations per course
+        """
+        for i in xrange(num_notes - 1):
+            kwargs = {'text': 'Foo_{}'.format(i)}
+            self._create_annotation(**kwargs)
+
+        # Creating more notes should result in 400 error
+        kwargs = {'text': 'Foo_{}'.format(num_notes)}
+        response = self._create_annotation_without_assert(**kwargs)
+
+        if not should_create:
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, 'Creating more than allowed notes')
+            self.assertEqual(
+                response.data['error_msg'],
+                u'You can create up to {0} notes.'
+                u' You must remove some notes before you can add new ones.'.format(settings.MAX_ANNOTATIONS_PER_COURSE)
+            )
+        else:
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_maximum_allowed_other(self):
+        # if user tries to create notes in another course it should succeed
+        for i in xrange(5):
+            kwargs = {'text': 'Foo_{}'.format(i)}
+            self._create_annotation(**kwargs)
+
+        # Creating more notes should result in 400 error
+        kwargs = {'text': 'Foo_{}'.format(6)}
+        response = self._create_annotation_without_assert(**kwargs)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, 'Creating more than allowed notes')
+        self.assertEqual(
+            response.data['error_msg'],
+            u'You can create up to {0} notes.'
+            u' You must remove some notes before you can add new ones.'.format(settings.MAX_ANNOTATIONS_PER_COURSE)
+        )
+
+        # if user tries to create note in a different course it should succeed
+        kwargs = {'course_id': 'test-course-id-2'}
+        response = self._create_annotation(**kwargs)
+        self.assertFalse(hasattr(response, 'data'))
+
+        # if another user to tries to create note in first course it should succeed
+        token = get_id_token(TEST_OTHER_USER)
+        self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
+        self.headers = {'user': TEST_OTHER_USER}
+        kwargs = {'user': TEST_OTHER_USER}
+        response = self._create_annotation(**kwargs)
+        self.assertFalse(hasattr(response, 'data'))
 
     def test_read_all_no_annotations(self):
         """

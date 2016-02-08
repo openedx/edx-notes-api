@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.utils.translation import ugettext_noop
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -18,6 +19,13 @@ if not settings.ES_DISABLED:
     from notesserver.highlight import SearchQuerySet
 
 log = logging.getLogger(__name__)
+
+
+class AnnotationsLimitReachedError(Exception):
+    """
+    Exception when trying to create more than allowed annotations
+    """
+    pass
 
 
 class AnnotationSearchView(APIView):
@@ -117,20 +125,35 @@ class AnnotationListView(APIView):
 
         Returns 400 request if bad payload is sent or it was empty object.
         """
-        if 'id' in self.request.data:
+        if not self.request.data or 'id' in self.request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            if Note.objects.filter(
+                    user_id=self.request.data['user'], course_id=self.request.data['course_id']
+            ).count() >= settings.MAX_ANNOTATIONS_PER_COURSE:
+                raise AnnotationsLimitReachedError
+
             note = Note.create(self.request.data)
             note.full_clean()
         except ValidationError as error:
             log.debug(error, exc_info=True)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        except AnnotationsLimitReachedError:
+            error_message = ugettext_noop(
+                u'You can create up to {max_num_annotations_per_course} notes.'
+                u' You must remove some notes before you can add new ones.'
+            ).format(max_num_annotations_per_course=settings.MAX_ANNOTATIONS_PER_COURSE)
+            log.info(
+                u'Attempted to create more than %s annotations',
+                settings.MAX_ANNOTATIONS_PER_COURSE
+            )
+            return Response({
+                'error_msg': error_message
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         note.save()
-
         location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note.id})
-
         return Response(note.as_dict(), status=status.HTTP_201_CREATED, headers={'Location': location})
 
 

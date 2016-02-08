@@ -80,3 +80,6 @@ CORS_ALLOW_HEADERS = (
 TEMPLATE_DIRS = (
     'templates',
 )
+
+### Maximum number of allowed notes per course ###
+MAX_ANNOTATIONS_PER_COURSE = 500
