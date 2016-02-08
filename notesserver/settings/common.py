@@ -83,3 +83,6 @@ TEMPLATE_DIRS = (
 )
 
 DEFAULT_NOTES_PAGE_SIZE = 25
+
+### Maximum number of allowed notes for each student per course ###
+MAX_NOTES_PER_COURSE = 500

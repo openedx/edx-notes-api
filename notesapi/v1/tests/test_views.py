@@ -18,6 +18,7 @@ from rest_framework.test import APITestCase
 from .helpers import get_id_token
 
 TEST_USER = "test_user_id"
+TEST_OTHER_USER = "test_other_user_id"
 
 if not settings.ES_DISABLED:
     import haystack
@@ -54,7 +55,7 @@ class BaseAnnotationViewTests(APITestCase):
             "tags": ["pink", "lady"]
         }
 
-    def _create_annotation(self, **kwargs):
+    def _create_annotation(self, expected_status=status.HTTP_201_CREATED, **kwargs):
         """
         Create annotation
         """
@@ -62,7 +63,7 @@ class BaseAnnotationViewTests(APITestCase):
         opts.update(kwargs)
         url = reverse('api:v1:annotations')
         response = self.client.post(url, opts, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, expected_status)
         return response.data.copy()
 
     def _do_annotation_update(self, data, updated_fields):
@@ -345,6 +346,38 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         del annotation['updated']
         del annotation['created']
         self.assertEqual(annotation, note)
+
+    @patch('django.conf.settings.MAX_NOTES_PER_COURSE', 5)
+    def test_create_maximum_allowed(self):
+        """
+        Tests if user can create more than maximum allowed notes per course
+        Also test if other user can create notes and Same user can create notes in other course
+        """
+        for i in xrange(5):
+            kwargs = {'text': 'Foo_{}'.format(i)}
+            self._create_annotation(**kwargs)
+
+        # Creating more notes should result in 400 error
+        kwargs = {'text': 'Foo_{}'.format(6)}
+        response = self._create_annotation(expected_status=status.HTTP_400_BAD_REQUEST, **kwargs)
+        self.assertEqual(
+            response['error_msg'],
+            u'You can create up to {0} notes.'
+            u' You must remove some notes before you can add new ones.'.format(settings.MAX_NOTES_PER_COURSE)
+        )
+
+        # if user tries to create note in a different course it should succeed
+        kwargs = {'course_id': 'test-course-id-2'}
+        response = self._create_annotation(**kwargs)
+        self.assertTrue('id' in response)
+
+        # if another user to tries to create note in first course it should succeed
+        token = get_id_token(TEST_OTHER_USER)
+        self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
+        self.headers = {'user': TEST_OTHER_USER}
+        kwargs = {'user': TEST_OTHER_USER}
+        response = self._create_annotation(**kwargs)
+        self.assertTrue('id' in response)
 
     def test_read_all_no_annotations(self):
         """
