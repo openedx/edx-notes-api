@@ -42,3 +42,6 @@ LOGGING = {
         }
     },
 }
+
+### Maximum number of allowed notes per course ###
+MAX_ANNOTATIONS_PER_COURSE = 5
