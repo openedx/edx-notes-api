@@ -30,7 +30,7 @@ class AnnotationSearchView(GenericAPIView):
 
             The annotations are always sorted in descending order by updated date.
 
-            Each page in the list contains 10 annotations by default. The page
+            Each page in the list contains 25 annotations by default. The page
             size can be altered by passing parameter "page_size=<page_size>".
 
             Http400 is returned if the format of the request is not correct.
@@ -165,7 +165,7 @@ class AnnotationListView(GenericAPIView):
 
                 The annotations are always sorted in descending order by updated date.
 
-                Each page in the list contains 10 annotations by default. The page
+                Each page in the list contains 25 annotations by default. The page
                 size can be altered by passing parameter "page_size=<page_size>".
 
                 Http400 is returned if the format of the request is not correct.

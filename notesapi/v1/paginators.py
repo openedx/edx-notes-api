@@ -5,12 +5,14 @@ Paginator for Notes.
 from rest_framework import pagination
 from rest_framework.response import Response
 
+from django.conf import settings
+
 
 class NotesPaginator(pagination.PageNumberPagination):
     """
     Student Notes Paginator.
     """
-    page_size = 10
+    page_size = settings.DEFAULT_NOTES_PAGE_SIZE
     page_size_query_param = "page_size"
 
     def get_paginated_response(self, data):

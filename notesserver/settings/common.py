@@ -81,3 +81,5 @@ CORS_ALLOW_HEADERS = (
 TEMPLATE_DIRS = (
     'templates',
 )
+
+DEFAULT_NOTES_PAGE_SIZE = 25
