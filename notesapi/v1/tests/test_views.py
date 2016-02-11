@@ -738,6 +738,25 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         response = self._get_search_results(text=u"Свят")
         self.assertEqual(response['rows'][0]['text'], u'Веселих свят')
 
+    @ddt.unpack
+    @ddt.data(
+        {"text": u"Веселих свят", 'text_to_search': u"веселих", 'result': u"{}Веселих{} свят"},
+        {"text": "The Hunger games", 'text_to_search': "Hunger", 'result': "The {}Hunger{} games"}
+    )
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL cannot do highlighting")
+    def test_search_with_highlighting(self, text, text_to_search, result):
+        """
+        Tests searching of unicode and non-unicode text with highlighting enabled.
+        """
+        start_tag = "{elasticsearch_highlight_start}"
+        end_tag = "{elasticsearch_highlight_end}"
+
+        self._create_annotation(text=text)
+
+        response = self._get_search_results(text=text_to_search, highlight=True)
+        self.assertEqual(response['total'], 1)
+        self.assertEqual(response['rows'][0]['text'], result.format(start_tag, end_tag))
+
     def test_search_multiword(self):
         """
         Tests searching of complex words and word combinations
