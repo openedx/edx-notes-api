@@ -35,6 +35,6 @@ class Note(models.Model):
 
         note_dict['ranges'] = json.dumps(ranges)
         note_dict['user_id'] = note_dict.pop('user', None)
-        note_dict['tags'] = json.dumps(note_dict.get('tags', list()))
+        note_dict['tags'] = json.dumps(note_dict.get('tags', list()), ensure_ascii=False)
 
         return cls(**note_dict)

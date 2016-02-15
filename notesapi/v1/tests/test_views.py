@@ -959,6 +959,26 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
             start=start
         )
 
+    @ddt.unpack
+    @ddt.data(
+        {"text": u"Ammar محمد عمار Muhammad", "search": u"محمد عمار", "tags": [u"عمار", u"Muhammad", u"محمد"]},
+        {"text": u"Ammar محمد عمار Muhammad", "search": u"محمد", "tags": [u"محمد", u"Muhammad"]},
+        {"text": u"Ammar محمد عمار Muhammad", "search": u"عمار", "tags": [ u"ammar", u"عمار"]},
+        {"text": u"Muhammad Ammar", "search": u"عمار", "tags": [ u"ammar", u"عمار"]},
+        {"text": u"محمد عمار", "search": u"Muhammad", "tags": [ u"Muhammad", u"عمار"]}
+    )
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL cannot do highlighting")
+    def test_search_unicode_text_and_tags(self, text, search, tags):
+        """
+        Verify that search works as expected with unicode and non-unicode text and tags.
+        """
+        self._create_annotation(text=text, tags=tags)
+
+        response = self._get_search_results(text=search)
+        self.assertEqual(response["total"], 1)
+        self.assertEqual(response["rows"][0]["text"], text)
+        self.assertEqual(response["rows"][0]["tags"], tags)
+
 
 @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)
 class AllowAllAnnotationViewTests(BaseAnnotationViewTests):
