@@ -13,7 +13,7 @@ test: clean
 	./manage.py test --settings=$(test_settings) --with-coverage --with-ignore-docstrings \
 		--exclude-dir=notesserver/settings --cover-inclusive --cover-branches \
 		--cover-html --cover-html-dir=build/coverage/html/ \
-		--cover-xml --cover-xml-file=build/coverage/coverage.xml \
+		--cover-xml --cover-xml-file=build/coverage/coverage.xml --verbosity=2 \
 		$(foreach package,$(PACKAGES),--cover-package=$(package)) \
 		$(PACKAGES)
 
