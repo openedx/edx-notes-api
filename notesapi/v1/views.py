@@ -1,10 +1,12 @@
 import logging
 import json
+import newrelic.agent
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.utils.translation import ugettext as _
 
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -20,6 +22,13 @@ if not settings.ES_DISABLED:
     from notesserver.highlight import SearchQuerySet
 
 log = logging.getLogger(__name__)
+
+
+class AnnotationsLimitReachedError(Exception):
+    """
+    Exception when trying to create more than allowed annotations
+    """
+    pass
 
 
 class AnnotationSearchView(GenericAPIView):
@@ -275,20 +284,41 @@ class AnnotationListView(GenericAPIView):
 
         Returns 400 request if bad payload is sent or it was empty object.
         """
-        if 'id' in self.request.data:
+        if not self.request.data or 'id' in self.request.data:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            total_notes = Note.objects.filter(
+                    user_id=self.request.data['user'], course_id=self.request.data['course_id']
+            ).count()
+            if total_notes >= settings.MAX_NOTES_PER_COURSE:
+                raise AnnotationsLimitReachedError
+
             note = Note.create(self.request.data)
             note.full_clean()
+
+            # Gather metrics for New Relic so we can slice data in New Relic Insights
+            newrelic.agent.add_custom_parameter('notes.count', total_notes)
         except ValidationError as error:
             log.debug(error, exc_info=True)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        except AnnotationsLimitReachedError:
+            error_message = _(
+                u'You can create up to {max_num_annotations_per_course} notes.'
+                u' You must remove some notes before you can add new ones.'
+            ).format(max_num_annotations_per_course=settings.MAX_NOTES_PER_COURSE)
+            log.info(
+                u'Attempted to create more than %s annotations',
+                settings.MAX_NOTES_PER_COURSE
+            )
+
+            return Response({
+                'error_msg': error_message
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         note.save()
 
         location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note.id})
-
         serializer = NoteSerializer(note)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers={'Location': location})
 
