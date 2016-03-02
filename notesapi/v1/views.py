@@ -157,6 +157,7 @@ class AnnotationSearchView(GenericAPIView):
             opts = {
                 'pre_tags': ['{elasticsearch_highlight_start}'],
                 'post_tags': ['{elasticsearch_highlight_end}'],
+                'number_of_fragments': 0
             }
             query = query.highlight(**opts)
 
