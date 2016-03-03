@@ -717,6 +717,36 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
                 '{elasticsearch_highlight_start}First{elasticsearch_highlight_end} note'
         )
 
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
+    def test_search_highlight_with_long_text(self):
+        """
+        Tests highlighting with long text.
+        """
+        text = "Lorem " + "word " * 100 + " Lorem"
+
+        start_tag = "{elasticsearch_highlight_start}"
+        end_tag = "{elasticsearch_highlight_end}"
+
+        expected_text = "{start_tag}Lorem{end_tag} {word} {start_tag}Lorem{end_tag}".format(
+                start_tag=start_tag,
+                end_tag=end_tag,
+                word="word " * 100
+        )
+
+        self._create_annotation(text=text)
+        self._create_annotation(text=u'Second note')
+
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 2)
+
+        results = self._get_search_results(text="Lorem", highlight=True)
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(len(results['rows']), 1)
+        self.assertEqual(
+                results['rows'][0]['text'],
+                expected_text
+        )
+
     @override_settings(ES_DISABLED=True)
     def test_search_ordering_in_db(self):
         """
