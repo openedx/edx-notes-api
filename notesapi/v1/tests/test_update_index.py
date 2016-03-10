@@ -31,7 +31,7 @@ class UpdateIndexTest(BaseAnnotationViewTests):
         end = datetime.datetime.now()
 
         results = self._get_search_results(text='note')
-        self.assertEqual(results, {'rows': [], 'total': 0})
+        self.assertDictContainsSubset({'rows': [], 'total': 0}, results)
 
         # When second note was created.
         call_command('update_index', start_date=second_start.isoformat(), end_date=second_end.isoformat(), verbosity=0)

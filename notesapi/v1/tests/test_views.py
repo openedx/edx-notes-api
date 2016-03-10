@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import urlparse
 import jwt
 import unittest
 import ddt
@@ -9,7 +10,6 @@ from mock import patch
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.http import QueryDict
 from django.test.utils import override_settings
 
 from rest_framework import status
@@ -18,6 +18,7 @@ from rest_framework.test import APITestCase
 from .helpers import get_id_token
 
 TEST_USER = "test_user_id"
+TEST_OTHER_USER = "test_other_user_id"
 
 if not settings.ES_DISABLED:
     import haystack
@@ -54,7 +55,7 @@ class BaseAnnotationViewTests(APITestCase):
             "tags": ["pink", "lady"]
         }
 
-    def _create_annotation(self, **kwargs):
+    def _create_annotation(self, expected_status=status.HTTP_201_CREATED, **kwargs):
         """
         Create annotation
         """
@@ -62,7 +63,7 @@ class BaseAnnotationViewTests(APITestCase):
         opts.update(kwargs)
         url = reverse('api:v1:annotations')
         response = self.client.post(url, opts, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, expected_status)
         return response.data.copy()
 
     def _do_annotation_update(self, data, updated_fields):
@@ -98,7 +99,131 @@ class BaseAnnotationViewTests(APITestCase):
         result = self.client.get(url, data=data)
         return result.data
 
+    def get_annotations(self, query_parameters=None, expected_status=200):
+        """
+        Helper method for sending a GET to the server. Verifies the expected status and returns the response.
+        """
+        data = {"user": TEST_USER, 'course_id': 'test-course-id'}
+        if query_parameters:
+            data.update(query_parameters)
+        response = self.client.get(reverse('api:v1:annotations'), data=data)
+        self.assertEqual(expected_status, response.status_code)
+        return response.data
 
+    # pylint: disable=too-many-arguments
+    def verify_pagination_info(
+            self, response,
+            total_annotations,
+            num_pages,
+            annotations_per_page,
+            current_page,
+            previous_page,
+            next_page,
+            start
+    ):
+        """
+        Verify the pagination information.
+
+        Argument:
+            response: response from api
+            total_annotations: total annotations in the response
+            num_pages: total number of pages in response
+            annotations_per_page: annotations on current page
+            current_page: current page number
+            previous_page: previous page number
+            next_page: next page number
+            start: start of the current page
+        """
+        def get_page_value(url, current_page):
+            """
+            Return page value extracted from url.
+            """
+            if url is None:
+                return None
+
+            parsed = urlparse.urlparse(url)
+            query_params = urlparse.parse_qs(parsed.query)
+
+            # If current_page is 2 then DRF will not include `page` query param in previous url.
+            # So return page 1 if current page equals to 2 and `page` key is missing from url.
+            if 'page' not in query_params and current_page == 2:
+                return 1
+
+            page = query_params['page'][0]
+            return page if page is None else int(page)
+
+        self.assertEqual(response['total'], total_annotations)
+        self.assertEqual(response['num_pages'], num_pages)
+        self.assertEqual(len(response['rows']), annotations_per_page)
+        self.assertEqual(response['current_page'], current_page)
+        self.assertEqual(get_page_value(response['previous'], response['current_page']), previous_page)
+        self.assertEqual(get_page_value(response['next'], response['current_page']), next_page)
+        self.assertEqual(response['start'], start)
+
+    # pylint: disable=too-many-arguments
+    def verify_list_view_pagination(
+            self,
+            query_parameters,
+            total_annotations,
+            num_pages,
+            annotations_per_page,
+            current_page,
+            previous_page,
+            next_page,
+            start
+    ):
+        """
+        Verify pagination information for AnnotationListView
+        """
+        total_annotations = total_annotations
+        for i in range(total_annotations):
+            self._create_annotation(text=u'annotation {}'.format(i))
+
+        response = self.get_annotations(query_parameters=query_parameters)
+        self.verify_pagination_info(
+            response,
+            total_annotations=total_annotations,
+            num_pages=num_pages,
+            annotations_per_page=annotations_per_page,
+            current_page=current_page,
+            previous_page=previous_page,
+            next_page=next_page,
+            start=start
+        )
+
+    # pylint: disable=too-many-arguments
+    def verify_search_view_pagination(
+            self,
+            query_parameters,
+            total_annotations,
+            num_pages,
+            annotations_per_page,
+            current_page,
+            previous_page,
+            next_page,
+            start
+    ):
+        """
+        Verify pagination information for AnnotationSearchView
+        """
+        total_annotations = total_annotations
+        for i in range(total_annotations):
+            self._create_annotation(text=u'annotation {}'.format(i))
+
+        response = self._get_search_results(**query_parameters)
+        self.verify_pagination_info(
+            response,
+            total_annotations=total_annotations,
+            num_pages=num_pages,
+            annotations_per_page=annotations_per_page,
+            current_page=current_page,
+            previous_page=previous_page,
+            next_page=next_page,
+            start=start
+        )
+
+
+@ddt.ddt
 class AnnotationListViewTests(BaseAnnotationViewTests):
     """
     Test annotation creation and listing by user and course
@@ -116,7 +241,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
         annotation = response.data.copy()
         self.assertIn('id', annotation)
-        self.assertEqual(type(annotation['id']), str)
+        self.assertEqual(type(annotation['id']), unicode)
         del annotation['id']
         del annotation['updated']
         del annotation['created']
@@ -222,6 +347,38 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         del annotation['created']
         self.assertEqual(annotation, note)
 
+    @patch('django.conf.settings.MAX_NOTES_PER_COURSE', 5)
+    def test_create_maximum_allowed(self):
+        """
+        Tests if user can create more than maximum allowed notes per course
+        Also test if other user can create notes and Same user can create notes in other course
+        """
+        for i in xrange(5):
+            kwargs = {'text': 'Foo_{}'.format(i)}
+            self._create_annotation(**kwargs)
+
+        # Creating more notes should result in 400 error
+        kwargs = {'text': 'Foo_{}'.format(6)}
+        response = self._create_annotation(expected_status=status.HTTP_400_BAD_REQUEST, **kwargs)
+        self.assertEqual(
+            response['error_msg'],
+            u'You can create up to {0} notes.'
+            u' You must remove some notes before you can add new ones.'.format(settings.MAX_NOTES_PER_COURSE)
+        )
+
+        # if user tries to create note in a different course it should succeed
+        kwargs = {'course_id': 'test-course-id-2'}
+        response = self._create_annotation(**kwargs)
+        self.assertTrue('id' in response)
+
+        # if another user to tries to create note in first course it should succeed
+        token = get_id_token(TEST_OTHER_USER)
+        self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
+        self.headers = {'user': TEST_OTHER_USER}
+        kwargs = {'user': TEST_OTHER_USER}
+        response = self._create_annotation(**kwargs)
+        self.assertTrue('id' in response)
+
     def test_read_all_no_annotations(self):
         """
         Tests list all annotations endpoint when no annotations are present in database.
@@ -230,7 +387,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         headers["course_id"] = "a/b/c"
         response = self.client.get(reverse('api:v1:annotations'), headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0, "no annotation should be returned in response")
+        self.assertDictContainsSubset(
+            {'total': 0, 'rows': []}, response.data, "no annotation should be returned in response"
+        )
 
     def test_read_all(self):
         """
@@ -244,7 +403,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         headers["course_id"] = "test-course-id"
         response = self.client.get(reverse('api:v1:annotations'), headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 5, "five annotations should be returned in response")
+        self.assertEqual(response.data['total'], 5, "five annotations should be returned in response")
 
     def test_read_all_ordering(self):
         """
@@ -260,9 +419,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         headers["course_id"] = "test-course-id"
         results = self.client.get(reverse('api:v1:annotations'), headers).data
 
-        self.assertEqual(results[0]['text'], 'Third note')
-        self.assertEqual(results[1]['text'], 'Second note')
-        self.assertEqual(results[2]['text'], 'First one')
+        self.assertEqual(results['rows'][0]['text'], 'Third note')
+        self.assertEqual(results['rows'][1]['text'], 'Second note')
+        self.assertEqual(results['rows'][2]['text'], 'First one')
 
     def test_read_all_no_query_param(self):
         """
@@ -270,6 +429,84 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         """
         response = self.client.get(reverse('api:v1:annotations'), self.headers)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @ddt.unpack
+    @ddt.data(
+        {'page': 1, 'annotations_per_page': 10, 'previous_page': None, 'next_page': 2, 'start': 0},
+        {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3, 'start': 10},
+        {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None, 'start': 20}
+    )
+    # pylint: disable=too-many-arguments
+    def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page, start):
+        """
+        Verify that pagination info is correct when we have data spanned on multiple pages.
+        """
+        self.verify_list_view_pagination(
+            query_parameters={'page': page},
+            total_annotations=23,
+            num_pages=3,
+            annotations_per_page=annotations_per_page,
+            current_page=page,
+            previous_page=previous_page,
+            next_page=next_page,
+            start=start
+        )
+
+    def test_pagination_single_page(self):
+        """
+        Verify that pagination info is correct when we have a single page of data.
+        """
+        self.verify_list_view_pagination(
+            query_parameters=None,
+            total_annotations=6,
+            num_pages=1,
+            annotations_per_page=6,
+            current_page=1,
+            previous_page=None,
+            next_page=None,
+            start=0
+        )
+
+    @ddt.unpack
+    @ddt.data(
+        {'page_size': 2, 'annotations_per_page': 2, 'num_pages': 8, 'next_page': 2},
+        {'page_size': 15, 'annotations_per_page': 15, 'num_pages': 1, 'next_page': None},
+    )
+    def test_pagination_page_size(self, page_size, annotations_per_page, num_pages, next_page):
+        """
+        Verify that requests for different page_size returns correct pagination info.
+        """
+        self.verify_list_view_pagination(
+            query_parameters={'page_size': page_size},
+            total_annotations=15,
+            num_pages=num_pages,
+            annotations_per_page=annotations_per_page,
+            current_page=1,
+            previous_page=None,
+            next_page=next_page,
+            start=0
+        )
+
+    @ddt.unpack
+    @ddt.data(
+        {'page': 1, 'start': 0, 'previous_page': None, 'next_page': 2},
+        {'page': 2, 'start': 5, 'previous_page': 1, 'next_page': 3},
+        {'page': 3, 'start': 10, 'previous_page': 2, 'next_page': None},
+    )
+    def test_pagination_page_start(self, page, start, previous_page, next_page):
+        """
+        Verify that start value is correct for different pages.
+        """
+        self.verify_list_view_pagination(
+            query_parameters={'page': page, 'page_size': 5},
+            total_annotations=15,
+            num_pages=3,
+            annotations_per_page=5,
+            current_page=page,
+            previous_page=previous_page,
+            next_page=next_page,
+            start=start
+        )
 
 
 @ddt.ddt
@@ -288,7 +525,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         annotation = response.data
-        self.assertEqual(type(annotation['id']), str)
+        self.assertEqual(type(annotation['id']), unicode)
         del annotation['id']
         del annotation['updated']
         del annotation['created']
@@ -409,6 +646,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND, "response should be 404 NOT FOUND")
 
 
+@ddt.ddt
 class AnnotationSearchViewTests(BaseAnnotationViewTests):
     """
     Test annotation searching by user, course_id, usage_id and text
@@ -474,14 +712,40 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         results = self._get_search_results(text="first", highlight=True)
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
-        self.assertEqual(results['rows'][0]['text'], '<em>First</em> note')
+        self.assertEqual(
+                results['rows'][0]['text'],
+                '{elasticsearch_highlight_start}First{elasticsearch_highlight_end} note'
+        )
 
-        results = self._get_search_results(text="first", highlight=True, highlight_tag='tag')
-        self.assertEqual(results['rows'][0]['text'], '<tag>First</tag> note')
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
+    def test_search_highlight_with_long_text(self):
+        """
+        Tests highlighting with long text.
+        """
+        text = "Lorem " + "word " * 100 + " Lorem"
 
-        results = self._get_search_results(text="first", highlight=True, highlight_tag='tag', highlight_class='klass')
-        self.assertEqual(results['rows'][0]['text'], '<tag class="klass">First</tag> note')
+        start_tag = "{elasticsearch_highlight_start}"
+        end_tag = "{elasticsearch_highlight_end}"
 
+        expected_text = "{start_tag}Lorem{end_tag} {word} {start_tag}Lorem{end_tag}".format(
+                start_tag=start_tag,
+                end_tag=end_tag,
+                word="word " * 100
+        )
+
+        self._create_annotation(text=text)
+        self._create_annotation(text=u'Second note')
+
+        results = self._get_search_results()
+        self.assertEqual(results['total'], 2)
+
+        results = self._get_search_results(text="Lorem", highlight=True)
+        self.assertEqual(results['total'], 1)
+        self.assertEqual(len(results['rows']), 1)
+        self.assertEqual(
+                results['rows'][0]['text'],
+                expected_text
+        )
 
     @override_settings(ES_DISABLED=True)
     def test_search_ordering_in_db(self):
@@ -530,12 +794,31 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         self._create_annotation(text=u'Веселих свят')
 
-        results = self._get_search_results(text=u"веселих")
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], u'Веселих свят')
+        response = self._get_search_results(text=u"веселих")
+        self.assertEqual(response['total'], 1)
+        self.assertEqual(response['rows'][0]['text'], u'Веселих свят')
 
-        results = self._get_search_results(text=u"Свят")
-        self.assertEqual(results['rows'][0]['text'], u'Веселих свят')
+        response = self._get_search_results(text=u"Свят")
+        self.assertEqual(response['rows'][0]['text'], u'Веселих свят')
+
+    @ddt.unpack
+    @ddt.data(
+        {"text": u"Веселих свят", 'text_to_search': u"веселих", 'result': u"{}Веселих{} свят"},
+        {"text": "The Hunger games", 'text_to_search': "Hunger", 'result': "The {}Hunger{} games"}
+    )
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL cannot do highlighting")
+    def test_search_with_highlighting(self, text, text_to_search, result):
+        """
+        Tests searching of unicode and non-unicode text with highlighting enabled.
+        """
+        start_tag = "{elasticsearch_highlight_start}"
+        end_tag = "{elasticsearch_highlight_end}"
+
+        self._create_annotation(text=text)
+
+        response = self._get_search_results(text=text_to_search, highlight=True)
+        self.assertEqual(response['total'], 1)
+        self.assertEqual(response['rows'][0]['text'], result.format(start_tag, end_tag))
 
     def test_search_multiword(self):
         """
@@ -656,13 +939,108 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         results = self._get_search_results(text="bar", highlight=True)
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
-        self.assertEqual(results['rows'][0]['tags'], ['foo', '<em>bar</em>'])
+        self.assertEqual(
+                results['rows'][0]['tags'],
+                ['foo', '{elasticsearch_highlight_start}bar{elasticsearch_highlight_end}']
+        )
 
-        results = self._get_search_results(text="bar", highlight=True, highlight_tag='tag')
-        self.assertEqual(results['rows'][0]['tags'], ['foo', '<tag>bar</tag>'])
+    @ddt.unpack
+    @ddt.data(
+        {'page': 1, 'annotations_per_page': 10, 'previous_page': None, 'next_page': 2, 'start': 0},
+        {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3, 'start': 10},
+        {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None, 'start': 20}
+    )
+    # pylint: disable=too-many-arguments
+    def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page, start):
+        """
+        Verify that pagination info is correct when we have data spanned on multiple pages.
+        """
+        self.verify_search_view_pagination(
+            query_parameters={'page': page},
+            total_annotations=23,
+            num_pages=3,
+            annotations_per_page=annotations_per_page,
+            current_page=page,
+            previous_page=previous_page,
+            next_page=next_page,
+            start=start
+        )
 
-        results = self._get_search_results(text="bar", highlight=True, highlight_tag='tag', highlight_class='klass')
-        self.assertEqual(results['rows'][0]['tags'], ['foo', '<tag class="klass">bar</tag>'])
+    def test_pagination_single_page(self):
+        """
+        Verify that pagination info is correct when we have a single page of data.
+        """
+        self.verify_search_view_pagination(
+            query_parameters={},
+            total_annotations=6,
+            num_pages=1,
+            annotations_per_page=6,
+            current_page=1,
+            previous_page=None,
+            next_page=None,
+            start=0
+        )
+
+    @ddt.unpack
+    @ddt.data(
+        {'page_size': 2, 'annotations_per_page': 2, 'num_pages': 8, 'next_page': 2},
+        {'page_size': 15, 'annotations_per_page': 15, 'num_pages': 1, 'next_page': None},
+    )
+    def test_pagination_page_size(self, page_size, annotations_per_page, num_pages, next_page):
+        """
+        Verify that requests for different page_size returns correct pagination info.
+        """
+        self.verify_search_view_pagination(
+            query_parameters={'page_size': page_size},
+            total_annotations=15,
+            num_pages=num_pages,
+            annotations_per_page=annotations_per_page,
+            current_page=1,
+            previous_page=None,
+            next_page=next_page,
+            start=0
+        )
+
+    @ddt.unpack
+    @ddt.data(
+        {'page': 1, 'start': 0, 'previous_page': None, 'next_page': 2},
+        {'page': 2, 'start': 5, 'previous_page': 1, 'next_page': 3},
+        {'page': 3, 'start': 10, 'previous_page': 2, 'next_page': None},
+    )
+    def test_pagination_page_start(self, page, start, previous_page, next_page):
+        """
+        Verify that start value is correct for different pages.
+        """
+        self.verify_search_view_pagination(
+            query_parameters={'page': page, 'page_size': 5},
+            total_annotations=15,
+            num_pages=3,
+            annotations_per_page=5,
+            current_page=page,
+            previous_page=previous_page,
+            next_page=next_page,
+            start=start
+        )
+
+    @ddt.unpack
+    @ddt.data(
+        {"text": u"Ammar محمد عمار Muhammad", "search": u"محمد عمار", "tags": [u"عمار", u"Muhammad", u"محمد"]},
+        {"text": u"Ammar محمد عمار Muhammad", "search": u"محمد", "tags": [u"محمد", u"Muhammad"]},
+        {"text": u"Ammar محمد عمار Muhammad", "search": u"عمار", "tags": [ u"ammar", u"عمار"]},
+        {"text": u"Muhammad Ammar", "search": u"عمار", "tags": [ u"ammar", u"عمار"]},
+        {"text": u"محمد عمار", "search": u"Muhammad", "tags": [ u"Muhammad", u"عمار"]}
+    )
+    @unittest.skipIf(settings.ES_DISABLED, "MySQL cannot do highlighting")
+    def test_search_unicode_text_and_tags(self, text, search, tags):
+        """
+        Verify that search works as expected with unicode and non-unicode text and tags.
+        """
+        self._create_annotation(text=text, tags=tags)
+
+        response = self._get_search_results(text=search)
+        self.assertEqual(response["total"], 1)
+        self.assertEqual(response["rows"][0]["text"], text)
+        self.assertEqual(response["rows"][0]["tags"], tags)
 
 
 @patch('django.conf.settings.DISABLE_TOKEN_CHECK', True)

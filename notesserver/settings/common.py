@@ -63,7 +63,8 @@ LOGGING = get_logger_config()
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'notesapi.v1.permissions.HasAccessToken'
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'notesapi.v1.paginators.NotesPaginator',
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -80,3 +81,8 @@ CORS_ALLOW_HEADERS = (
 TEMPLATE_DIRS = (
     'templates',
 )
+
+DEFAULT_NOTES_PAGE_SIZE = 25
+
+### Maximum number of allowed notes for each student per course ###
+MAX_NOTES_PER_COURSE = 500

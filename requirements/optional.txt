@@ -1,1 +1,0 @@
-newrelic==2.40.0.34            # New Relic

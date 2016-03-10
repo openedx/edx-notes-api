@@ -42,3 +42,5 @@ LOGGING = {
         }
     },
 }
+
+DEFAULT_NOTES_PAGE_SIZE = 10

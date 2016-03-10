@@ -35,25 +35,6 @@ class Note(models.Model):
 
         note_dict['ranges'] = json.dumps(ranges)
         note_dict['user_id'] = note_dict.pop('user', None)
-        note_dict['tags'] = json.dumps(note_dict.get('tags', list()))
+        note_dict['tags'] = json.dumps(note_dict.get('tags', list()), ensure_ascii=False)
 
         return cls(**note_dict)
-
-    def as_dict(self):
-        """
-        Returns the note object as a dictionary.
-        """
-        created = self.created.isoformat() if self.created else None
-        updated = self.updated.isoformat() if self.updated else None
-        return {
-            'id': str(self.pk),
-            'user': self.user_id,
-            'course_id': self.course_id,
-            'usage_id': self.usage_id,
-            'text': self.text,
-            'quote': self.quote,
-            'ranges': json.loads(self.ranges),
-            'created': created,
-            'updated': updated,
-            'tags': json.loads(self.tags)
-        }

@@ -1,6 +1,7 @@
 from unittest import TestCase
 from notesapi.v1.models import Note
 from django.core.exceptions import ValidationError
+from notesapi.v1.serializers import NoteSerializer
 
 
 class NoteTest(TestCase):
@@ -27,7 +28,8 @@ class NoteTest(TestCase):
         note = Note.create(self.note_dict.copy())
         note.save()
 
-        result_note = note.as_dict()
+        serializer = NoteSerializer(note)
+        result_note = serializer.data
         del result_note['id']
         del result_note['created']
         del result_note['updated']
@@ -56,5 +58,6 @@ class NoteTest(TestCase):
         note = Note.create(payload)
         note.full_clean()
         note.save()
+
         self.assertEqual("[]", note.tags)
-        self.assertEqual([], note.as_dict()["tags"])
+        self.assertEqual([], NoteSerializer(note).data["tags"])
