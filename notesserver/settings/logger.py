@@ -24,7 +24,6 @@ def get_logger_config(log_dir='/var/tmp',
     "edx_filename" is ignored unless dev_env is set to true since otherwise
     logging is handled by rsyslogd.
     """
-
     # Revert to INFO if an invalid string is passed in
     if local_loglevel not in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']:
         local_loglevel = 'INFO'
@@ -69,7 +68,7 @@ def get_logger_config(log_dir='/var/tmp',
             },
             "elasticsearch.trace": {
                 'handlers': handlers,
-                'level': 'DEBUG',
+                'level': 'WARNING',
                 'propagate': False,
             },
             '': {
