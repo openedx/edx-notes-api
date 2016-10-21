@@ -35,9 +35,11 @@ class AnnotationSearchView(GenericAPIView):
     """
     **Use Case**
 
-        * Search and return a paginated list of annotations for a user.
+        * Search and return a list of annotations for a user.
 
             The annotations are always sorted in descending order by updated date.
+
+            Response is paginated by default except usage_id based search.
 
             Each page in the list contains 25 annotations by default. The page
             size can be altered by passing parameter "page_size=<page_size>".
@@ -58,6 +60,8 @@ class AnnotationSearchView(GenericAPIView):
 
         GET /api/v1/search/
         GET /api/v1/search/?course_id={course_id}&user={user_id}
+        GET /api/v1/search/?course_id={course_id}&user={user_id}&usage_id={usage_id}
+        GET /api/v1/search/?course_id={course_id}&user={user_id}&usage_id={usage_id}&usage_id={usage_id} ...
 
     **Query Parameters for GET**
 
@@ -66,6 +70,8 @@ class AnnotationSearchView(GenericAPIView):
         * course_id: Id of the course.
 
         * user: Anonymized user id.
+
+        * usage_id: The identifier string of the annotations XBlock.
 
         * text: Student's thoughts on the quote
 
@@ -109,31 +115,49 @@ class AnnotationSearchView(GenericAPIView):
 
             * updated: DateTime. When was the last time annotation was updated.
     """
+    params = {}
+    query_params = {}
+    search_with_usage_id = False
 
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
         Search annotations in most appropriate storage
         """
+        self.query_params = {}
+        self.search_with_usage_id = False
+        self.params = self.request.query_params.dict()
+
+        usage_ids = self.request.query_params.getlist('usage_id')
+        if len(usage_ids) > 0:
+            self.search_with_usage_id = True
+            self.query_params['usage_id__in'] = usage_ids
+
+        if 'course_id' in self.params:
+            self.query_params['course_id'] = self.params['course_id']
+
         # search in DB when ES is not available or there is no need to bother it
-        if settings.ES_DISABLED or 'text' not in self.request.query_params.dict():
+        if settings.ES_DISABLED or 'text' not in self.params:
+            if 'user' in self.params:
+                self.query_params['user_id'] = self.params['user']
             return self.get_from_db(*args, **kwargs)
         else:
+            if 'user' in self.params:
+                self.query_params['user'] = self.params['user']
             return self.get_from_es(*args, **kwargs)
 
     def get_from_db(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
         Search annotations in database.
         """
-        params = self.request.query_params.dict()
-        query = Note.objects.filter(
-            **{f: v for (f, v) in params.items() if f in ('course_id', 'usage_id')}
-        ).order_by('-updated')
+        query = Note.objects.filter(**self.query_params).order_by('-updated')
 
-        if 'user' in params:
-            query = query.filter(user_id=params['user'])
+        if 'text' in self.params:
+            query = query.filter(Q(text__icontains=self.params['text']) | Q(tags__icontains=self.params['text']))
 
-        if 'text' in params:
-            query = query.filter(Q(text__icontains=params['text']) | Q(tags__icontains=params['text']))
+        # Do not send paginated result if usage id based search.
+        if self.search_with_usage_id:
+            serializer = NoteSerializer(query, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         page = self.paginate_queryset(query)
         serializer = NoteSerializer(page, many=True)
@@ -144,22 +168,24 @@ class AnnotationSearchView(GenericAPIView):
         """
         Search annotations in ElasticSearch.
         """
-        params = self.request.query_params.dict()
-        query = SearchQuerySet().models(Note).filter(
-            **{f: v for (f, v) in params.items() if f in ('user', 'course_id', 'usage_id')}
-        )
+        query = SearchQuerySet().models(Note).filter(**self.query_params)
 
-        if 'text' in params:
-            clean_text = query.query.clean(params['text'])
+        if 'text' in self.params:
+            clean_text = query.query.clean(self.params['text'])
             query = query.filter(SQ(data=clean_text))
 
-        if params.get('highlight'):
+        if self.params.get('highlight'):
             opts = {
                 'pre_tags': ['{elasticsearch_highlight_start}'],
                 'post_tags': ['{elasticsearch_highlight_end}'],
                 'number_of_fragments': 0
             }
             query = query.highlight(**opts)
+
+        # Do not send paginated result if usage id based search.
+        if self.search_with_usage_id:
+            serializer = NotesElasticSearchSerializer(query, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         page = self.paginate_queryset(query)
         serializer = NotesElasticSearchSerializer(page, many=True)
