@@ -1,3 +1,4 @@
+import json
 import datetime
 from unittest import skipIf
 from mock import patch, Mock
@@ -17,7 +18,7 @@ class OperationalEndpointsTest(APITestCase):
         """
         response = self.client.get(reverse('heartbeat'))
         self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.data, {"OK": True})
+        self.assertEquals(json.loads(response.content), {"OK": True})
 
     @skipIf(settings.ES_DISABLED, "Do not test if Elasticsearch service is disabled.")
     @patch('notesserver.views.get_es')
@@ -28,7 +29,7 @@ class OperationalEndpointsTest(APITestCase):
         mocked_get_es.return_value.ping.return_value = False
         response = self.client.get(reverse('heartbeat'))
         self.assertEquals(response.status_code, 500)
-        self.assertEquals(response.data, {"OK": False, "check": "es"})
+        self.assertEquals(json.loads(response.content), {"OK": False, "check": "es"})
 
     @patch("django.db.backends.utils.CursorWrapper")
     def test_heartbeat_failure_db(self, mocked_cursor_wrapper):
@@ -38,7 +39,7 @@ class OperationalEndpointsTest(APITestCase):
         mocked_cursor_wrapper.side_effect = Exception
         response = self.client.get(reverse('heartbeat'))
         self.assertEquals(response.status_code, 500)
-        self.assertEquals(response.data, {"OK": False, "check": "db"})
+        self.assertEquals(json.loads(response.content), {"OK": False, "check": "db"})
 
     def test_root(self):
         """
