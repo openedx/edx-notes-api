@@ -3,6 +3,8 @@ import datetime
 
 from django.db import connection
 from django.conf import settings
+from django.http import JsonResponse
+
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -38,12 +40,12 @@ def heartbeat(request):  # pylint: disable=unused-argument
     try:
         db_status()
     except Exception:
-        return Response({"OK": False, "check": "db"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse({"OK": False, "check": "db"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     if not settings.ES_DISABLED and not get_es().ping():
-        return Response({"OK": False, "check": "es"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse({"OK": False, "check": "es"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    return Response({"OK": True})
+    return JsonResponse({"OK": True}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])

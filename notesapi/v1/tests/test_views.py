@@ -680,6 +680,32 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         search_and_verify("First", "First one", [])
         search_and_verify("Second", "Second note", ["tag1", "tag2"])
 
+    @ddt.data(True, False)
+    def test_usage_id_search(self, is_es_disabled):
+        """
+        Verifies the search with usage id.
+        """
+        self._create_annotation(text=u'First one', usage_id='test-1')
+        self._create_annotation(text=u'Second note', usage_id='test-2')
+        self._create_annotation(text=u'Third note', usage_id='test-3')
+
+        @patch('django.conf.settings.ES_DISABLED', is_es_disabled)
+        def verify_usage_id_search(usage_ids):
+            """
+            Verify search results based on usage id operation.
+
+            Arguments:
+                usage_ids: List. The identifier string of the annotations XBlock(s).
+            """
+            results = self._get_search_results(usage_id=usage_ids)
+            self.assertEqual(len(results), len(usage_ids))
+            # Here we are reverse-traversing usage_ids because response has descending ordered rows.
+            for index, u_id in enumerate(usage_ids[::-1]):
+                self.assertEqual(results[index]['usage_id'], u_id)
+
+        verify_usage_id_search(usage_ids=['test-1'])
+        verify_usage_id_search(usage_ids=['test-1', 'test-2', 'test-3'])
+
     def test_search_deleted(self):
         """
         Tests for search method to not return deleted notes.
