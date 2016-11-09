@@ -17,5 +17,5 @@ after_success:
 
 env:
 - ESVER=-
-- ESVER=0.90.11
 - ESVER=1.4.2
+- ESVER=1.5.2

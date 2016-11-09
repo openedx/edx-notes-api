@@ -10,13 +10,12 @@ This is a backend store for edX Student Notes.
 Overview
 --------
 
-The edX Notes API is designed to be compatible with the
-`Annotator <http://annotatorjs.org/>`__. Can be run with up to date ElasticSearch or legacy 0.90.x.
+The edX Notes API is designed to be compatible with the `Annotator <http://annotatorjs.org/>`__.
 
 Getting Started
 ---------------
 
-1. You'll need an `ElasticSearch <http://elasticsearch.org>`__ installed.
+1. Install `ElasticSearch <http://elasticsearch.org>`__ 1.x.y.
 
 2. Install the requirements:
 
