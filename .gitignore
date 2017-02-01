@@ -8,3 +8,6 @@ coverage/
 
 # Sqlite Database
 *.db
+
+#vim
+*.swp

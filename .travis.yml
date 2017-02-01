@@ -1,21 +1,20 @@
 language: python
-python: 2.7
-sudo: false
 
-install:
-    - scripts/travis/install.sh
-    - scripts/travis/setup.sh
-    - pip install -r requirements/test.txt
-    - git fetch origin master:refs/remotes/origin/master # https://github.com/edx/diff-cover#troubleshooting
-    - pip install coveralls
+python:
+    - "3.5"
+
+services:
+  - docker
+
+sudo: required
+
+before_install:
+    - make travis_up
 
 script:
-    - make validate
+    - make travis_test
 
 after_success:
-    - coveralls
-
-env:
-- ESVER=-
-- ESVER=0.90.11
-- ESVER=1.4.2
+    - pip install -U codecov
+    - docker exec notes /edx/app/notes/notes/.travis/run_coverage.sh
+    - codecov
