@@ -2,8 +2,13 @@ from .common import *
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'default.db',
+        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DB_NAME', 'default.db'),
+        'USER': os.environ.get('DB_USER', ''),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', ''),
+        'PORT': os.environ.get('DB_PORT', ''),
+        'CONN_MAX_AGE': int(os.environ.get('CONN_MAX_AGE', 0))
     }
 }
 
@@ -14,7 +19,7 @@ INSTALLED_APPS += ('django_nose',)
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'notesserver.highlight.ElasticsearchSearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
+        'URL': os.environ.get('ELASTICSEARCH_URL', 'http://localhost:9200/'),
         'INDEX_NAME': 'notes_index_test',
     },
 }

@@ -654,7 +654,7 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
 
     def test_search(self):
         """
-        Tests for search method.
+        Tests for search method with case insensitivity for text param.
         """
         self._create_annotation(text=u'First one', tags=[])
         self._create_annotation(text=u'Second note', tags=[u'tag1', u'tag2'])
@@ -669,16 +669,17 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(last_note, note)
         self.assertEqual(results['total'], 3)
 
-        def search_and_verify(searchText, expectedText, expectedTags):
+        def search_and_verify(search_text, expected_text, expected_tags):
             """ Test the results from a specific text search operation """
-            results = self._get_search_results(text=searchText)
+            results = self._get_search_results(text=search_text)
             self.assertEqual(results['total'], 1)
             self.assertEqual(len(results['rows']), 1)
-            self.assertEqual(results['rows'][0]['text'], expectedText)
-            self.assertEqual(results['rows'][0]['tags'], expectedTags)
+            self.assertEqual(results['rows'][0]['text'], expected_text)
+            self.assertEqual(results['rows'][0]['tags'], expected_tags)
 
-        search_and_verify("First", "First one", [])
-        search_and_verify("Second", "Second note", ["tag1", "tag2"])
+        search_and_verify(search_text="First", expected_text="First one", expected_tags=[])
+        search_and_verify(search_text="first", expected_text="First one", expected_tags=[])
+        search_and_verify(search_text="Second", expected_text="Second note", expected_tags=["tag1", "tag2"])
 
     @ddt.data(True, False)
     def test_usage_id_search(self, is_es_disabled):
@@ -859,12 +860,11 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(self._get_search_results(text=u"something")['total'], 1)
         self.assertEqual(self._get_search_results(text=u"totally different")['total'], 1)
 
-    def test_search_course(self):
+    def test_search_by_course_id(self):
         """
         Tests searching with course_id provided
         """
         self._create_annotation(text=u'First one', course_id="u'edX/DemoX/Demo_Course'")
-        self._create_annotation(text=u'Not shown', course_id="u'edx/demox/demo_course'")  # wrong case
         self._create_annotation(text=u'Second note', course_id="u'edX/DemoX/Demo_Course'")
         self._create_annotation(text=u'Third note', course_id="b")
         self._create_annotation(text=u'Fourth note', course_id="c")
