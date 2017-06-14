@@ -12,7 +12,7 @@ services:
       MYSQL_PASSWORD: "secret"
       MYSQL_DATABASE: "edx_notes_api"
   es:
-    image: edxops/elasticsearch:0.9.13
+    image: elasticsearch:1.5.2
     container_name: es
   notes:
     # Uncomment this line to use the official course-discovery base image
