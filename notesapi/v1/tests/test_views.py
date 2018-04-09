@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-import urlparse
-import jwt
-import unittest
-import ddt
 from calendar import timegm
 from datetime import datetime, timedelta
-from mock import patch
+import ddt
+import jwt
+import unittest
+import urlparse
 
+from django.conf import settings
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
-from django.conf import settings
 from django.test.utils import override_settings
-
+from mock import patch
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -507,6 +506,42 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
             next_page=next_page,
             start=start
         )
+
+    def test_delete_all_user_annotations(self, user_id=TEST_USER):
+        """
+        Verify that deleting all user annotations works
+        """
+        self._create_annotation(text=u'Comment with foo', tags=[u'bar'])
+        self._create_annotation(text=u'Another comment', tags=[u'foo'])
+        self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
+        response = self._get_search_results()
+        self.assertEqual(response["total"], 3)
+
+        url = reverse('api:v1:annotations')
+        self.payload["user_id"] = user_id
+        # Delete all notes for User 1
+        response = self.client.delete(url, headers=self.headers, data=self.payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify notes are deleted for User 1
+        response = self._get_search_results()
+        self.assertEqual(response["total"], 0)
+
+        # Reattempt delete for User 1
+        response = self.client.delete(url, headers=self.headers, data=self.payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_all_user_annotations_no_user(self):
+        # Delete for No User
+        url = reverse('api:v1:annotations')
+        response = self.client.delete(url, headers=self.headers, data=self.payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_delete_all_user_annotations_other_user(self):
+        url = reverse('api:v1:annotations')
+        self.payload["user_id"] = TEST_OTHER_USER
+        response = self.client.delete(url, headers=self.headers, data=self.payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 @ddt.ddt
