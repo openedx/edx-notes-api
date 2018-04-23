@@ -1,22 +1,21 @@
-import logging
 import json
-import newrelic.agent
+import logging
 
+import newrelic.agent
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.utils.translation import ugettext as _
-
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from haystack.query import SQ
-
 from notesapi.v1.models import Note
-from notesapi.v1.serializers import NoteSerializer, NotesElasticSearchSerializer
+from notesapi.v1.serializers import (NotesElasticSearchSerializer,
+                                     NoteSerializer)
 
 if not settings.ES_DISABLED:
     from notesserver.highlight import SearchQuerySet
@@ -348,6 +347,18 @@ class AnnotationListView(GenericAPIView):
         location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note.id})
         serializer = NoteSerializer(note)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers={'Location': location})
+
+    def delete(self, *args, **kwargs):  # pylint: disable=unused-argument
+        """
+        Delete all annotations for user_id
+
+        """
+        params = self.request.data
+        if 'user_id' not in params:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        Note.objects.filter(user_id=params['user_id']).delete()
+        return Response(status=status.HTTP_200_OK)
 
 
 class AnnotationDetailView(APIView):

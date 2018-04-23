@@ -11,3 +11,7 @@ coverage/
 
 #vim
 *.swp
+
+venv/
+
+.idea/
