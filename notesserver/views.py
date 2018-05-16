@@ -11,7 +11,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
 from elasticsearch.exceptions import TransportError
-
+try:
+    import newrelic.agent
+except ImportError:  # pragma: no cover
+    newrelic = None  # pylint: disable=invalid-name
 if not settings.ES_DISABLED:
     from haystack import connections
 
@@ -37,6 +40,8 @@ def heartbeat(request):  # pylint: disable=unused-argument
     """
     ElasticSearch and database are reachable and ready to handle requests.
     """
+    if newrelic:  # pragma: no cover
+        newrelic.agent.ignore_transaction()
     try:
         db_status()
     except Exception:
