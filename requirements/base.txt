@@ -11,3 +11,4 @@ gunicorn==19.1.1     # MIT
 path.py==3.0.1
 python-dateutil==2.4.0
 newrelic==2.40.0.34            # New Relic
+edx-django-release-util==0.3.1
