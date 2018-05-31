@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'haystack',
     'notesapi.v1',
+    # additional release utilities to ease automation
+    'release_util',
 ]
 
 STATIC_URL = '/static/'
