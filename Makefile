@@ -38,6 +38,12 @@ coverage: diff-coverage diff-quality
 create-index:
 	python manage.py rebuild_index
 
+migrate:
+	python manage.py migrate --noinput
+
+static:  # provide the static target for devstack's tooling.
+	@echo "The notes service does not need staticfiles to be compiled. Skipping."
+
 requirements:
 	pip install -q -r requirements/base.txt --exists-action=w
 
