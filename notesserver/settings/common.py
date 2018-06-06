@@ -80,9 +80,20 @@ CORS_ALLOW_HEADERS = (
     'x-annotator-auth-token',
 )
 
-TEMPLATE_DIRS = (
-    'templates',
-)
+# Base project path, where manage.py lives.
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,  # This ensures app templates are loadable, e.g. DRF views.
+        'DIRS': [
+            # The EdxNotes templates directory is not actually under any app
+            # directory, so specify its absolute path.
+            os.path.join(BASE_DIR, 'templates'),
+        ]
+    }
+]
 
 DEFAULT_NOTES_PAGE_SIZE = 25
 
