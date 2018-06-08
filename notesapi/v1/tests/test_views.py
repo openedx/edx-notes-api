@@ -518,7 +518,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         self.assertEqual(response["total"], 3)
 
         url = reverse('api:v1:annotations')
-        self.payload["user_id"] = user_id
+        self.payload["user"] = user_id
         # Delete all notes for User 1
         response = self.client.delete(url, headers=self.headers, data=self.payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -532,16 +532,50 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete_all_user_annotations_no_user(self):
-        # Delete for No User
+        """
+        Test case where no user is specified when user deletion is requested.
+
+        The result should be a 403 response, with the following logging:
+
+            notesapi.v1.permissions: INFO: No user was present to compare in GET, POST or DATA
+        """
+        self._create_annotation(text=u'Comment with foo', tags=[u'bar'])
+        self._create_annotation(text=u'Another comment', tags=[u'foo'])
+        self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
+        response = self._get_search_results()
+        self.assertEqual(response["total"], 3)
+
         url = reverse('api:v1:annotations')
+        del self.payload['user']
         response = self.client.delete(url, headers=self.headers, data=self.payload)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # Verify no notes are deleted
+        response = self._get_search_results()
+        self.assertEqual(response["total"], 3)
 
     def test_delete_all_user_annotations_other_user(self):
+        """
+        Test the case where the user specified in params doesn't appear to match the one in the token.
+
+        In this case, the response should be 403 and logging should indicate some sort of token user mismatch failure:
+
+            notesapi.v1.permissions: DEBUG: Token user test_user_id did not match data user test_other_user_id
+        """
+        self._create_annotation(text=u'Comment with foo', tags=[u'bar'])
+        self._create_annotation(text=u'Another comment', tags=[u'foo'])
+        self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
+        response = self._get_search_results()
+        self.assertEqual(response["total"], 3)
+
         url = reverse('api:v1:annotations')
-        self.payload["user_id"] = TEST_OTHER_USER
+        self.payload["user"] = TEST_OTHER_USER
         response = self.client.delete(url, headers=self.headers, data=self.payload)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # Verify no notes are deleted
+        response = self._get_search_results()
+        self.assertEqual(response["total"], 3)
 
 
 @ddt.ddt

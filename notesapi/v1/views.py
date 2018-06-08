@@ -203,17 +203,30 @@ class AnnotationListView(GenericAPIView):
                 Each page in the list contains 25 annotations by default. The page
                 size can be altered by passing parameter "page_size=<page_size>".
 
-                Http400 is returned if the format of the request is not correct.
+                HTTP 400 Bad Request: The format of the request is not correct.
 
             * Create a new annotation for a user.
 
-                Http400 is returned if the format of the request is not correct.
+                HTTP 400 Bad Request: The format of the request is not correct, or the maximum number of notes for a
+                user has been reached.
+
+                HTTP 201 Created: Success.
+
+            * Delete all annotations for a user.
+
+                HTTP 400 Bad Request: The format of the request is not correct.
+
+                HTTP 200 OK: Either annotations from the user were deleted, or no annotations for the user were found.
 
         **Example Requests**
 
             GET /api/v1/annotations/?course_id={course_id}&user={user_id}
 
             POST /api/v1/annotations/
+            user={user_id}&course_id={course_id}&usage_id={usage_id}&ranges={ranges}&quote={quote}
+
+            DELETE /api/v1/annotations/
+            user={user_id}
 
         **Query Parameters for GET**
 
@@ -257,7 +270,7 @@ class AnnotationListView(GenericAPIView):
 
                 * updated: DateTime. When was the last time annotation was updated.
 
-        **Query Parameters for POST**
+        **Form-encoded data for POST**
 
             user, course_id, usage_id, ranges and quote fields must be provided.
 
@@ -282,6 +295,15 @@ class AnnotationListView(GenericAPIView):
             * created: DateTime. Creation datetime of annotation.
 
             * updated: DateTime. When was the last time annotation was updated.
+
+        **Form-encoded data for DELETE**
+
+            * user: Anonymized user id.
+
+        **Response Values for DELETE**
+
+            * no content.
+
     """
 
     serializer_class = NoteSerializer
@@ -350,14 +372,13 @@ class AnnotationListView(GenericAPIView):
 
     def delete(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
-        Delete all annotations for user_id
-
+        Delete all annotations for a user.
         """
         params = self.request.data
-        if 'user_id' not in params:
+        if 'user' not in params:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        Note.objects.filter(user_id=params['user_id']).delete()
+        Note.objects.filter(user_id=params['user']).delete()
         return Response(status=status.HTTP_200_OK)
 
 
