@@ -18,15 +18,15 @@ def extract_comma_separated_list(option, opt_str, value, parser):
 
 class Command(BaseCommand):
     args = '<total_notes>'
-    option_list = BaseCommand.option_list + (
-        make_option(
-            '--per_user',
+    def add_arguments(self, parser):
+        parser.add_argument(
+        '--per_user',
             action='store',
             type='int',
             default=50,
             help='number of notes that should be attributed to each user (default 50)'
         ),
-        make_option(
+        parser.add_argument(
             '--course_ids',
             action='callback',
             callback=extract_comma_separated_list,
@@ -34,7 +34,7 @@ class Command(BaseCommand):
             default=['edX/DemoX/Demo_Course'],
             help='comma-separated list of course_ids for which notes should be randomly attributed'
         ),
-        make_option(
+        parser.add_argument(
             '--batch_size',
             action='store',
             type='int',
@@ -42,7 +42,6 @@ class Command(BaseCommand):
             help='number of notes that should be bulk inserted at a time - useful for getting around the maximum SQL '
                  'query size'
         )
-    )
     help = 'Add N random notes to the database'
 
     def handle(self, *args, **options):
