@@ -1,8 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from notesapi.v1.views import AnnotationListView, AnnotationDetailView, AnnotationSearchView
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^annotations/$', AnnotationListView.as_view(), name='annotations'),
     url(
         r'^annotations/(?P<annotation_id>[a-zA-Z0-9_-]+)/?$',
@@ -10,4 +9,4 @@ urlpatterns = patterns(
         name='annotations_detail'
     ),
     url(r'^search/$', AnnotationSearchView.as_view(), name='annotations_search'),
-)
+]
