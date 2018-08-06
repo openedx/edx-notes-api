@@ -1,6 +1,5 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^v1/', include('notesapi.v1.urls', namespace='v1')),
-)
+]
