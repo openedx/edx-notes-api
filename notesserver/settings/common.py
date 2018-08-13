@@ -38,9 +38,11 @@ RESULTS_MAX_SIZE = 250
 ROOT_URLCONF = 'notesserver.urls'
 
 MIDDLEWARE_CLASSES = (
+    'edx_django_utils.cache.middleware.RequestCacheMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'edx_rest_framework_extensions.middleware.RequestMetricsMiddleware',
 )
 
 INSTALLED_APPS = [
