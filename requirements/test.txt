@@ -10,3 +10,5 @@ pylint==1.5.0
 diff-cover==0.7.2
 factory_boy==2.5.2
 ddt==0.8.0
+# For devserver code reloading
+pyinotify==0.9.6
