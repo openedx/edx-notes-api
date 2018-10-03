@@ -27,3 +27,4 @@ DATABASES = {
     }
 }
 
+JWT_AUTH = {}

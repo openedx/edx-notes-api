@@ -16,6 +16,8 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 DISABLE_TOKEN_CHECK = False
 INSTALLED_APPS += ('django_nose',)
 
+JWT_AUTH = {}
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'notesserver.highlight.ElasticsearchSearchEngine',
