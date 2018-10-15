@@ -43,6 +43,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'edx_rest_framework_extensions.middleware.RequestMetricsMiddleware',
+    'edx_rest_framework_extensions.auth.jwt.middleware.EnsureJWTAuthSettingsMiddleware',
+    'edx_rest_framework_extensions.auth.jwt.middleware.JwtAuthCookieMiddleware',
 )
 
 INSTALLED_APPS = [
