@@ -517,19 +517,19 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         response = self._get_search_results()
         self.assertEqual(response["total"], 3)
 
-        url = reverse('api:v1:annotations')
+        url = reverse('api:v1:annotations_retire')
         self.payload["user"] = user_id
         # Delete all notes for User 1
-        response = self.client.delete(url, headers=self.headers, data=self.payload)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.post(url, headers=self.headers, data=self.payload)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         # Verify notes are deleted for User 1
         response = self._get_search_results()
         self.assertEqual(response["total"], 0)
 
         # Reattempt delete for User 1
-        response = self.client.delete(url, headers=self.headers, data=self.payload)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.post(url, headers=self.headers, data=self.payload)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_delete_all_user_annotations_no_user(self):
         """
@@ -545,9 +545,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         response = self._get_search_results()
         self.assertEqual(response["total"], 3)
 
-        url = reverse('api:v1:annotations')
+        url = reverse('api:v1:annotations_retire')
         del self.payload['user']
-        response = self.client.delete(url, headers=self.headers, data=self.payload)
+        response = self.client.post(url, headers=self.headers, data=self.payload)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         # Verify no notes are deleted
@@ -568,9 +568,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         response = self._get_search_results()
         self.assertEqual(response["total"], 3)
 
-        url = reverse('api:v1:annotations')
+        url = reverse('api:v1:annotations_retire')
         self.payload["user"] = TEST_OTHER_USER
-        response = self.client.delete(url, headers=self.headers, data=self.payload)
+        response = self.client.post(url, headers=self.headers, data=self.payload)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         # Verify no notes are deleted
