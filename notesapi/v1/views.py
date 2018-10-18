@@ -192,6 +192,23 @@ class AnnotationSearchView(GenericAPIView):
         return response
 
 
+class AnnotationRetireView(GenericAPIView):
+    """
+    Administrative functions for the notes service.
+    """
+
+    def post(self, *args, **kwargs):  # pylint: disable=unused-argument
+        """
+        Delete all annotations for a user.
+        """
+        params = self.request.data
+        if 'user' not in params:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        Note.objects.filter(user_id=params['user']).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class AnnotationListView(GenericAPIView):
     """
         **Use Case**
@@ -369,17 +386,6 @@ class AnnotationListView(GenericAPIView):
         location = reverse('api:v1:annotations_detail', kwargs={'annotation_id': note.id})
         serializer = NoteSerializer(note)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers={'Location': location})
-
-    def delete(self, *args, **kwargs):  # pylint: disable=unused-argument
-        """
-        Delete all annotations for a user.
-        """
-        params = self.request.data
-        if 'user' not in params:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        Note.objects.filter(user_id=params['user']).delete()
-        return Response(status=status.HTTP_200_OK)
 
 
 class AnnotationDetailView(APIView):
