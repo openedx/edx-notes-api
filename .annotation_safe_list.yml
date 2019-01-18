@@ -1,0 +1,10 @@
+auth.Group:
+  ".. no_pii::" : "No PII"
+auth.Permission:
+  ".. no_pii::" : "No PII"
+auth.User:
+  ".. pii::": "username and email address"
+  ".. pii_types::" : name, other
+  ".. pii_retirement::" : local_api
+contenttypes.ContentType:
+  ".. no_pii::": "No PII"

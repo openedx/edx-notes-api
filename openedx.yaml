@@ -2,7 +2,9 @@
 # http://open-edx-proposals.readthedocs.io/en/latest/oeps/oep-0002.html#specification
 
 nick: not
-oeps: {}
+oeps:
+  oep-30:
+    state: True
 openedx-release: {ref: master}
 owner: edx/teaching-and-learning
 track-pulls: true

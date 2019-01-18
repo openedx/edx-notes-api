@@ -6,7 +6,11 @@ from django.core.exceptions import ValidationError
 class Note(models.Model):
     """
     Annotation model.
-    """
+
+    .. pii:: Stores 'text' and 'tags' about a particular course quote.
+    .. pii_types:: other
+    .. pii_retirement:: local_api, consumer_api
+   """
     user_id = models.CharField(max_length=255, db_index=True, help_text="Anonymized user id, not course specific")
     course_id = models.CharField(max_length=255, db_index=True)
     usage_id = models.CharField(max_length=255, help_text="ID of XBlock where the text comes from")
