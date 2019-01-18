@@ -1,0 +1,15 @@
+source_path: ./
+report_path: pii_reports
+safelist_path: .annotation_safe_list.yml
+coverage_target: 100.0
+annotations:
+    ".. no_pii::":
+    "pii_group":
+        - ".. pii::":
+        - ".. pii_types::":
+            choices: [id, name, other]
+        - ".. pii_retirement::":
+            choices: [retained, local_api, consumer_api, third_party]
+extensions:
+    python:
+        - py

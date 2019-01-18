@@ -13,6 +13,10 @@ test: clean
 		$(foreach package,$(PACKAGES),--cover-package=$(package)) \
 		$(PACKAGES)
 
+pii_check: test.requirements pii_clean
+	code_annotations django_find_annotations --config_file .pii_annotations.yml --report_path pii_report/ \
+		--lint --report --coverage
+
 run:
 	./manage.py runserver 0.0.0.0:8120
 
@@ -21,6 +25,10 @@ shell:
 
 clean:
 	coverage erase
+
+pii_clean:
+	rm -rf pii_report
+	mkdir -p pii_report
 
 quality:
 	pep8 --config=.pep8 $(PACKAGES)
