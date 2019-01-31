@@ -14,7 +14,7 @@ test: clean
 		$(PACKAGES)
 
 pii_check: test.requirements pii_clean
-	code_annotations django_find_annotations --config_file .pii_annotations.yml --report_path pii_report/ \
+	code_annotations django_find_annotations --config_file .pii_annotations.yml \
 		--lint --report --coverage
 
 run:

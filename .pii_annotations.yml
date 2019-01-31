@@ -1,5 +1,5 @@
 source_path: ./
-report_path: pii_reports
+report_path: pii_report
 safelist_path: .annotation_safe_list.yml
 coverage_target: 100.0
 annotations:

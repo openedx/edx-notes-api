@@ -5,6 +5,7 @@
 .coverage
 .tox
 coverage/
+pii_report/
 
 # Sqlite Database
 *.db
