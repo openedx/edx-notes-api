@@ -5,6 +5,7 @@ from rest_framework.permissions import BasePermission
 
 logger = logging.getLogger(__name__)
 
+USERNAME_REPLACEMENT_GROUP = "username_replacement_admin"
 
 class TokenWrongIssuer(Exception):
     pass
@@ -63,3 +64,11 @@ class HasAccessToken(BasePermission):
         except TokenWrongIssuer:
             logger.debug("Token has wrong issuer %s", token)
         return False
+
+class CanReplaceUsername(BasePermission):
+    """
+    Grants access to the Username Replacement API for anyone in the group,
+    including the service user.
+    """
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name=USERNAME_REPLACEMENT_GROUP).exists()
