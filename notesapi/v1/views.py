@@ -519,9 +519,8 @@ class UsernameReplacementView(APIView):
     API will recieve a list of current usernames and their new username.
     """
 
-    # authentication_classes = (JwtAuthentication, )
-    # permission_classes = (permissions.IsAuthenticated, CanReplaceUsername)
-    permission_classes = (permissions.AllowAny, )
+    authentication_classes = (JwtAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, CanReplaceUsername)
 
     def post(self, request):
         """
