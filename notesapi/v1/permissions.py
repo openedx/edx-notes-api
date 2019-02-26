@@ -71,4 +71,4 @@ class CanReplaceUsername(BasePermission):
     including the service user.
     """
     def has_permission(self, request, view):
-        return request.user.groups.filter(name=USERNAME_REPLACEMENT_GROUP).exists()
+        return request.user.username == getattr(settings, "USERNAME_REPLACEMENT_WORKER")
