@@ -66,9 +66,6 @@ WSGI_APPLICATION = 'notesserver.wsgi.application'
 LOGGING = get_logger_config()
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'notesapi.v1.permissions.HasAccessToken'
     ],
