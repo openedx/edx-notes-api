@@ -4,7 +4,7 @@
 nick: not
 oeps:
   oep-30:
-    state: True
+    state: true
+  oep-7: true  # Python 3
 openedx-release: {ref: master}
 owner: edx/teaching-and-learning
-track-pulls: true
