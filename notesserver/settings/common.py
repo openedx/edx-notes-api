@@ -11,20 +11,20 @@ USE_TZ = True
 TIME_ZONE = 'UTC'
 
 # This value needs to be overriden in production.
-SECRET_KEY = '*^owi*4%!%9=#h@app!l^$jz8(c*q297^)4&4yn^#_m#fq=z#l'
-ALLOWED_HOSTS = ['localhost', '*.edx.org']
+SECRET_KEY = 'CHANGEME'
+ALLOWED_HOSTS = ['localhost']
 
 # ID and Secret used for authenticating JWT Auth Tokens
 # should match those configured for `edx-notes` Client in EdX's /admin/oauth2/client/
-CLIENT_ID = 'edx-notes-id'
-CLIENT_SECRET = 'edx-notes-secret'
+CLIENT_ID = 'CHANGEME'
+CLIENT_SECRET = 'CHANGEME'
 
 ES_DISABLED = False
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'notesserver.highlight.ElasticsearchSearchEngine',
         'URL': 'http://127.0.0.1:9200/',
-        'INDEX_NAME': 'notes_index',
+        'INDEX_NAME': 'edx_notes_api',
     },
 }
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
@@ -105,3 +105,34 @@ DEFAULT_NOTES_PAGE_SIZE = 25
 
 ### Maximum number of allowed notes for each student per course ###
 MAX_NOTES_PER_COURSE = 500
+
+ELASTICSEARCH_URL = 'localhost:9200'
+ELASTICSEARCH_INDEX = 'edx_notes'
+
+EDX_NOTES_API_DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'NAME': 'edx_notes_api',
+        'OPTIONS': {'connect_timeout': 10},
+        'PASSWORD': 'secret',
+        'PORT': 3306,
+        'USER': 'notes00'
+    }
+}
+
+USERNAME_REPLACEMENT_WORKER = 'OVERRIDE THIS WITH A VALID USERNAME'
+
+JWT_AUTH = {
+    'JWT_ISSUER': [
+        {
+            'AUDIENCE': 'SET-ME-PLEASE',
+            'ISSUER': 'http://127.0.0.1:8000/oauth2',
+            'SECRET_KEY': 'SET-ME-PLEASE'
+        }
+    ],
+    'JWT_PUBLIC_SIGNING_JWK_SET': None,
+    'JWT_AUTH_COOKIE_HEADER_PAYLOAD': 'edx-jwt-cookie-header-payload',
+    'JWT_AUTH_COOKIE_SIGNATURE': 'edx-jwt-cookie-signature',
+    'JWT_AUTH_REFRESH_COOKIE': 'edx-jwt-refresh-cookie'
+}
