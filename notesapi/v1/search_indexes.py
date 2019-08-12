@@ -1,4 +1,7 @@
+from __future__ import absolute_import
+
 from haystack import indexes
+
 from .models import Note
 
 

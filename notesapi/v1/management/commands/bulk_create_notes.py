@@ -1,12 +1,15 @@
+from __future__ import absolute_import
+
 import itertools
 import json
-from optparse import make_option
 import os
 import random
 import uuid
+from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
+from six.moves import range
 
 from notesapi.v1.models import Note
 

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import json
 import logging
 
@@ -7,12 +9,12 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.utils.translation import ugettext as _
+from haystack.query import SQ
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from haystack.query import SQ
 from notesapi.v1.models import Note
 from notesapi.v1.serializers import (NotesElasticSearchSerializer,
                                      NoteSerializer)

@@ -2,10 +2,11 @@
 Paginator for Notes.
 """
 
-from rest_framework import pagination
-from rest_framework.response import Response
+from __future__ import absolute_import
 
 from django.conf import settings
+from rest_framework import pagination
+from rest_framework.response import Response
 
 
 class NotesPaginator(pagination.PageNumberPagination):
