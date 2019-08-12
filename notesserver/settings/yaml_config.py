@@ -1,9 +1,13 @@
+from __future__ import absolute_import
+
+from os import environ
+
+import six
 import yaml
+from django.core.exceptions import ImproperlyConfigured
+from path import path
 
 from .common import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from path import path
-from django.core.exceptions import ImproperlyConfigured
-from os import environ
 
 ###############################################################################
 # Explicitly declare here in case someone changes common.py.
@@ -36,7 +40,7 @@ DB_OVERRIDES = dict(
     PORT=environ.get('DB_MIGRATION_PORT', DATABASES['default']['PORT']),
 )
 
-for override, value in DB_OVERRIDES.iteritems():
+for override, value in six.iteritems(DB_OVERRIDES):
     DATABASES['default'][override] = value
 
 if ES_DISABLED:
