@@ -1,8 +1,5 @@
-from __future__ import absolute_import
-
-from notesserver.settings.logger import get_logger_config
-
 from .common import *
+from notesserver.settings.logger import get_logger_config
 
 DEBUG = True
 

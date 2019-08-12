@@ -1,7 +1,5 @@
-from __future__ import absolute_import
-
-import json
 import os
+import json
 import sys
 
 from notesserver.settings.logger import get_logger_config
