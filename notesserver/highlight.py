@@ -4,11 +4,15 @@ to backends, so we use our subclassed SearchQuerySet which does,
 and subclassed ElasticsearchSearchBackend which passes them to ES
 """
 
+from __future__ import absolute_import
+
 import haystack
-from haystack.backends.elasticsearch_backend import (
-    ElasticsearchSearchEngine as OrigElasticsearchSearchEngine,
-    ElasticsearchSearchQuery as OrigElasticsearchSearchQuery,
-    ElasticsearchSearchBackend as OrigElasticsearchSearchBackend)
+from haystack.backends.elasticsearch_backend import \
+    ElasticsearchSearchBackend as OrigElasticsearchSearchBackend
+from haystack.backends.elasticsearch_backend import \
+    ElasticsearchSearchEngine as OrigElasticsearchSearchEngine
+from haystack.backends.elasticsearch_backend import \
+    ElasticsearchSearchQuery as OrigElasticsearchSearchQuery
 from haystack.query import SearchQuerySet as OrigSearchQuerySet
 
 
