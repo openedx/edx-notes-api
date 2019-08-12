@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-from calendar import timegm
-from datetime import datetime, timedelta
-import ddt
-import jwt
 import unittest
 import urlparse
+from calendar import timegm
+from datetime import datetime, timedelta
 
+import jwt
 from django.conf import settings
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.test.utils import override_settings
-from mock import patch
 from rest_framework import status
 from rest_framework.test import APITestCase
+
+import ddt
+from mock import patch
 
 from .helpers import get_id_token
 

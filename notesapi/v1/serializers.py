@@ -3,7 +3,9 @@ Serializers for Notes API.
 """
 
 import json
+
 from rest_framework import serializers
+
 from notesapi.v1.models import Note
 
 

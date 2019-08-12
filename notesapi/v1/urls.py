@@ -1,10 +1,7 @@
 from django.conf.urls import url
-from notesapi.v1.views import (
-    AnnotationDetailView,
-    AnnotationListView,
-    AnnotationRetireView,
-    AnnotationSearchView,
-)
+
+from notesapi.v1.views import (AnnotationDetailView, AnnotationListView,
+                               AnnotationRetireView, AnnotationSearchView)
 
 urlpatterns = [
     url(r'^annotations/$', AnnotationListView.as_view(), name='annotations'),
