@@ -2,12 +2,8 @@
 Serializers for Notes API.
 """
 
-from __future__ import absolute_import
-
 import json
-
 from rest_framework import serializers
-
 from notesapi.v1.models import Note
 
 
