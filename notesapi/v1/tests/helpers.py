@@ -1,9 +1,6 @@
-from __future__ import absolute_import
-
+import jwt
 from calendar import timegm
 from datetime import datetime, timedelta
-
-import jwt
 from django.conf import settings
 
 

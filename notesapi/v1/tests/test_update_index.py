@@ -1,15 +1,10 @@
-from __future__ import absolute_import
-
-import datetime
-from unittest import skipIf
-
-from django.conf import settings
-from django.core.management import call_command
-from django.core.urlresolvers import reverse
-from django.db.models import signals
-
 import factory
-
+import datetime
+from django.conf import settings
+from unittest import skipIf
+from django.core.management import call_command
+from django.db.models import signals
+from django.core.urlresolvers import reverse
 from .test_views import BaseAnnotationViewTests
 
 

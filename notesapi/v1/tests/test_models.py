@@ -1,10 +1,6 @@
-from __future__ import absolute_import
-
 from unittest import TestCase
-
-from django.core.exceptions import ValidationError
-
 from notesapi.v1.models import Note
+from django.core.exceptions import ValidationError
 from notesapi.v1.serializers import NoteSerializer
 
 
