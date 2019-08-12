@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+
+import unittest
 from calendar import timegm
 from datetime import datetime, timedelta
-import ddt
-import jwt
-import unittest
-import urlparse
 
+import jwt
+import six
+import six.moves.urllib.parse
 from django.conf import settings
 from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.test.utils import override_settings
-from mock import patch
 from rest_framework import status
 from rest_framework.test import APITestCase
+from six.moves import range
+
+import ddt
+from mock import patch
 
 from .helpers import get_id_token
 
@@ -140,8 +145,8 @@ class BaseAnnotationViewTests(APITestCase):
             if url is None:
                 return None
 
-            parsed = urlparse.urlparse(url)
-            query_params = urlparse.parse_qs(parsed.query)
+            parsed = six.moves.urllib.parse.urlparse(url)
+            query_params = six.moves.urllib.parse.parse_qs(parsed.query)
 
             # If current_page is 2 then DRF will not include `page` query param in previous url.
             # So return page 1 if current page equals to 2 and `page` key is missing from url.
@@ -240,7 +245,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
         annotation = response.data.copy()
         self.assertIn('id', annotation)
-        self.assertEqual(type(annotation['id']), unicode)
+        self.assertEqual(type(annotation['id']), six.text_type)
         del annotation['id']
         del annotation['updated']
         del annotation['created']
@@ -352,7 +357,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         Tests if user can create more than maximum allowed notes per course
         Also test if other user can create notes and Same user can create notes in other course
         """
-        for i in xrange(5):
+        for i in range(5):
             kwargs = {'text': 'Foo_{}'.format(i)}
             self._create_annotation(**kwargs)
 
@@ -394,7 +399,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         """
         Tests list all annotations.
         """
-        for i in xrange(5):
+        for i in range(5):
             kwargs = {'text': 'Foo_{}'.format(i)}
             self._create_annotation(**kwargs)
 
@@ -594,7 +599,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         annotation = response.data
-        self.assertEqual(type(annotation['id']), unicode)
+        self.assertEqual(type(annotation['id']), six.text_type)
         del annotation['id']
         del annotation['updated']
         del annotation['created']

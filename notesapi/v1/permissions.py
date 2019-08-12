@@ -1,5 +1,8 @@
-import jwt
+from __future__ import absolute_import
+
 import logging
+
+import jwt
 from django.conf import settings
 from rest_framework.permissions import BasePermission
 
