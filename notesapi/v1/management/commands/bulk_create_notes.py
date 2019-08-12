@@ -1,9 +1,9 @@
 import itertools
 import json
-from optparse import make_option
 import os
 import random
 import uuid
+from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction

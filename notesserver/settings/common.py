@@ -1,5 +1,5 @@
-import os
 import json
+import os
 import sys
 
 from notesserver.settings.logger import get_logger_config
