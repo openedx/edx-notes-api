@@ -1,10 +1,10 @@
 # This file describes this Open edX repo, as described in OEP-2:
 # http://open-edx-proposals.readthedocs.io/en/latest/oeps/oep-0002.html#specification
 
-nick: not
+nick: notes
 oeps:
-  oep-30:
-    state: true
+  oep-30: true # PII
   oep-7: true  # Python 3
+  oep-2: true  # openedx.yml
 openedx-release: {ref: master}
 owner: bderusha
