@@ -2,6 +2,7 @@ from os import environ
 
 import yaml
 from django.core.exceptions import ImproperlyConfigured
+from notesserver.settings.logger import build_logging_config
 from path import path
 
 from .common import *  # pylint: disable=unused-wildcard-import, wildcard-import
@@ -22,10 +23,9 @@ if not EDXNOTES_CONFIG_ROOT:
 CONFIG_ROOT = path(EDXNOTES_CONFIG_ROOT)
 
 with open(CONFIG_ROOT / "edx_notes_api.yml") as yaml_file:
-    config_from_yaml = yaml.load(yaml_file)
+    config_from_yaml = yaml.safe_load(yaml_file)
 
 vars().update(config_from_yaml)
-
 #
 # Support environment overrides for migrations
 DB_OVERRIDES = dict(
@@ -43,3 +43,6 @@ for override, value in DB_OVERRIDES.iteritems():
 if ES_DISABLED:
     HAYSTACK_CONNECTIONS = {}
     INSTALLED_APPS.remove('haystack')
+
+LOGGING = build_logging_config()
+

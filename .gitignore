@@ -16,3 +16,7 @@ pii_report/
 venv/
 
 .idea/
+
+
+# Helm dependencies
+/helmcharts/**/*.tgz

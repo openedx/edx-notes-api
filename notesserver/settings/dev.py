@@ -1,4 +1,4 @@
-from notesserver.settings.logger import get_logger_config
+from notesserver.settings.logger import build_logging_config
 
 from .common import *
 
@@ -13,4 +13,4 @@ DATABASES = {
     }
 }
 
-LOGGING = get_logger_config(debug=DEBUG, dev_env=True, local_loglevel='DEBUG')
+LOGGING = build_logging_config()

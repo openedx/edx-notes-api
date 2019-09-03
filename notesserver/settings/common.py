@@ -2,8 +2,6 @@ import json
 import os
 import sys
 
-from notesserver.settings.logger import get_logger_config
-
 DEBUG = False
 TEMPLATE_DEBUG = False
 DISABLE_TOKEN_CHECK = False
@@ -63,7 +61,13 @@ STATIC_URL = '/static/'
 
 WSGI_APPLICATION = 'notesserver.wsgi.application'
 
-LOGGING = get_logger_config()
+LOG_SETTINGS_LOG_DIR= '/var/tmp'
+LOG_SETTINGS_LOGGING_ENV= 'no_env'
+LOG_SETTINGS_DEV_ENV= False
+LOG_SETTINGS_DEBUG= False
+LOG_SETTINGS_LOCAL_LOGLEVEL= 'INFO'
+LOG_SETTINGS_EDX_FILENAME= "edx.log"
+LOG_SETTINGS_SERVICE_VARIANT= 'edx-notes-api'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
