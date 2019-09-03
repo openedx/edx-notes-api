@@ -13,7 +13,6 @@ $ helm package helmcharts/notes --destination helmcharts/notes
 ```
 
 ```bash
-# Production configuration
 $ helm install helmcharts/notes/notes-0.1.0.tgz --name notes -f helmcharts/notes/values.yaml
 ```
 
@@ -28,12 +27,54 @@ This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and
 - Kubernetes 1.8+
 - PV provisioner support in the underlying infrastructure
 
-## Installing the Chart
+## Local Development:
 
-To install the chart with the release name `my-release`:
+See https://kubernetes.io/docs/tasks/tools/install-minikube for more information.  We are currently using the nginx minikube addon and the kubernetes dashbaord helmchart.
+
+### TL;DR for Mac
 
 ```bash
-$ helm install --name my-release <todo>
+brew cask install minikube
+```
+
+### TL;DR for Ubuntu
+```bash
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
+  && chmod +x minikube
+sudo install minikube /usr/local/bin
+```
+
+### Run Nginx & Dashboard
+```bash
+minikube enable nginx
+cat <<'EOF' >> dashboard.yml
+---
+enableSkipLogin: true
+enableInsecureLogin: true
+rbac:
+  clusterAdminRole: true
+ingress:
+  enabled: true
+  hosts:
+    - k8s.dashboard
+extraArgs:
+  - --port=8443 # By default, https uses 8443 so we move it away to something else
+  - --insecure-port=9090 # The chart has 8443 hard coded as a containerPort in the deployment spec so we must use this internally for the http service
+  - --insecure-bind-address=0.0.0.0
+service:
+  type: ClusterIP
+  # Not required, but less confusing
+  externalPort: 8444
+EOF
+helm install stable/kubernetes-dashboard --name kubernetes-dashboard -f dashboard.yml
+```
+
+## Installing the Chart
+
+To install the chart with the release name `notes`:
+
+```bash
+$ helm install helmcharts/notes/notes-0.1.0.tgz --name notes -f helmcharts/notes/values.yaml
 ```
 
 The command deploys Notes on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -42,10 +83,10 @@ The command deploys Notes on the Kubernetes cluster in the default configuration
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the `notes` deployment:
 
 ```bash
-$ helm delete my-release
+$ helm delete notes --purge
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -71,9 +112,9 @@ The following table lists the configurable parameters of the Notes chart and the
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-$ helm install --name my-release \
+$ helm install --name notes \
   --set token=secretpassword \
-    <todo>
+  --name notes -f helmcharts/notes/values.yaml
 ```
 
 The above command sets the token to `secrettoken`.
@@ -81,7 +122,7 @@ The above command sets the token to `secrettoken`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```bash
-$ helm install --name my-release -f values.yaml <todo>
+$ helm install --name notes -f values.yaml <todo>
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -99,7 +140,7 @@ $ kubectl create secret generic rnotes-token-file --from-file=/tmp/notes-token
 And deploy the Helm Chart using the secret name:
 
 ```bash
-$ helm install <todo> --set usePassword=true,useTokenFile=true,existingSecret=notes-token-file,sentinels.enabled=true,metrics.enabled=true
+$ helm install notes --set usePassword=true,useTokenFile=true,existingSecret=notes-token-file,sentinels.enabled=true,metrics.enabled=true
 ```
 
 ### Production configuration
@@ -107,7 +148,7 @@ $ helm install <todo> --set usePassword=true,useTokenFile=true,existingSecret=no
 This chart will include a `values-production.yaml` file where you can find some parameters oriented to production configuration in comparison to the regular `values.yaml`.
 
 ```console
-$ helm install --name my-release -f ./values-production.yaml <todo>
+$ helm install --name notes -f ./values-production.yaml
 ```
 
 - Number of slaves:
