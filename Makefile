@@ -1,5 +1,5 @@
 PACKAGES = notesserver notesapi
-.PHONY: requirements
+.PHONY: requirements upgrade docker.upgrade
 
 include .travis/docker.mk
 

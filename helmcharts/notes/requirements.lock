@@ -1,0 +1,9 @@
+dependencies:
+- name: elasticsearch
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 1.30.0
+- name: mysql
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 1.3.1
+digest: sha256:50d112ca33a198ec9e1322777209c43c9186d991dffb9e64af6372c6876e8f5e
+generated: "2019-08-22T15:38:53.113106048-04:00"
