@@ -9,8 +9,8 @@ RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-ENV EDXNOTES_CONFIG_ROOT /edx/etc
-ENV DJANGO_SETTINGS notesserver.settings.yaml_config
+ENV EDXNOTES_CONFIG_ROOT /edx/app
+ENV DJANGO_SETTINGS_MODULE notesserver.settings.yaml_config
 
 EXPOSE 8000
 RUN useradd -m --shell /bin/false app
@@ -22,4 +22,4 @@ RUN pip install -r requirements/base.txt
 
 USER app
 
-CMD gunicorn --workers=2 --name notes --bind=0.0.0.0:8000 --max-requests=1000 notesserver.wsgi:application
+CMD gunicorn --workers=2 --name notes --bind=0.0.0.0:8000 --log-file=/tmp/notes.log --max-requests=1000 notesserver.wsgi:application

@@ -18,6 +18,7 @@ grade infrastructure code.
 
 ```bash
 brew cask install minikube
+minikube start --vm-driver hyperkit --bootstrapper kubeadm --memory=10000 --cpus=6
 ```
 
 ### For Ubuntu
@@ -25,11 +26,16 @@ brew cask install minikube
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
   && chmod +x minikube
 sudo install minikube /usr/local/bin
+minikube start --memory=10000 --cpus=6
 ```
 
 ### Nginx Ingress Conroller & Kubernetes Dashboard
 ```bash
-minikube enable nginx
+eval $(minikube docker-env) # You may want this in your .bashrc or .zshrc
+kubectl -n kube-system create serviceaccount tiller
+minikube addons enable ingress
+kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+helm init --service-account=tiller
 cat <<'EOF' >> dashboard.yml
 ---
 enableSkipLogin: true
@@ -50,6 +56,7 @@ service:
   externalPort: 8444
 EOF
 helm install stable/kubernetes-dashboard --name kubernetes-dashboard -f dashboard.yml
+sudo -- sh -c -e "echo '$(minikube ip)     k8s.dashboard' >> /etc/hosts";
 ```
 
 ## What is Kubernetes?
@@ -140,6 +147,12 @@ To uninstall/delete the `notes` deployment:
 
 ```bash
 $ helm delete notes --purge
+```
+
+## Deleting Minikube
+
+```bash
+$ minikube delete
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
