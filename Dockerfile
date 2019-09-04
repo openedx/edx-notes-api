@@ -14,12 +14,12 @@ ENV DJANGO_SETTINGS notesserver.settings.yaml_config
 
 EXPOSE 8000
 RUN useradd -m --shell /bin/false app
-USER app
 
 WORKDIR /edx/notes
-
 COPY --chown=app:app requirements/base.txt /edx/notes/requirements/base.txt
-RUN pip install --user -r requirements/base.txt
 COPY --chown=app:app . /edx/notes
+RUN pip install -r requirements/base.txt
+
+USER app
 
 CMD gunicorn --workers=2 --name notes --bind=0.0.0.0:8000 --max-requests=1000 notesserver.wsgi:application
