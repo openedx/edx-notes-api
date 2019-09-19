@@ -32,11 +32,11 @@ minikube start --memory=10000 --cpus=6
 ### Nginx Ingress Conroller & Kubernetes Dashboard
 ```bash
 eval $(minikube docker-env) # You may want this in your .bashrc or .zshrc
-kubectl -n kube-system create serviceaccount tiller
 minikube addons enable ingress
+kubectl -n kube-system create serviceaccount tiller
 kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 helm init --service-account=tiller
-cat <<'EOF' >> dashboard.yml
+cat <<'EOF' > dashboard.yml
 ---
 enableSkipLogin: true
 enableInsecureLogin: true
