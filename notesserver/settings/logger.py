@@ -6,15 +6,9 @@ import os
 import platform
 import sys
 from logging.handlers import SysLogHandler
+from django.conf import settings
 
-
-def get_logger_config(log_dir='/var/tmp',
-                      logging_env="no_env",
-                      edx_filename="edx.log",
-                      dev_env=False,
-                      debug=False,
-                      local_loglevel='INFO',
-                      service_variant='edx-notes-api'):
+def build_logging_config():
 
     """
     Return the appropriate logging config dictionary. You should assign the
@@ -25,6 +19,15 @@ def get_logger_config(log_dir='/var/tmp',
     logging is handled by rsyslogd.
     """
     # Revert to INFO if an invalid string is passed in
+
+    log_dir=settings.LOG_SETTINGS_LOG_DIR
+    logging_env=settings.LOG_SETTINGS_LOGGING_ENV
+    edx_filename=settings.LOG_SETTINGS_EDX_FILENAME
+    dev_env=settings.LOG_SETTINGS_DEV_ENV
+    debug=settings.LOG_SETTINGS_DEBUG
+    local_loglevel=settings.LOG_SETTINGS_LOCAL_LOGLEVEL
+    service_variant=settings.LOG_SETTINGS_SERVICE_VARIANT
+
     if local_loglevel not in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']:
         local_loglevel = 'INFO'
 

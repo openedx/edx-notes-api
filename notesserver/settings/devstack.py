@@ -1,4 +1,4 @@
-from notesserver.settings.logger import get_logger_config
+from notesserver.settings.logger import build_logging_config
 
 from .common import *
 
@@ -6,7 +6,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-LOGGING = get_logger_config(debug=DEBUG, dev_env=True, local_loglevel='DEBUG')
 del LOGGING['handlers']['local']
 
 # These values are derived from provision-ida-user.sh in the edx/devstack repo.
@@ -29,3 +28,5 @@ DATABASES = {
 }
 
 JWT_AUTH = {}
+
+LOGGING = build_logging_config()
