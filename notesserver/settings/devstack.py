@@ -6,8 +6,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-del LOGGING['handlers']['local']
-
 # These values are derived from provision-ida-user.sh in the edx/devstack repo.
 CLIENT_ID = 'edx_notes_api-key'
 CLIENT_SECRET = 'edx_notes_api-secret'
