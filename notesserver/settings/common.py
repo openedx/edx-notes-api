@@ -113,7 +113,7 @@ MAX_NOTES_PER_COURSE = 500
 ELASTICSEARCH_URL = 'localhost:9200'
 ELASTICSEARCH_INDEX = 'edx_notes'
 
-EDX_NOTES_API_DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': 'localhost',
@@ -121,7 +121,7 @@ EDX_NOTES_API_DATABASES = {
         'OPTIONS': {'connect_timeout': 10},
         'PASSWORD': 'secret',
         'PORT': 3306,
-        'USER': 'notes00'
+        'USER': 'notes001'
     }
 }
 
