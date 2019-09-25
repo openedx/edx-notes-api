@@ -4,6 +4,7 @@ from .common import *
 
 DEBUG = True
 LOG_SETTINGS_DEBUG = True
+LOG_SETTINGS_DEV_ENV = True
 
 ALLOWED_HOSTS = ['*']
 
