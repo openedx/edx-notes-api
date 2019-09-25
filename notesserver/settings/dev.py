@@ -3,6 +3,8 @@ from notesserver.settings.logger import build_logging_config
 from .common import *
 
 DEBUG = True
+LOG_SETTINGS_DEBUG = True
+LOG_SETTINGS_DEV_ENV = True
 
 ES_INDEXES = {'default': 'notes_index_dev'}
 
