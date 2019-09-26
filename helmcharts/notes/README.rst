@@ -1,5 +1,5 @@
 edx-notes-api is a Django service used to store and serve notes taken by edX learners.  This folder 
-contains Helm charts for deploying edx-notes-api on a `_kubernetes`_ cluster with `_helm`_
+contains Helm charts for deploying edx-notes-api on a `kubernetes`_ cluster with `helm`_
 
 .. _kubernetes: http://kubernetes.io
 .. _helm: https://helm.sh
@@ -8,35 +8,35 @@ contains Helm charts for deploying edx-notes-api on a `_kubernetes`_ cluster wit
 Prerequisites
 ------------
 
-- Kubernetes 1.8+ cluster or `_minikube`_ with PV support.
+- Kubernetes 1.8+ cluster or `minikube`_ with PV support.
 - kubectl configured
 - helm configured
 
 Installing Notes
 ------------
 
-   ::
+::
 
-    $ helm dependency build helmcharts/notes
-    $ helm package helmcharts/notes
-    $ helm install notes-x.y.z.tgz --name notes -f values.yaml
+$ helm dependency build helmcharts/notes
+$ helm package helmcharts/notes
+$ helm install notes-x.y.z.tgz --name notes -f values.yaml
 
 
 Uninstalling the Chart
 ------------
 
-   ::
+::
 
-    $ helm delete notes --purge
+$ helm delete notes --purge
 
 Upgrading an existing Release to a new major version
 ------------
 
-   ::
+::
 
-    $ helm dependency build helmcharts/notes
-    $ helm package helmcharts/notes
-    $ helm upgrade notes notes-x.y.z.tgz -f values.yaml
+$ helm dependency build helmcharts/notes
+$ helm package helmcharts/notes
+$ helm upgrade notes notes-x.y.z.tgz -f values.yaml
 
 Notes-specific Configuration
 ------------
@@ -44,7 +44,7 @@ Notes-specific Configuration
 .. _mysql: https://github.com/helm/charts/tree/master/stable/mysql
 .. _elasticsearch: https://github.com/elastic/helm-charts/tree/master/elasticsearch
 
-edx notes has a `_mysql`_ and `_elasticsearch`_ subchart that can be toggled on or off depending on if you want to use external services or not.
+edx notes has a `mysql`_ and `elasticsearch`_ subchart that can be toggled on or off depending on if you want to use external services or not.
 See the links above for the chart parameters for those services.
 
 https://github.com/helm/charts/tree/master/stable/mysql
