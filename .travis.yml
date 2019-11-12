@@ -23,3 +23,10 @@ after_success:
     - pip install -U codecov
     - docker exec notes /edx/app/notes/notes/.travis/run_coverage.sh
     - codecov
+
+deploy:
+  provider: script
+  script: make docker_push
+  on:
+    branch: master
+
