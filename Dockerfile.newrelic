@@ -1,0 +1,4 @@
+FROM edxops/edx-notes-api
+RUN pip install newrelic
+
+CMD newrelic-admin run-program gunicorn --workers=2 --name notes -c /edx/app/notes/notesserver/docker_gunicorn_configuration.py --log-file - --max-requests=1000 notesserver.wsgi:application

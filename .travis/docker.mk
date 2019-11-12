@@ -17,3 +17,12 @@ travis_stop: ## Stop running containers created by `travis_up` without removing 
 
 travis_down: ## Stop and remove containers and other resources created by `travis_up`
 	docker-compose -f .travis/docker-compose-travis.yml down
+
+docker_auth:
+	echo "$$DOCKER_PASSWORD" | docker login -u "$$DOCKER_USERNAME" --password-stdin
+
+docker_push: docker_auth ## push to docker hub
+	docker build . -f Dockerfile -t edxops/edx-notes-api
+	docker push 'edxops/edx-notes-api'
+	docker build . -f Dockerfile.newrelic -t 'edxops/edx-notes-api:newrelic'
+	docker push 'edxops/edx-notes-api:newrelic'
