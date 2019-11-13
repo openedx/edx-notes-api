@@ -37,10 +37,8 @@ class HasAccessToken(BasePermission):
             logger.debug("No token found in headers")
             return False
         try:
-            data = jwt.decode(token, settings.CLIENT_SECRET)
+            data = jwt.decode(token, settings.CLIENT_SECRET, audience=settings.CLIENT_ID)
             auth_user = data['sub']
-            if data['aud'] != settings.CLIENT_ID:
-                raise TokenWrongIssuer
             user_found = False
             for request_field in ('GET', 'POST', 'data'):
                 if 'user' in getattr(request, request_field):
@@ -61,6 +59,6 @@ class HasAccessToken(BasePermission):
             logger.debug("Token was expired: %s", token)
         except jwt.DecodeError:
             logger.debug("Could not decode token %s", token)
-        except TokenWrongIssuer:
+        except jwt.InvalidAudienceError:
             logger.debug("Token has wrong issuer %s", token)
         return False
