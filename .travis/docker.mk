@@ -21,8 +21,10 @@ travis_down: ## Stop and remove containers and other resources created by `travi
 docker_auth:
 	echo "$$DOCKER_PASSWORD" | docker login -u "$$DOCKER_USERNAME" --password-stdin
 
-docker_push: docker_auth ## push to docker hub
-	docker build . -f Dockerfile -t edxops/edx-notes-api
-	docker push 'edxops/edx-notes-api'
-	docker build . -f Dockerfile.newrelic -t 'edxops/edx-notes-api:newrelic'
-	docker push 'edxops/edx-notes-api:newrelic'
+docker_build:
+	docker build . -f Dockerfile -t 'edxops/notes:latest'
+	docker build . -f Dockerfile.newrelic -t 'edxops/notes:newrelic-latest'
+
+docker_push: docker_build docker_auth ## push to docker hub
+	docker push 'edxops/notes:latest'
+	docker push 'edxops/notes:newrelic-latest'
