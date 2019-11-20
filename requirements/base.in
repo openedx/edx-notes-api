@@ -1,6 +1,6 @@
 Django<=2.0
 requests==2.9.1
-djangorestframework==3.6.3
+djangorestframework==3.9.1
 django-rest-swagger==2.1.2
 django-haystack==2.8.0
 elasticsearch>=1.0.0,<2.0.0
