@@ -4,6 +4,8 @@
 #
 #    make upgrade
 #
+certifi==2019.9.11        # via requests
+chardet==3.0.4            # via requests
 coreapi==2.3.3            # via django-rest-swagger, openapi-codec
 coreschema==0.0.4         # via coreapi
 django-cors-headers==2.4.0
@@ -20,6 +22,7 @@ edx-opaque-keys==2.0.1    # via edx-drf-extensions
 elasticsearch==1.9.0
 future==0.18.2            # via pyjwkest
 gunicorn==19.1.1
+idna==2.7                 # via requests
 itypes==1.1.0             # via coreapi
 jinja2==2.10.3            # via coreschema
 markupsafe==1.1.1         # via jinja2
@@ -36,11 +39,11 @@ pymongo==3.9.0            # via edx-opaque-keys
 python-dateutil==2.4.0
 pytz==2019.3              # via django
 pyyaml==5.1.2             # via edx-django-release-util
-requests==2.9.1
+requests==2.20.0
 rest-condition==1.0.3     # via edx-drf-extensions
 semantic-version==2.8.2   # via edx-drf-extensions
 simplejson==3.17.0        # via django-rest-swagger
 six==1.13.0               # via edx-django-release-util, edx-drf-extensions, edx-opaque-keys, pyjwkest, python-dateutil, stevedore
 stevedore==1.31.0         # via edx-opaque-keys
 uritemplate==3.0.0        # via coreapi
-urllib3==1.25.7           # via elasticsearch
+urllib3==1.24.3           # via elasticsearch, requests
