@@ -9,6 +9,8 @@ services:
 sudo: required
 before_install:
 - make travis_up
+install:
+  - pip install -r requirements/travis.txt
 script:
 - make travis_test
 - make travis_pii_check

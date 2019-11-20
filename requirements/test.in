@@ -1,0 +1,15 @@
+-r base.txt
+
+astroid==1.6.6
+django_nose
+mock
+code-annotations
+coverage
+more-itertools==5.0.0
+nose-exclude
+nose-ignore-docstring
+pep8
+pylint==1.5.0
+diff-cover
+factory_boy
+ddt
