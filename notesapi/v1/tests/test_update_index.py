@@ -3,7 +3,7 @@ from unittest import skipIf
 
 from django.conf import settings
 from django.core.management import call_command
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import signals
 
 import factory

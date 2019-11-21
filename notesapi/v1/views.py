@@ -4,7 +4,7 @@ import logging
 import newrelic.agent
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Q
 from django.utils.translation import ugettext as _
 from haystack.query import SQ

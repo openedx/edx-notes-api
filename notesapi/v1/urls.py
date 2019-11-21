@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from notesapi.v1.views import (AnnotationDetailView, AnnotationListView,
                                AnnotationRetireView, AnnotationSearchView)
-
+app_name = "notesapi.v1"
 urlpatterns = [
     url(r'^annotations/$', AnnotationListView.as_view(), name='annotations'),
     url(r'^retire_annotations/$', AnnotationRetireView.as_view(), name='annotations_retire'),
