@@ -9,8 +9,8 @@ LOG_SETTINGS_DEV_ENV = True
 ALLOWED_HOSTS = ['*']
 
 # These values are derived from provision-ida-user.sh in the edx/devstack repo.
-CLIENT_ID = 'edx_notes_api-key'
-CLIENT_SECRET = 'edx_notes_api-secret'
+CLIENT_ID = 'edx_notes_api-backend-service-key'
+CLIENT_SECRET = 'edx_notes_api-backend-service-secret'
 
 ES_INDEXES = {'default': 'notes_index'}
 HAYSTACK_CONNECTIONS['default']['URL'] = 'http://edx.devstack.elasticsearch:9200/'
