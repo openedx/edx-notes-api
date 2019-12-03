@@ -13,11 +13,13 @@ MAINTAINER devops@edx.org
 
 # python-pip; install pip to install application requirements.txt files
 
+# libssl-dev; # mysqlclient wont install without this.
+
 # libmysqlclient-dev; to install header files needed to use native C implementation for 
 # MySQL-python for performance gains.
 
 # If you add a package here please include a comment above describing what it is used for
-RUN apt-get update && apt-get upgrade -qy && apt-get install language-pack-en locales git python2.7 python-pip libmysqlclient-dev -qy && \
+RUN apt-get update && apt-get upgrade -qy && apt-get install language-pack-en locales git python2.7 python-pip libmysqlclient-dev libssl-dev -qy && \
 pip install --upgrade pip setuptools && \
 rm -rf /var/lib/apt/lists/*
 
