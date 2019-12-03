@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:bionic as app
 MAINTAINER devops@edx.org
 
 
@@ -54,4 +54,9 @@ CMD gunicorn --workers=2 --name notes -c /edx/app/notes/notesserver/docker_gunic
 # This line is after the requirements so that changes to the code will not
 # bust the image cache
 COPY . /edx/app/notes
+
+
+FROM app as newrelic
+RUN pip install newrelic
+CMD newrelic-admin run-program gunicorn --workers=2 --name notes -c /edx/app/notes/notesserver/docker_gunicorn_configuration.py --log-file - --max-requests=1000 notesserver.wsgi:application
 
