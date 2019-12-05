@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import jwt
 from django.conf import settings
 from django.core.management import call_command
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test.utils import override_settings
 from rest_framework import status
 from rest_framework.test import APITestCase

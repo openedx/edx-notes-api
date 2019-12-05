@@ -3,7 +3,7 @@ import json
 from unittest import skipIf
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from elasticsearch.exceptions import TransportError
 from rest_framework.test import APITestCase
 
