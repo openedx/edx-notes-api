@@ -11,7 +11,7 @@ MAINTAINER devops@edx.org
 
 # python; ubuntu doesnt ship with python, so this is the python we will use to run the application
 
-# python-pip; install pip to install application requirements.txt files
+# python3-pip; install pip to install application requirements.txt files
 
 # libssl-dev; # mysqlclient wont install without this.
 
@@ -19,8 +19,8 @@ MAINTAINER devops@edx.org
 # MySQL-python for performance gains.
 
 # If you add a package here please include a comment above describing what it is used for
-RUN apt-get update && apt-get upgrade -qy && apt-get install language-pack-en locales git python2.7 python-pip libmysqlclient-dev libssl-dev -qy && \
-pip install --upgrade pip setuptools && \
+RUN apt-get update && apt-get upgrade -qy && apt-get install language-pack-en locales git python3.5 python3-pip libmysqlclient-dev libssl-dev python3-dev -qy && \
+pip3 install --upgrade pip setuptools && \
 rm -rf /var/lib/apt/lists/*
 
 RUN locale-gen en_US.UTF-8
@@ -40,7 +40,7 @@ WORKDIR /edx/app/notes
 COPY requirements/base.txt /edx/app/notes/requirements/base.txt
 
 # Dependencies are installed as root so they cannot be modified by the application user.
-RUN pip install -r requirements/base.txt
+RUN pip3 install -r requirements/base.txt
 
 RUN mkdir -p /edx/var/log
 
