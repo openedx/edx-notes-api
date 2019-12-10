@@ -3,7 +3,7 @@
 astroid==1.6.6
 django_nose
 mock
-code-annotations
+-e git+https://github.com/edx/code-annotations.git@azarembok/django2#egg=code-annotations
 coverage
 more-itertools==5.0.0
 nose-exclude

@@ -11,7 +11,7 @@ coverage==4.5.4           # via codecov
 filelock==3.0.12          # via tox
 idna==2.8                 # via requests
 importlib-metadata==1.2.0  # via pluggy, tox
-more-itertools==8.0.0     # via zipp
+more-itertools==8.0.2     # via zipp
 packaging==19.2           # via tox
 pluggy==0.13.1            # via tox
 py==1.8.0                 # via tox

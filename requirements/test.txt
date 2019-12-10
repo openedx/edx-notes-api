@@ -4,10 +4,10 @@
 #
 #    make upgrade
 #
+-e git+https://github.com/edx/code-annotations.git@azarembok/django2#egg=code-annotations
 astroid==1.6.6
-click==7.0                # via code-annotations
-code-annotations==0.3.2
-colorama==0.4.1           # via pylint
+click==7.0
+colorama==0.4.3           # via pylint
 coreapi==2.3.3
 coreschema==0.0.4
 coverage==4.5.4
@@ -56,7 +56,7 @@ pyjwt==1.7.1
 pylint==1.5.0
 pymongo==3.9.0
 python-dateutil==2.4.0
-python-slugify==4.0.0     # via code-annotations
+python-slugify==4.0.0
 pytz==2019.3
 pyyaml==5.2
 requests==2.9.1
