@@ -1,4 +1,4 @@
-Django==1.11.26
+Django==1.11.27
 requests==2.9.1
 djangorestframework==3.6.3
 django-rest-swagger==2.1.2
