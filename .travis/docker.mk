@@ -22,9 +22,13 @@ docker_auth:
 	echo "$$DOCKER_PASSWORD" | docker login -u "$$DOCKER_USERNAME" --password-stdin
 
 docker_build:
-	docker build . -f Dockerfile -t 'edxops/notes:latest'
-	docker build . -f Dockerfile.newrelic -t 'edxops/notes:newrelic-latest'
+	docker build . --target app -t 'openedx/edx-notes-api:latest'
+	docker build . --target app -t 'openedx/edx-notes-api:$$TRAVIS_COMMIT'
+	docker build . --target newrelic -t 'openedx/edx-notes-api:latest-newrelic'
+	docker build . --target newrelic -t 'openedx/edx-notes-api:$$TRAVIS_COMMIT-newrelic'
 
 docker_push: docker_build docker_auth ## push to docker hub
-	docker push 'edxops/notes:latest'
-	docker push 'edxops/notes:newrelic-latest'
+	docker push 'openedx/edx-notes-api:latest'
+	docker push 'openedx/edx-notes-api:$$TRAVIS_COMMIT'
+	docker push 'openedx/edx-notes-api:latest-newrelic'
+	docker push 'openedx/edx-notes-api:$$TRAVIS_COMMIT-newrelic'
