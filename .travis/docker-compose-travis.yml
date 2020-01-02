@@ -15,8 +15,7 @@ services:
     image: elasticsearch:1.5.2
     container_name: es
   notes:
-    # Uncomment this line to use the official course-discovery base image
-    image: edxops/notes:latest
+    image: openedx/edx-notes-api:latest
 
     # Uncomment the next two lines to build from a local configuration repo
     # build: ../configuration/docker/build/discovery/
