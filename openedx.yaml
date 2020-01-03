@@ -6,5 +6,6 @@ oeps:
   oep-30: true # PII
   oep-7: true  # Python 3
   oep-2: true  # openedx.yml
+  oep-18: true
 openedx-release: {ref: master}
 owner: bderusha
