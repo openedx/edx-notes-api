@@ -59,7 +59,7 @@ test.requirements: requirements
 	pip install -q -r requirements/test.txt --exists-action=w
 
 develop: test.requirements
-	
+
 piptools: ## install pinned version of pip-compile and pip-sync
 	pip install -r requirements/pip-tools.txt
 
