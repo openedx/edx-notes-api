@@ -2,5 +2,5 @@
 
 cd /edx/app/notes
 
-make validate
+PATH=/home/app/.local/bin:$PATH make validate
 

@@ -43,24 +43,24 @@ diff-quality:
 coverage: diff-coverage diff-quality
 
 create-index:
-	python manage.py rebuild_index
+	python3 manage.py rebuild_index
 
 migrate:
-	python manage.py migrate --noinput
+	python3 manage.py migrate --noinput
 
 static:  # provide the static target for devstack's tooling.
 	@echo "The notes service does not need staticfiles to be compiled. Skipping."
 
 requirements:
-	pip install -q -r requirements/base.txt --exists-action=w
+	pip install --user -q -r requirements/base.txt --exists-action=w
 
 test.requirements: requirements
-	pip install -q -r requirements/test.txt --exists-action=w
+	pip install --user -q -r requirements/test.txt --exists-action=w
 
 develop: test.requirements
 
 piptools: ## install pinned version of pip-compile and pip-sync
-	pip install -r requirements/pip-tools.txt
+	pip install --user -r requirements/pip-tools.txt
 
 upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
 upgrade: piptools ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
