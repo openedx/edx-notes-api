@@ -71,3 +71,6 @@ upgrade: piptools ## update the requirements/*.txt files with the latest package
 	pip-compile --upgrade -o requirements/base.txt requirements/base.in
 	pip-compile --upgrade -o requirements/test.txt requirements/test.in
 
+docker_build:
+	docker build . --target app -t "openedx/edx-notes-api:latest"
+	docker build . --target newrelic -t "openedx/edx-notes-api:latest-newrelic"

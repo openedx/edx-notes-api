@@ -1,9 +1,6 @@
 language: python
 python:
 - '3.6'
-branches:
-  only:
-  - master
 services:
 - docker
 sudo: required
@@ -26,6 +23,6 @@ env:
     secure: OgsQf8hp40s+E2btyl+RHcdgjqx9gZ4phlvm2tQ8Oy9mCO6hAy2XCjL1m2bidaFzwSjZXDZ7BhjD3yXpW2B+zP/yJNVKmdPA5E+D7YgFPdlOv7Wb+t0Z083Wbwqk7ZZgxLCcMLWf5vTs/QkPVAXbU8wJvQQC2l0EKESFnYkzNAI=
 deploy:
   provider: script
-  script: make docker_push
+  script: make travis_docker_push
   on:
     branch: master
