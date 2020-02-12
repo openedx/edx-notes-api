@@ -19,9 +19,12 @@ MAINTAINER devops@edx.org
 # MySQL-python for performance gains.
 
 # If you add a package here please include a comment above describing what it is used for
-RUN apt-get update && apt-get upgrade -qy && apt-get install language-pack-en locales git python3.5 python3-pip libmysqlclient-dev libssl-dev python3-dev -qy && \
+RUN apt-get update && apt-get upgrade -qy && apt-get install language-pack-en locales git python3.6 python3-pip libmysqlclient-dev libssl-dev python3.6-dev -qy && \
 pip3 install --upgrade pip setuptools && \
 rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/pip3 /usr/bin/pip
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -40,7 +43,7 @@ WORKDIR /edx/app/notes
 COPY requirements/base.txt /edx/app/notes/requirements/base.txt
 
 # Dependencies are installed as root so they cannot be modified by the application user.
-RUN pip3 install -r requirements/base.txt
+RUN pip install -r requirements/base.txt
 
 RUN mkdir -p /edx/var/log
 
@@ -55,8 +58,6 @@ CMD gunicorn --workers=2 --name notes -c /edx/app/notes/notesserver/docker_gunic
 # bust the image cache
 COPY . /edx/app/notes
 
-
 FROM app as newrelic
 RUN pip install newrelic
 CMD newrelic-admin run-program gunicorn --workers=2 --name notes -c /edx/app/notes/notesserver/docker_gunicorn_configuration.py --log-file - --max-requests=1000 notesserver.wsgi:application
-
