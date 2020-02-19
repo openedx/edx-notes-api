@@ -4,5 +4,4 @@
 #
 #    make upgrade
 #
-click==7.0                # via pip-tools
-pip-tools==4.2.0
+pip-tools
