@@ -12,9 +12,7 @@ DATABASES = {
     }
 }
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 DISABLE_TOKEN_CHECK = False
-INSTALLED_APPS += ('django_nose',)
 
 JWT_AUTH = {}
 
