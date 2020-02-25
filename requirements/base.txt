@@ -8,38 +8,38 @@ certifi==2019.11.28       # via requests
 chardet==3.0.4            # via requests
 coreapi==2.3.3            # via django-rest-swagger, openapi-codec
 coreschema==0.0.4         # via coreapi
-django-cors-headers==2.4.0
-django-haystack==2.8.0
-django-rest-swagger==2.1.2
+django-cors-headers==3.2.1  # via -r requirements/base.in (line 7)
+django-haystack==2.8.0    # via -r requirements/base.in (line 5)
+django-rest-swagger==2.1.2  # via -r requirements/base.in (line 4)
 django-waffle==0.20.0     # via edx-django-utils, edx-drf-extensions
-django==1.11.28
+django==1.11.28           # via -r requirements/base.in (line 1), django-cors-headers, django-haystack, djangorestframework, edx-django-release-util, edx-django-utils, edx-drf-extensions, rest-condition
 djangorestframework-jwt==1.11.0  # via edx-drf-extensions
-djangorestframework==3.11.0
-edx-django-release-util==0.3.6
-edx-django-utils==3.0
-edx-drf-extensions==2.4.6
+djangorestframework==3.11.0  # via -r requirements/base.in (line 3), django-rest-swagger, edx-drf-extensions, rest-condition
+edx-django-release-util==0.3.6  # via -r requirements/base.in (line 14)
+edx-django-utils==3.0     # via -r requirements/base.in (line 15), edx-drf-extensions
+edx-drf-extensions==3.0.0  # via -r requirements/base.in (line 16)
 edx-opaque-keys==2.0.1    # via edx-drf-extensions
-elasticsearch==1.9.0
+elasticsearch==1.9.0      # via -r requirements/base.in (line 6)
 future==0.18.2            # via pyjwkest
-gunicorn==19.1.1
+gunicorn==19.1.1          # via -r requirements/base.in (line 10)
 idna==2.8                 # via requests
 itypes==1.1.0             # via coreapi
 jinja2==2.11.1            # via coreschema
 markupsafe==1.1.1         # via jinja2
-mysqlclient==1.4.6
-newrelic==4.8.0.110
+mysqlclient==1.4.6        # via -r requirements/base.in (line 8)
+newrelic==4.8.0.110       # via -r requirements/base.in (line 13), edx-django-utils
 openapi-codec==1.3.2      # via django-rest-swagger
-path.py==3.0.1
+path.py==3.0.1            # via -r requirements/base.in (line 11)
 pbr==5.4.4                # via stevedore
 psutil==1.2.1             # via edx-django-utils, edx-drf-extensions
-pycryptodomex==3.9.6      # via pyjwkest
+pycryptodomex==3.9.7      # via pyjwkest
 pyjwkest==1.3.2           # via edx-drf-extensions
-pyjwt==1.7.1
+pyjwt==1.7.1              # via -r requirements/base.in (line 9), djangorestframework-jwt
 pymongo==3.10.1           # via edx-opaque-keys
-python-dateutil==2.4.0
+python-dateutil==2.4.0    # via -r requirements/base.in (line 12), edx-drf-extensions
 pytz==2019.3              # via django
 pyyaml==5.3               # via edx-django-release-util
-requests==2.22.0
+requests==2.22.0          # via -r requirements/base.in (line 2), coreapi, edx-drf-extensions, pyjwkest
 rest-condition==1.0.3     # via edx-drf-extensions
 semantic-version==2.8.4   # via edx-drf-extensions
 simplejson==3.17.0        # via django-rest-swagger
