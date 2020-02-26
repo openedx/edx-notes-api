@@ -997,11 +997,11 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self._has_text(results['rows'], ['Last note'])
 
         results = self._get_search_results(text='good')
-        self.assertEquals(results['total'], 2)
+        self.assertEqual(results['total'], 2)
         self._has_text(results['rows'], ['Another comment', 'Not as good'])
 
         results = self._get_search_results(text='comment')
-        self.assertEquals(results['total'], 3)
+        self.assertEqual(results['total'], 3)
         self._has_text(results['rows'], ['A great comment', 'Another comment', 'Not as good'])
 
     def _has_text(self, rows, expected):

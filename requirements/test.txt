@@ -5,19 +5,19 @@
 #    make upgrade
 #
 astroid==1.6.6            # via -r requirements/test.in (line 3), pylint
+attrs==19.3.0             # via pytest
 certifi==2019.11.28       # via -r requirements/base.txt (line 7), requests
 chardet==3.0.4            # via -r requirements/base.txt (line 8), requests
 click==7.0                # via code-annotations
-code-annotations==0.3.3   # via -r requirements/test.in (line 6)
+code-annotations==0.3.3   # via -r requirements/test.in (line 5)
 colorama==0.4.3           # via pylint
 coreapi==2.3.3            # via -r requirements/base.txt (line 9), django-rest-swagger, openapi-codec
 coreschema==0.0.4         # via -r requirements/base.txt (line 10), coreapi
-coverage==5.0.3           # via -r requirements/test.in (line 7)
-ddt==1.2.2                # via -r requirements/test.in (line 15)
-diff-cover==2.6.0         # via -r requirements/test.in (line 13)
+coverage==5.0.3           # via -r requirements/test.in (line 6), pytest-cov
+ddt==1.2.2                # via -r requirements/test.in (line 12)
+diff-cover==2.6.0         # via -r requirements/test.in (line 10)
 django-cors-headers==3.2.1  # via -r requirements/base.txt (line 11)
 django-haystack==2.8.0    # via -r requirements/base.txt (line 12)
-django-nose==1.4.6        # via -r requirements/test.in (line 4)
 django-rest-swagger==2.1.2  # via -r requirements/base.txt (line 13)
 django-waffle==0.20.0     # via -r requirements/base.txt (line 14), edx-django-utils, edx-drf-extensions
 django==1.11.28           # via -r requirements/base.txt (line 15), code-annotations, django-cors-headers, django-haystack, djangorestframework, edx-django-release-util, edx-django-utils, edx-drf-extensions, rest-condition
@@ -28,37 +28,41 @@ edx-django-utils==3.0     # via -r requirements/base.txt (line 19), edx-drf-exte
 edx-drf-extensions==3.0.0  # via -r requirements/base.txt (line 20)
 edx-opaque-keys==2.0.1    # via -r requirements/base.txt (line 21), edx-drf-extensions
 elasticsearch==1.9.0      # via -r requirements/base.txt (line 22)
-factory-boy==2.12.0       # via -r requirements/test.in (line 14)
+factory-boy==2.12.0       # via -r requirements/test.in (line 11)
 faker==4.0.1              # via factory-boy
 future==0.18.2            # via -r requirements/base.txt (line 23), pyjwkest
 gunicorn==19.1.1          # via -r requirements/base.txt (line 24)
 idna==2.8                 # via -r requirements/base.txt (line 25), requests
-importlib-metadata==1.5.0  # via inflect, pluggy
+importlib-metadata==1.5.0  # via pluggy, pytest
 inflect==3.0.2            # via jinja2-pluralize
 itypes==1.1.0             # via -r requirements/base.txt (line 26), coreapi
 jinja2-pluralize==0.3.0   # via diff-cover
 jinja2==2.11.1            # via -r requirements/base.txt (line 27), code-annotations, coreschema, diff-cover, jinja2-pluralize
 lazy-object-proxy==1.4.3  # via astroid
 markupsafe==1.1.1         # via -r requirements/base.txt (line 28), jinja2
-mock==3.0.5               # via -r requirements/test.in (line 5)
-more-itertools==5.0.0     # via -r requirements/test.in (line 8)
+mock==3.0.5               # via -r requirements/test.in (line 4)
+more-itertools==5.0.0     # via -r requirements/test.in (line 7), pytest
 mysqlclient==1.4.6        # via -r requirements/base.txt (line 29)
 newrelic==4.8.0.110       # via -r requirements/base.txt (line 30), edx-django-utils
-nose-exclude==0.5.0       # via -r requirements/test.in (line 9)
-nose-ignore-docstring==0.2  # via -r requirements/test.in (line 10)
-nose==1.3.7               # via django-nose, nose-exclude
 openapi-codec==1.3.2      # via -r requirements/base.txt (line 31), django-rest-swagger
+packaging==20.1           # via pytest
 path.py==3.0.1            # via -r requirements/base.txt (line 32)
+pathlib2==2.3.5           # via pytest
 pbr==5.4.4                # via -r requirements/base.txt (line 33), stevedore
-pep8==1.7.1               # via -r requirements/test.in (line 11)
-pluggy==0.13.1            # via diff-cover
+pep8==1.7.1               # via -r requirements/test.in (line 8)
+pluggy==0.13.1            # via diff-cover, pytest
 psutil==1.2.1             # via -r requirements/base.txt (line 34), edx-django-utils, edx-drf-extensions
+py==1.8.1                 # via pytest
 pycryptodomex==3.9.7      # via -r requirements/base.txt (line 35), pyjwkest
 pygments==2.5.2           # via diff-cover
 pyjwkest==1.3.2           # via -r requirements/base.txt (line 36), edx-drf-extensions
 pyjwt==1.7.1              # via -r requirements/base.txt (line 37), djangorestframework-jwt
-pylint==1.5.0             # via -r requirements/test.in (line 12)
+pylint==1.5.0             # via -r requirements/test.in (line 9)
 pymongo==3.10.1           # via -r requirements/base.txt (line 38), edx-opaque-keys
+pyparsing==2.4.6          # via packaging
+pytest-cov==2.8.1         # via -r requirements/test.in (line 14)
+pytest-django==3.8.0      # via -r requirements/test.in (line 15)
+pytest==5.3.5             # via -r requirements/test.in (line 13), pytest-cov, pytest-django
 python-dateutil==2.4.0    # via -r requirements/base.txt (line 39), edx-drf-extensions, faker
 python-slugify==4.0.0     # via code-annotations
 pytz==2019.3              # via -r requirements/base.txt (line 40), django
@@ -67,10 +71,11 @@ requests==2.22.0          # via -r requirements/base.txt (line 42), coreapi, edx
 rest-condition==1.0.3     # via -r requirements/base.txt (line 43), edx-drf-extensions
 semantic-version==2.8.4   # via -r requirements/base.txt (line 44), edx-drf-extensions
 simplejson==3.17.0        # via -r requirements/base.txt (line 45), django-rest-swagger
-six==1.14.0               # via -r requirements/base.txt (line 46), astroid, diff-cover, django-waffle, edx-django-release-util, edx-drf-extensions, edx-opaque-keys, mock, more-itertools, pyjwkest, pylint, python-dateutil, stevedore
+six==1.14.0               # via -r requirements/base.txt (line 46), astroid, diff-cover, django-waffle, edx-django-release-util, edx-drf-extensions, edx-opaque-keys, mock, more-itertools, packaging, pathlib2, pyjwkest, pylint, python-dateutil, stevedore
 stevedore==1.32.0         # via -r requirements/base.txt (line 47), code-annotations, edx-opaque-keys
 text-unidecode==1.3       # via faker, python-slugify
 uritemplate==3.0.1        # via -r requirements/base.txt (line 48), coreapi
 urllib3==1.25.8           # via -r requirements/base.txt (line 49), elasticsearch, requests
+wcwidth==0.1.8            # via pytest
 wrapt==1.12.0             # via astroid
 zipp==1.2.0               # via importlib-metadata

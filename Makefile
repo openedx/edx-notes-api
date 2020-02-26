@@ -6,12 +6,7 @@ include .travis/docker.mk
 validate: test.requirements test
 
 test: clean
-	./manage.py test --settings=notesserver.settings.test --with-coverage --with-ignore-docstrings \
-		--exclude-dir=notesserver/settings --cover-inclusive --cover-branches \
-		--cover-html --cover-html-dir=build/coverage/html/ \
-		--cover-xml --cover-xml-file=build/coverage/coverage.xml --verbosity=2 \
-		$(foreach package,$(PACKAGES),--cover-package=$(package)) \
-		$(PACKAGES)
+	python -Wd -m pytest
 
 pii_check: test.requirements pii_clean
 	code_annotations django_find_annotations --config_file .pii_annotations.yml \
