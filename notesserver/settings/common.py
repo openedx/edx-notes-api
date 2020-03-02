@@ -35,7 +35,7 @@ RESULTS_MAX_SIZE = 250
 
 ROOT_URLCONF = 'notesserver.urls'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'edx_django_utils.cache.middleware.RequestCacheMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
