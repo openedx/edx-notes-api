@@ -20,7 +20,7 @@ django-cors-headers==3.2.1  # via -r requirements/base.txt (line 11)
 django-haystack==2.8.0    # via -r requirements/base.txt (line 12)
 django-rest-swagger==2.1.2  # via -r requirements/base.txt (line 13)
 django-waffle==0.20.0     # via -r requirements/base.txt (line 14), edx-django-utils, edx-drf-extensions
-django==1.11.28           # via -r requirements/base.txt (line 15), code-annotations, django-cors-headers, django-haystack, djangorestframework, edx-django-release-util, edx-django-utils, edx-drf-extensions, rest-condition
+django==1.11.29           # via -r requirements/base.txt (line 15), code-annotations, django-cors-headers, django-haystack, djangorestframework, edx-django-release-util, edx-django-utils, edx-drf-extensions, rest-condition
 djangorestframework-jwt==1.11.0  # via -r requirements/base.txt (line 16), edx-drf-extensions
 djangorestframework==3.11.0  # via -r requirements/base.txt (line 17), django-rest-swagger, edx-drf-extensions, rest-condition
 edx-django-release-util==0.3.6  # via -r requirements/base.txt (line 18)
