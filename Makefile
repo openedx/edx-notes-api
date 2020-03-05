@@ -1,12 +1,16 @@
 PACKAGES = notesserver notesapi
 .PHONY: requirements
 
+ifdef TOXENV
+TOX := tox -- #to isolate each tox environment if TOXENV is defined
+endif
+
 include .travis/docker.mk
 
 validate: test.requirements test
 
 test: clean
-	python -Wd -m pytest
+	$(TOX)python -Wd -m pytest
 
 pii_check: test.requirements pii_clean
 	code_annotations django_find_annotations --config_file .pii_annotations.yml \
@@ -65,4 +69,8 @@ upgrade: piptools ## update the requirements/*.txt files with the latest package
 	pip-compile --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
 	pip-compile --upgrade -o requirements/base.txt requirements/base.in
 	pip-compile --upgrade -o requirements/test.txt requirements/test.in
+	# Let tox control the Django version for tests
+	grep -e "^django==" requirements/base.txt > requirements/django.txt
+	sed '/^[dD]jango==/d' requirements/test.txt > requirements/test.tmp
+	mv requirements/test.tmp requirements/test.txt
 
