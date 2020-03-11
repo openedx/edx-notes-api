@@ -1,1 +1,1 @@
-django==1.11.29           # via -r requirements/base.in, django-cors-headers, django-haystack, djangorestframework, edx-django-release-util, edx-django-utils, edx-drf-extensions, rest-condition
+django==2.2.11            # via -r requirements/base.in, django-cors-headers, django-haystack, djangorestframework, drf-jwt, edx-django-release-util, edx-django-utils, edx-drf-extensions, rest-condition
