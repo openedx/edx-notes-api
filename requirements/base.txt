@@ -14,7 +14,7 @@ django-rest-swagger==2.1.2  # via -r requirements/base.in
 django-waffle==0.20.0     # via edx-django-utils, edx-drf-extensions
 django==1.11.29           # via -r requirements/base.in, django-cors-headers, django-haystack, djangorestframework, drf-jwt, edx-django-release-util, edx-django-utils, edx-drf-extensions, rest-condition
 djangorestframework==3.11.0  # via -r requirements/base.in, django-rest-swagger, drf-jwt, edx-drf-extensions, rest-condition
-drf-jwt==1.15.1           # via edx-drf-extensions
+drf-jwt==1.14.0           # via -c requirements/constraints.txt, edx-drf-extensions
 edx-django-release-util==0.3.6  # via -r requirements/base.in
 edx-django-utils==3.0     # via -r requirements/base.in, edx-drf-extensions
 edx-drf-extensions==4.0.2  # via -r requirements/base.in

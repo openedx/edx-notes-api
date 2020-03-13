@@ -23,7 +23,7 @@ django-haystack==2.8.0    # via -r requirements/base.txt
 django-rest-swagger==2.1.2  # via -r requirements/base.txt
 django-waffle==0.20.0     # via -r requirements/base.txt, edx-django-utils, edx-drf-extensions
 djangorestframework==3.11.0  # via -r requirements/base.txt, django-rest-swagger, drf-jwt, edx-drf-extensions, rest-condition
-drf-jwt==1.15.1           # via -r requirements/base.txt, edx-drf-extensions
+drf-jwt==1.14.0           # via -r requirements/base.txt, edx-drf-extensions
 edx-django-release-util==0.3.6  # via -r requirements/base.txt
 edx-django-utils==3.0     # via -r requirements/base.txt, edx-drf-extensions
 edx-drf-extensions==4.0.2  # via -r requirements/base.txt
