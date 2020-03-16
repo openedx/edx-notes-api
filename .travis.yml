@@ -6,7 +6,6 @@ branches:
   - master
 services:
 - docker
-sudo: required
 before_install:
 - make travis_up
 install:
