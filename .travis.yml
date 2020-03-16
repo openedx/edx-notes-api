@@ -19,18 +19,34 @@ install:
 script:
   - make travis_test
   - make travis_pii_check
+  - make docker_build
 
 after_success:
   - pip install -U codecov
   - docker exec notes /edx/app/notes/notes/.travis/run_coverage.sh
   - codecov
 
+jobs:
+  include:
+    - name: Django 1.11
+      env:
+      - TOXENV=django111
+    - name: Django 2.0
+      env:
+      - TOXENV=django20
+    - name: Django 2.1
+      env:
+      - TOXENV=django21
+    - name: Django 2.2
+      env:
+      - TOXENV=django22
+    - name: Docker Build
+      before_install: []
+      install: []
+      script:
+        - make docker_build
+
 env:
-  matrix:
-    - TOXENV=django111
-    - TOXENV=django20
-    - TOXENV=django21
-    - TOXENV=django22
   global:
     - DOCKER_USERNAME=edxbuilder
     # encrypted DOCKER_PASSWORD
