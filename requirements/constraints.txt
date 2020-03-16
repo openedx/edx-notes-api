@@ -10,3 +10,6 @@
 
 # Because we don't support latest version yet
 drf-jwt==1.14.0
+
+# Stay on latest LTS release
+Django>=2.2,<3.0
