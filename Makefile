@@ -74,3 +74,6 @@ upgrade: piptools ## update the requirements/*.txt files with the latest package
 	sed '/^[dD]jango==/d' requirements/test.txt > requirements/test.tmp
 	mv requirements/test.tmp requirements/test.txt
 
+docker_build:
+	docker build . --target app -t "openedx/edx-notes-api:latest"
+	docker build . --target newrelic -t "openedx/edx-notes-api:latest-newrelic"
