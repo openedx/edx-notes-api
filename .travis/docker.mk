@@ -18,17 +18,3 @@ travis_stop: ## Stop running containers created by `travis_up` without removing 
 travis_down: ## Stop and remove containers and other resources created by `travis_up`
 	docker-compose -f .travis/docker-compose-travis.yml down
 
-docker_auth:
-	echo "$$DOCKER_PASSWORD" | docker login -u "$$DOCKER_USERNAME" --password-stdin
-
-docker_build:
-	docker build . --target app -t "openedx/edx-notes-api:latest"
-	docker build . --target app -t "openedx/edx-notes-api:$$TRAVIS_COMMIT"
-	docker build . --target newrelic -t "openedx/edx-notes-api:latest-newrelic"
-	docker build . --target newrelic -t "openedx/edx-notes-api:$$TRAVIS_COMMIT-newrelic"
-
-docker_push: docker_build docker_auth ## push to docker hub
-	docker push "openedx/edx-notes-api:latest"
-	docker push "openedx/edx-notes-api:$$TRAVIS_COMMIT"
-	docker push "openedx/edx-notes-api:latest-newrelic"
-	docker push "openedx/edx-notes-api:$$TRAVIS_COMMIT-newrelic"
