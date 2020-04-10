@@ -10,7 +10,7 @@ sudo: required
 before_install:
 - make travis_up
 install:
-  - pip install -r requirements/travis.txt
+- pip install -r requirements/travis.txt
 script:
 - make travis_test
 - make travis_pii_check
@@ -25,15 +25,15 @@ env:
   - TOXENV=django21
   - TOXENV=django22
   global:
-    - DOCKER_USERNAME=edxbuilder
-    # encrypted DOCKER_PASSWORD
-    - secure: OgsQf8hp40s+E2btyl+RHcdgjqx9gZ4phlvm2tQ8Oy9mCO6hAy2XCjL1m2bidaFzwSjZXDZ7BhjD3yXpW2B+zP/yJNVKmdPA5E+D7YgFPdlOv7Wb+t0Z083Wbwqk7ZZgxLCcMLWf5vTs/QkPVAXbU8wJvQQC2l0EKESFnYkzNAI=
+  - DOCKER_USERNAME=edxbuilder
+  - secure: OgsQf8hp40s+E2btyl+RHcdgjqx9gZ4phlvm2tQ8Oy9mCO6hAy2XCjL1m2bidaFzwSjZXDZ7BhjD3yXpW2B+zP/yJNVKmdPA5E+D7YgFPdlOv7Wb+t0Z083Wbwqk7ZZgxLCcMLWf5vTs/QkPVAXbU8wJvQQC2l0EKESFnYkzNAI=
+  - secure: ZD3UP5QST9w+Zs+KQgi/67Ub7jezpPYqRewpXTJk9R2oQh1n+f5+ycki7jf37/BxF39ZqdK/HBDddB1r8a+u8tzTuuE31qXMfBlZ71VtiOtfB+cQb5EQpKvA3a6f7ylWHdMnpEnb9kWQrXrLb4Ki5gBr6EeWXpOkG1wDiYfH8n8=
 deploy:
-  - provider: script
-    script: make travis_docker_push
-    on:
-      branch: master
-  - provider: script
-    script: .travis/deployment_prs.sh
-    on:
-      branch: master
+- provider: script
+  script: make travis_docker_push
+  on:
+    branch: master
+- provider: script
+  script: ".travis/deployment_prs.sh"
+  on:
+    branch: master
