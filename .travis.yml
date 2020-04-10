@@ -26,7 +26,9 @@ env:
   - TOXENV=django22
   global:
   - DOCKER_USERNAME=edxbuilder
+    #  encrypted DOCKER_PASSWORD
   - secure: OgsQf8hp40s+E2btyl+RHcdgjqx9gZ4phlvm2tQ8Oy9mCO6hAy2XCjL1m2bidaFzwSjZXDZ7BhjD3yXpW2B+zP/yJNVKmdPA5E+D7YgFPdlOv7Wb+t0Z083Wbwqk7ZZgxLCcMLWf5vTs/QkPVAXbU8wJvQQC2l0EKESFnYkzNAI=
+    # encrypted GITHUB_ACCESS_TOKEN
   - secure: ZD3UP5QST9w+Zs+KQgi/67Ub7jezpPYqRewpXTJk9R2oQh1n+f5+ycki7jf37/BxF39ZqdK/HBDddB1r8a+u8tzTuuE31qXMfBlZ71VtiOtfB+cQb5EQpKvA3a6f7ylWHdMnpEnb9kWQrXrLb4Ki5gBr6EeWXpOkG1wDiYfH8n8=
 deploy:
 - provider: script
