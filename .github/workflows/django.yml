@@ -27,5 +27,4 @@ jobs:
         pip install -q -r requirements/test.txt --exists-action=w
     - name: Run Tests
       run: |
-        clean
         python -Wd -m pytest
