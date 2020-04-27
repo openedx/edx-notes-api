@@ -26,8 +26,8 @@ clean:
 	coverage erase
 
 pii_clean:
-	rm -rf pii_report
-	mkdir -p pii_report
+	rm -rf /tmp/pii_report
+	mkdir -p /tmp/pii_report
 
 quality:
 	pep8 --config=.pep8 $(PACKAGES)
