@@ -23,6 +23,7 @@ services:
     container_name: edx_notes_api
     volumes:
       - ..:/edx/app/notes
+      - ./edx_notes_api.yml:/edx/etc/edx_notes_api.yml
     command: tail -f /dev/null
     depends_on:
       - "db"

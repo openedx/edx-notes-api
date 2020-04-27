@@ -1,0 +1,9 @@
+DATABASES:
+  default:
+    ENGINE: "django.db.backends.mysql"
+    HOST: "db"
+    NAME: "edx_notes_api"
+    PASSWORD: "secret"
+    PORT: "3306"
+    USER: "notes001"
+ELASTICSEARCH_URL: "http://es:9200"
