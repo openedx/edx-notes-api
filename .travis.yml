@@ -19,11 +19,6 @@ after_success:
 - docker exec notes /edx/app/notes/notes/.travis/run_coverage.sh
 - codecov
 env:
-  matrix:
-  - TOXENV=django111
-  - TOXENV=django20
-  - TOXENV=django21
-  - TOXENV=django22
   global:
   - DOCKER_USERNAME=edxbuilder
     #  encrypted DOCKER_PASSWORD
