@@ -2,8 +2,6 @@
 """ Initial migration file for creating Note model """
 from __future__ import unicode_literals
 
-import django.contrib.auth.models
-import django.contrib.auth.validators
 from django.db import migrations, models
 
 
