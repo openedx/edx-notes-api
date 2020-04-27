@@ -10,7 +10,7 @@ include .travis/docker.mk
 validate: test.requirements test
 
 test: clean
-	$(TOX)python -Wd -m pytest
+	$(TOX)python3 -Wd -m pytest
 
 pii_check: test.requirements pii_clean
 	code_annotations django_find_annotations --config_file .pii_annotations.yml \
