@@ -27,10 +27,6 @@ env:
   - secure: oHetFkwhb7dEPaMLO6to+xd9iI9I10SQFSOPjbNxEbnfYk7rcms0AklbOdCbAmmWKw00uiw53lPgXW+DvVlSxdZikUk6BZUn381ZAJgGWgyFwALakz2dfVScEgg6VURMhD2MOuXjpt2SISc5oyLM8pqCvLw0JzXseYggb2ncA3E=
 deploy:
 - provider: script
-  script: make travis_docker_push
-  on:
-    branch: master
-- provider: script
   script: ".travis/deployment_prs.sh"
   on:
     branch: master
