@@ -3,6 +3,8 @@
 export GITHUB_USER='edx-deployment'
 export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
 
+export GITHUB_UPSTREAM_PR_NUMBER=$(echo $TRAVIS_COMMIT_MESSAGE | sed -e 's/.*#//' -e 's/ .*//');
+
 cd ..
 git clone https://edx-deployment:${GITHUB_ACCESS_TOKEN}@github.com/edx/edx-internal
 
@@ -17,7 +19,8 @@ git checkout -b edx-deployment/stage/$TRAVIS_COMMIT
 sed -i -e "s/newTag: .*/newTag: $TRAVIS_COMMIT-newrelic/" argocd/applications/edx-notes-api/stage/kustomization.yaml
 git commit -a -m "edx-notes-api stage deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
 git push --set-upstream origin edx-deployment/stage/$TRAVIS_COMMIT
-../hub-linux*/bin/hub pull-request -m "Edx-notes-api stage deploy: $TRAVIS_COMMIT_MESSAGE"
+../hub-linux*/bin/hub pull-request -m "Edx-notes-api stage deploy: $TRAVIS_COMMIT_MESSAGE" -m "Staging environment deployment of https://github.com/edx/edx-notes-api/pull/$GITHUB_UPSTREAM_PR_NUMBER"
+-m "Review and merge this PR to deploy your code to stage.edx.org"
 
 # prod
 git checkout master
@@ -25,7 +28,7 @@ git checkout -b edx-deployment/prod/$TRAVIS_COMMIT
 sed -i -e "s/newTag: .*/newTag: $TRAVIS_COMMIT-newrelic/" argocd/applications/edx-notes-api/prod/kustomization.yaml
 git commit -a -m "edx-notes-api prod deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
 git push --set-upstream origin edx-deployment/prod/$TRAVIS_COMMIT
-../hub-linux*/bin/hub pull-request -m "Edx-notes-api prod deploy: $TRAVIS_COMMIT_MESSAGE"
+../hub-linux*/bin/hub pull-request -m "Edx-notes-api prod deploy: $TRAVIS_COMMIT_MESSAGE" -m "Production environment deployment of https://github.com/edx/edx-notes-api/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edx.org"
 
 # edge
 git checkout master
@@ -33,4 +36,4 @@ git checkout -b edx-deployment/edge/$TRAVIS_COMMIT
 sed -i -e "s/newTag: .*/newTag: $TRAVIS_COMMIT-newrelic/" argocd/applications/edx-notes-api/edge/kustomization.yaml
 git commit -a -m "edx-notes-api edge deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
 git push --set-upstream origin edx-deployment/edge/$TRAVIS_COMMIT
-../hub-linux*/bin/hub pull-request -m "Edx-notes-api edge deploy: $TRAVIS_COMMIT_MESSAGE"
+../hub-linux*/bin/hub pull-request -m "Edx-notes-api edge deploy: $TRAVIS_COMMIT_MESSAGE" -m "Edge environment deployment of https://github.com/edx/edx-notes-api/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edge.edx.org"
