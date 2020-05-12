@@ -13,6 +13,8 @@ git clone https://edx-deployment:${GITHUB_ACCESS_TOKEN}@github.com/edx/edx-inter
 curl -L -o hub.tgz https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz
 tar -zxvf hub.tgz
 
+hub-linux*/bin/hub api repos/edx/${REPO_NAME}/pr/${GITHUB_UPSTREAM_PR_NUMBER}/comments -f body="A docker container including this PR has been built and shipped to docker hub.  Check it out at https://hub.docker.com/r/openedx/${REPO_NAME}/tags?page=1&name=${TRAVIS_COMMIT}" 
+
 cd edx-internal
 
 # stage
