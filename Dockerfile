@@ -3,7 +3,7 @@ MAINTAINER devops@edx.org
 
 
 # Packages installed:
-# git; Used to pull in particular requirements from github rather than pypi, 
+# git; Used to pull in particular requirements from github rather than pypi,
 # and to check the sha of the code checkout.
 
 # language-pack-en locales; ubuntu locale support so that system utilities have a consistent
@@ -15,7 +15,7 @@ MAINTAINER devops@edx.org
 
 # libssl-dev; # mysqlclient wont install without this.
 
-# libmysqlclient-dev; to install header files needed to use native C implementation for 
+# libmysqlclient-dev; to install header files needed to use native C implementation for
 # MySQL-python for performance gains.
 
 # If you add a package here please include a comment above describing what it is used for
