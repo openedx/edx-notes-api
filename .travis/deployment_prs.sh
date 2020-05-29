@@ -29,6 +29,9 @@ sed -i -e "s/newTag: .*/newTag: $TRAVIS_COMMIT-newrelic/" argocd/applications/${
 git commit -a -m "${REPO_NAME} stage deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
 git push --set-upstream origin edx-deployment/stage/$TRAVIS_COMMIT
 ../hub-linux*/bin/hub pull-request -m "${REPO_NAME} stage deploy: $TRAVIS_COMMIT_MESSAGE" -m "Staging environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to stage.edx.org"
+STAGING_PR=$(../hub-linux*/bin/hub pr show -u | sed -e s'/.*\///');
+../hub-linux*/bin/hub issue update $STAGING_PR -l staging-deployment
+
 
 # prod
 git checkout master
