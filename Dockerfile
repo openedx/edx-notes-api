@@ -18,18 +18,14 @@ MAINTAINER devops@edx.org
 # libmysqlclient-dev; to install header files needed to use native C implementation for 
 # MySQL-python for performance gains.
 # software-properties-common; to get apt-add-repository
+# deadsnakes PPA to install Python 3.8
 # If you add a package here please include a comment above describing what it is used for
 
 RUN apt-get update && \
-    apt-get install -y locales && \
-    apt-get install -y locales software-properties-common && \
-    locale-gen en_US.UTF-8
-
-# Add the deadsnakes PPA to install Python 3.8
-RUN apt-add-repository -y ppa:deadsnakes/ppa
-
-RUN apt-get update && apt-get upgrade -qy && apt-get install language-pack-en locales git python3.6 python3-pip libmysqlclient-dev libssl-dev python3-dev -qy && \
-    apt-get install -y python3.8-dev python3.8-distutils && \
+    apt-get install -y software-properties-common && \
+    apt-add-repository -y ppa:deadsnakes/ppa && \
+    apt-get update && apt-get upgrade -qy && \
+    apt-get install language-pack-en locales git python3.6 python3-pip libmysqlclient-dev libssl-dev python3-dev python3.8-dev python3.8-distutils -qy && \
     pip3 install --upgrade pip setuptools && \
     rm -rf /var/lib/apt/lists/*
 
