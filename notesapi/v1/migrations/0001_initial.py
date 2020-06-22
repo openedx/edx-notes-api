@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """ Initial migration file for creating Note model """
-from __future__ import unicode_literals
 
 from django.db import migrations, models
 
