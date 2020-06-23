@@ -1,22 +1,19 @@
 # -*- coding: utf-8 -*-
 import unittest
-from six.moves.urllib import parse
-from six.moves import range
 from calendar import timegm
 from datetime import datetime, timedelta
+from urllib import parse
 
-import jwt
 from django.conf import settings
 from django.core.management import call_command
-from django.urls import reverse
 from django.test.utils import override_settings
-from rest_framework import status
-from rest_framework.test import APITestCase
-
-import ddt
+from django.urls import reverse
 from mock import patch
 
-import six
+import ddt
+import jwt
+from rest_framework import status
+from rest_framework.test import APITestCase
 
 from .helpers import get_id_token
 
@@ -244,7 +241,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
         annotation = response.data.copy()
         self.assertIn('id', annotation)
-        self.assertEqual(type(annotation['id']), six.text_type)
+        self.assertEqual(type(annotation['id']), str)
         del annotation['id']
         del annotation['updated']
         del annotation['created']
@@ -598,7 +595,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         annotation = response.data
-        self.assertEqual(type(annotation['id']), six.text_type)
+        self.assertEqual(type(annotation['id']), str)
         del annotation['id']
         del annotation['updated']
         del annotation['created']
@@ -813,8 +810,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(
-                results['rows'][0]['text'],
-                '{elasticsearch_highlight_start}First{elasticsearch_highlight_end} note'
+            results['rows'][0]['text'],
+            '{elasticsearch_highlight_start}First{elasticsearch_highlight_end} note'
         )
 
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
@@ -828,9 +825,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         end_tag = "{elasticsearch_highlight_end}"
 
         expected_text = "{start_tag}Lorem{end_tag} {word} {start_tag}Lorem{end_tag}".format(
-                start_tag=start_tag,
-                end_tag=end_tag,
-                word="word " * 100
+            start_tag=start_tag,
+            end_tag=end_tag,
+            word="word " * 100
         )
 
         self._create_annotation(text=text)
@@ -843,8 +840,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(
-                results['rows'][0]['text'],
-                expected_text
+            results['rows'][0]['text'],
+            expected_text
         )
 
     @override_settings(ES_DISABLED=True)
@@ -1039,8 +1036,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(results['total'], 1)
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(
-                results['rows'][0]['tags'],
-                ['foo', '{elasticsearch_highlight_start}bar{elasticsearch_highlight_end}']
+            results['rows'][0]['tags'],
+            ['foo', '{elasticsearch_highlight_start}bar{elasticsearch_highlight_end}']
         )
 
     @ddt.unpack
@@ -1125,9 +1122,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
     @ddt.data(
         {"text": u"Ammar محمد عمار Muhammad", "search": u"محمد عمار", "tags": [u"عمار", u"Muhammad", u"محمد"]},
         {"text": u"Ammar محمد عمار Muhammad", "search": u"محمد", "tags": [u"محمد", u"Muhammad"]},
-        {"text": u"Ammar محمد عمار Muhammad", "search": u"عمار", "tags": [ u"ammar", u"عمار"]},
-        {"text": u"Muhammad Ammar", "search": u"عمار", "tags": [ u"ammar", u"عمار"]},
-        {"text": u"محمد عمار", "search": u"Muhammad", "tags": [ u"Muhammad", u"عمار"]}
+        {"text": u"Ammar محمد عمار Muhammad", "search": u"عمار", "tags": [u"ammar", u"عمار"]},
+        {"text": u"Muhammad Ammar", "search": u"عمار", "tags": [u"ammar", u"عمار"]},
+        {"text": u"محمد عمار", "search": u"Muhammad", "tags": [u"Muhammad", u"عمار"]}
     )
     @unittest.skipIf(settings.ES_DISABLED, "MySQL cannot do highlighting")
     def test_search_unicode_text_and_tags(self, text, search, tags):
