@@ -1,8 +1,8 @@
 from os import environ
 
 import yaml
-import six
 from django.core.exceptions import ImproperlyConfigured
+
 from notesserver.settings.logger import build_logging_config
 from path import path
 
@@ -38,7 +38,7 @@ DB_OVERRIDES = dict(
     PORT=environ.get('DB_MIGRATION_PORT', DATABASES['default']['PORT']),
 )
 
-for override, value in six.iteritems(DB_OVERRIDES):
+for override, value in DB_OVERRIDES.items():
     DATABASES['default'][override] = value
 
 if ES_DISABLED:
@@ -46,4 +46,3 @@ if ES_DISABLED:
     INSTALLED_APPS.remove('haystack')
 
 LOGGING = build_logging_config()
-
