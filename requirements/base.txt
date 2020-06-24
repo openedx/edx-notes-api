@@ -4,19 +4,19 @@
 #
 #    make upgrade
 #
-certifi==2020.4.5.1       # via requests
+certifi==2020.6.20        # via requests
 chardet==3.0.4            # via requests
 coreapi==2.3.3            # via django-rest-swagger, openapi-codec
 coreschema==0.0.4         # via coreapi
-django-cors-headers==3.3.0  # via -r requirements/base.in
+django-cors-headers==3.4.0  # via -r requirements/base.in
 django-haystack==2.8.0    # via -r requirements/base.in
 django-rest-swagger==2.1.2  # via -r requirements/base.in
-django-waffle==0.20.0     # via edx-django-utils, edx-drf-extensions
+django-waffle==1.0.0      # via edx-django-utils, edx-drf-extensions
 django==2.2.13            # via -c requirements/constraints.txt, -r requirements/base.in, django-cors-headers, django-haystack, djangorestframework, drf-jwt, edx-django-release-util, edx-django-utils, edx-drf-extensions, rest-condition
 djangorestframework==3.11.0  # via -r requirements/base.in, django-rest-swagger, drf-jwt, edx-drf-extensions, rest-condition
 drf-jwt==1.14.0           # via -c requirements/constraints.txt, edx-drf-extensions
 edx-django-release-util==0.4.4  # via -r requirements/base.in
-edx-django-utils==3.2.2   # via -r requirements/base.in, edx-drf-extensions
+edx-django-utils==3.2.3   # via -r requirements/base.in, edx-drf-extensions
 edx-drf-extensions==6.0.0  # via -r requirements/base.in
 edx-opaque-keys==2.1.0    # via edx-drf-extensions
 elasticsearch==1.9.0      # via -r requirements/base.in
@@ -43,7 +43,7 @@ requests==2.22.0          # via -r requirements/base.in, coreapi, edx-drf-extens
 rest-condition==1.0.3     # via edx-drf-extensions
 semantic-version==2.8.5   # via edx-drf-extensions
 simplejson==3.17.0        # via django-rest-swagger
-six==1.15.0               # via django-waffle, edx-django-release-util, edx-drf-extensions, edx-opaque-keys, pyjwkest, python-dateutil, stevedore
+six==1.15.0               # via edx-django-release-util, edx-drf-extensions, edx-opaque-keys, pyjwkest, python-dateutil, stevedore
 sqlparse==0.3.1           # via django
 stevedore==1.32.0         # via edx-opaque-keys
 uritemplate==3.0.1        # via coreapi
