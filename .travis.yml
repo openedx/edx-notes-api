@@ -1,37 +1,42 @@
 language: python
+
+python:
+  - 3.5
+  - 3.8
+
+
 branches:
   only:
   - master
 services:
-- docker
+  - docker
 sudo: required
 before_install:
-- make travis_up
+  - make travis_up
 install:
-- pip install -r requirements/travis.txt
+  - pip install -r requirements/travis.txt
 script:
-- make travis_test
-- make travis_pii_check
+  - make travis_test
+  - make travis_pii_check
 after_success:
-- pip install -U codecov
-- docker exec notes /edx/app/notes/notes/.travis/run_coverage.sh
-- codecov
+  - pip install -U codecov
+  - docker exec notes /edx/app/notes/notes/.travis/run_coverage.sh
+  - codecov
 
-matrix:
-  - python: 3.8
-    env: TOXENV=py38-django22
-  - python: 3.6
-    env: TOXENV=py36-django22
 
 env:
   global:
-  - DOCKER_USERNAME=edxbuilder
-    # encrypted DOCKER_PASSWORD
-  - secure: OgsQf8hp40s+E2btyl+RHcdgjqx9gZ4phlvm2tQ8Oy9mCO6hAy2XCjL1m2bidaFzwSjZXDZ7BhjD3yXpW2B+zP/yJNVKmdPA5E+D7YgFPdlOv7Wb+t0Z083Wbwqk7ZZgxLCcMLWf5vTs/QkPVAXbU8wJvQQC2l0EKESFnYkzNAI=
-    # encrypted GITHUB_ACCESS_TOKEN
-  - secure: oHetFkwhb7dEPaMLO6to+xd9iI9I10SQFSOPjbNxEbnfYk7rcms0AklbOdCbAmmWKw00uiw53lPgXW+DvVlSxdZikUk6BZUn381ZAJgGWgyFwALakz2dfVScEgg6VURMhD2MOuXjpt2SISc5oyLM8pqCvLw0JzXseYggb2ncA3E=
+    - DOCKER_USERNAME=edxbuilder
+      # encrypted DOCKER_PASSWORD
+    - secure: OgsQf8hp40s+E2btyl+RHcdgjqx9gZ4phlvm2tQ8Oy9mCO6hAy2XCjL1m2bidaFzwSjZXDZ7BhjD3yXpW2B+zP/yJNVKmdPA5E+D7YgFPdlOv7Wb+t0Z083Wbwqk7ZZgxLCcMLWf5vTs/QkPVAXbU8wJvQQC2l0EKESFnYkzNAI=
+      # encrypted GITHUB_ACCESS_TOKEN
+    - secure: oHetFkwhb7dEPaMLO6to+xd9iI9I10SQFSOPjbNxEbnfYk7rcms0AklbOdCbAmmWKw00uiw53lPgXW+DvVlSxdZikUk6BZUn381ZAJgGWgyFwALakz2dfVScEgg6VURMhD2MOuXjpt2SISc5oyLM8pqCvLw0JzXseYggb2ncA3E=
+  jobs:
+    - TOXENV=django22
+    - TOXENV=django30
+
 deploy:
-- provider: script
-  script: ".travis/deployment_prs.sh"
-  on:
-    branch: master
+  - provider: script
+    script: ".travis/deployment_prs.sh"
+    on:
+      branch: master
