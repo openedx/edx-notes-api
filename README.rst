@@ -15,7 +15,7 @@ The edX Notes API is designed to be compatible with the `Annotator <http://annot
 Getting Started
 ---------------
 
-1. Install `ElasticSearch 1.5.2 <https://www.elastic.co/blog/elasticsearch-1-5-2-and-1-4-5-released>`__.
+1. Install `ElasticSearch 7.8.0 <https://www.elastic.co/blog/elasticsearch-7-8-0-released>`__.
 
 2. Install the requirements:
 
@@ -46,7 +46,7 @@ Configuration:
                   e.g if it became corrupted and you're rebuilding the index, while still serving users
                   through MySQL
 
-``HAYSTACK_CONNECTIONS['default']['url']`` - Your ElasticSearch URL
+``ELASTICSEARCH_DSL['default']['hosts']`` - Your ElasticSearch host
 
 Running Tests
 -------------
@@ -56,10 +56,10 @@ lint.
 
 How To Resync The Index
 -----------------------
-edX Notes Store uses `Haystack <http://haystacksearch.org/>`_ which comes with several management commands.
+edX Notes Store uses `Django elasticsearch DSL <https://django-elasticsearch-dsl.readthedocs.io/>`_ which comes with several management commands.
 
-Please read more about ``update_index`` management command
-`here <http://django-haystack.readthedocs.org/en/latest/management_commands.html#update-index>`_.
+Please read more about ``search_index`` management commands
+`here <https://django-elasticsearch-dsl.readthedocs.io/en/latest/management.html>`_.
 
 License
 -------
