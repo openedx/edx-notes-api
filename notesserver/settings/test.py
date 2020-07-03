@@ -16,12 +16,15 @@ DISABLE_TOKEN_CHECK = False
 
 JWT_AUTH = {}
 
-HAYSTACK_CONNECTIONS = {
+ELASTICSEARCH_DSL = {
     'default': {
-        'ENGINE': 'notesserver.highlight.ElasticsearchSearchEngine',
-        'URL': os.environ.get('ELASTICSEARCH_URL', 'http://localhost:9200/'),
-        'INDEX_NAME': 'notes_index_test',
+        'hosts': os.environ.get('ELASTICSEARCH_URL', 'localhost:9200')
     },
+}
+
+# Name of the Elasticsearch index
+ELASTICSEARCH_INDEX_NAMES = {
+    'notesapi.v1.search_indexes.documents.note': 'notes_index_test',
 }
 
 LOGGING = {

@@ -1,5 +1,5 @@
 from .test import *
 
 ES_DISABLED = True
-HAYSTACK_CONNECTIONS = {'default':{}}
-INSTALLED_APPS.remove('haystack')
+ELASTICSEARCH_DSL = {'default': {}}
+INSTALLED_APPS = [i for i in INSTALLED_APPS if i not in ES_APPS]

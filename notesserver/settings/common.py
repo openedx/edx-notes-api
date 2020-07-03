@@ -1,4 +1,3 @@
-import json
 import os
 import sys
 
@@ -19,14 +18,23 @@ CLIENT_ID = 'CHANGEME'
 CLIENT_SECRET = 'CHANGEME'
 
 ES_DISABLED = False
-HAYSTACK_CONNECTIONS = {
+
+ELASTICSEARCH_DSL = {
     'default': {
-        'ENGINE': 'notesserver.highlight.ElasticsearchSearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
-        'INDEX_NAME': 'edx_notes_api',
+        'hosts': '127.0.0.1:9200'
     },
 }
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+ELASTICSEARCH_DSL_INDEX_SETTINGS = {
+    'number_of_shards': 1,
+    'number_of_replicas': 0
+}
+
+# Name of the Elasticsearch index
+ELASTICSEARCH_INDEX_NAMES = {
+    'notesapi.v1.search_indexes.documents.note': 'edx_notes_api',
+}
+ELASTICSEARCH_DSL_SIGNAL_PROCESSOR = 'django_elasticsearch_dsl.signals.RealTimeSignalProcessor'
 
 # Number of rows to return by default in result.
 RESULTS_DEFAULT_SIZE = 25
@@ -45,6 +53,12 @@ MIDDLEWARE = (
     'edx_rest_framework_extensions.auth.jwt.middleware.EnsureJWTAuthSettingsMiddleware',
 )
 
+ES_APPS = (
+    'elasticsearch_dsl',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
+)
+
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,31 +66,28 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'corsheaders',
-    'haystack',
     'notesapi.v1',
     # additional release utilities to ease automation
     'release_util',
 ]
+if not ES_DISABLED:
+    INSTALLED_APPS.extend(ES_APPS)
 
 STATIC_URL = '/static/'
 
 WSGI_APPLICATION = 'notesserver.wsgi.application'
 
-LOG_SETTINGS_LOG_DIR= '/var/tmp'
-LOG_SETTINGS_LOGGING_ENV= 'no_env'
-LOG_SETTINGS_DEV_ENV= False
-LOG_SETTINGS_DEBUG= False
-LOG_SETTINGS_LOCAL_LOGLEVEL= 'INFO'
-LOG_SETTINGS_EDX_FILENAME= "edx.log"
-LOG_SETTINGS_SERVICE_VARIANT= 'edx-notes-api'
+LOG_SETTINGS_LOG_DIR = '/var/tmp'
+LOG_SETTINGS_LOGGING_ENV = 'no_env'
+LOG_SETTINGS_DEV_ENV = False
+LOG_SETTINGS_DEBUG = False
+LOG_SETTINGS_LOCAL_LOGLEVEL = 'INFO'
+LOG_SETTINGS_EDX_FILENAME = "edx.log"
+LOG_SETTINGS_SERVICE_VARIANT = 'edx-notes-api'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'notesapi.v1.permissions.HasAccessToken'
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
+    'DEFAULT_PERMISSION_CLASSES': ['notesapi.v1.permissions.HasAccessToken'],
     'DEFAULT_PAGINATION_CLASS': 'notesapi.v1.paginators.NotesPaginator',
 }
 
@@ -101,8 +112,8 @@ TEMPLATES = [
         'DIRS': [
             # The EdxNotes templates directory is not actually under any app
             # directory, so specify its absolute path.
-            os.path.join(BASE_DIR, 'templates'),
-        ]
+            os.path.join(BASE_DIR, 'templates')
+        ],
     }
 ]
 
@@ -122,7 +133,7 @@ DATABASES = {
         'OPTIONS': {'connect_timeout': 10},
         'PASSWORD': 'secret',
         'PORT': 3306,
-        'USER': 'notes001'
+        'USER': 'notes001',
     }
 }
 
@@ -131,14 +142,10 @@ USERNAME_REPLACEMENT_WORKER = 'OVERRIDE THIS WITH A VALID USERNAME'
 JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
     'JWT_ISSUER': [
-        {
-            'AUDIENCE': 'SET-ME-PLEASE',
-            'ISSUER': 'http://127.0.0.1:8000/oauth2',
-            'SECRET_KEY': 'SET-ME-PLEASE'
-        }
+        {'AUDIENCE': 'SET-ME-PLEASE', 'ISSUER': 'http://127.0.0.1:8000/oauth2', 'SECRET_KEY': 'SET-ME-PLEASE'}
     ],
     'JWT_PUBLIC_SIGNING_JWK_SET': None,
     'JWT_AUTH_COOKIE_HEADER_PAYLOAD': 'edx-jwt-cookie-header-payload',
     'JWT_AUTH_COOKIE_SIGNATURE': 'edx-jwt-cookie-signature',
-    'JWT_AUTH_REFRESH_COOKIE': 'edx-jwt-refresh-cookie'
+    'JWT_AUTH_REFRESH_COOKIE': 'edx-jwt-refresh-cookie',
 }
