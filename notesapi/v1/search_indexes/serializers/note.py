@@ -11,14 +11,18 @@ __all__ = (
 
 
 class NoteDocumentSerializer(DocumentSerializer):
-    """Serializer for the Note document."""
+    """
+    Serializer for the Note document.
+    """
 
     text = serializers.SerializerMethodField()
     ranges = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
 
     class Meta(object):
-        """Meta options."""
+        """
+        Meta options.
+        """
 
         document = NoteDocument
         fields = (

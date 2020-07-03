@@ -4,7 +4,6 @@ from django.conf import settings
 from django.core.management import call_command
 from django.urls import reverse
 from django.db.models import signals
-from django_elasticsearch_dsl.registries import registry
 import factory
 
 from .test_views import BaseAnnotationViewTests

@@ -25,7 +25,9 @@ class NoteDocument(Document):
     tags = fields.TextField(multi=True, analyzer=case_insensitive_keyword)
 
     def prepare_data(self, instance):
-        """Prepare data."""
+        """
+        Prepare data.
+        """
         return '{0}{1}'.format(instance.text, instance.tags)
 
     def prepare_tags(self, instance):

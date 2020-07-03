@@ -14,7 +14,8 @@ class CompoundSearchFilterBackend(CompoundSearchFilterBackendOrigin):
     )
 
     def get_search_query_params(self, request):
-        """Get search query params.
+        """
+        Get search query params.
 
         :param request: Django REST framework request.
         :type request: rest_framework.request.Request
