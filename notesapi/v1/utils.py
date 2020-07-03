@@ -14,7 +14,7 @@ class NotesPaginatorMixin:
     page_size = settings.DEFAULT_NOTES_PAGE_SIZE
     page_size_query_param = "page_size"
 
-    def get_paginated_response(self, data: ReturnList) -> Response:
+    def get_paginated_response(self, data):
         """
         Annotate the response with pagination information.
         """

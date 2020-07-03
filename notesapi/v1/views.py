@@ -1,6 +1,5 @@
 import json
 import logging
-import typing
 
 import newrelic.agent
 from django.conf import settings
@@ -154,7 +153,7 @@ class AnnotationSearchView(ListAPIView):
 
     @property
     @lru_cache()
-    def is_es_disabled(self) -> bool:
+    def is_es_disabled(self):
         """
         Predicate instance method.
 
@@ -176,9 +175,7 @@ class AnnotationSearchView(ListAPIView):
 
         return queryset
 
-    def get_serializer_class(
-        self
-    ) -> typing.Union[typing.Type[NoteSerializer], typing.Type[NotesElasticSearchSerializer]]:
+    def get_serializer_class(self):
         """
         Return the class to use for the serializer.
 
