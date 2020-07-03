@@ -1,24 +1,30 @@
 import json
 import logging
+import typing
 
 import newrelic.agent
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.urls import reverse
 from django.db.models import Q
+from django.urls import reverse
 from django.utils.translation import ugettext as _
-from haystack.query import SQ
+from functools import lru_cache
 from rest_framework import status
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from notesapi.v1.models import Note
-from notesapi.v1.serializers import (NotesElasticSearchSerializer,
-                                     NoteSerializer)
+from notesapi.v1.search_indexes.documents import NoteDocument
+from notesapi.v1.serializers import NoteSerializer
 
 if not settings.ES_DISABLED:
-    from notesserver.highlight import SearchQuerySet
+    from elasticsearch_dsl import Search
+    from elasticsearch_dsl.connections import connections
+    from django_elasticsearch_dsl_drf.filter_backends import HighlightBackend
+    from notesapi.v1.search_indexes.paginators import NotesPagination as ESNotesPagination
+    from notesapi.v1.search_indexes.backends import CompoundSearchFilterBackend
+    from notesapi.v1.search_indexes.serializers import NoteDocumentSerializer as NotesElasticSearchSerializer
 
 log = logging.getLogger(__name__)
 
@@ -27,10 +33,9 @@ class AnnotationsLimitReachedError(Exception):
     """
     Exception when trying to create more than allowed annotations
     """
-    pass
 
 
-class AnnotationSearchView(GenericAPIView):
+class AnnotationSearchView(ListAPIView):
     """
     **Use Case**
 
@@ -114,9 +119,115 @@ class AnnotationSearchView(GenericAPIView):
 
             * updated: DateTime. When was the last time annotation was updated.
     """
+
+    action = None
     params = {}
     query_params = {}
     search_with_usage_id = False
+    document = NoteDocument
+    search_fields = ('text', 'tags')
+    highlight_fields = {
+        'text': {
+            'enabled': True,
+            'options': {
+                'pre_tags': ['{elasticsearch_highlight_start}'],
+                'post_tags': ['{elasticsearch_highlight_end}'],
+                'number_of_fragments': 0,
+            },
+        },
+        'tags': {
+            'enabled': True,
+            'options': {
+                'pre_tags': ['{elasticsearch_highlight_start}'],
+                'post_tags': ['{elasticsearch_highlight_end}'],
+                'number_of_fragments': 0,
+            },
+        },
+    }
+
+    def __init__(self, *args, **kwargs):
+        self.client = connections.get_connection(self.document._get_using())
+        self.index = self.document._index._name
+        self.mapping = self.document._doc_type.mapping.properties.name
+        self.search = Search(using=self.client, index=self.index, doc_type=self.document._doc_type.name)
+        super(AnnotationSearchView, self).__init__(*args, **kwargs)
+
+    @property
+    @lru_cache()
+    def is_es_disabled(self) -> bool:
+        """
+        Predicate instance method.
+
+        Search in DB when ES is not available or there is no need to bother it
+        """
+
+        return settings.ES_DISABLED or 'text' not in self.params
+
+    def get_queryset(self):
+        if self.is_es_disabled:
+            queryset = Note.objects.filter(**self.query_params).order_by('-updated')
+            if 'text' in self.params:
+                queryset = queryset.filter(
+                    Q(text__icontains=self.params['text']) | Q(tags__icontains=self.params['text'])
+                )
+        else:
+            queryset = self.search.query()
+            queryset.model = self.document.Django.model
+
+        return queryset
+
+    def get_serializer_class(
+        self
+    ) -> typing.Union[typing.Type[NoteSerializer], typing.Type[NotesElasticSearchSerializer]]:
+        """
+        Return the class to use for the serializer.
+
+        Defaults to using `NoteSerializer` if elasticsearch is disabled
+        or `NotesElasticSearchSerializer` if elasticsearch is enabled
+        """
+
+        return NoteSerializer if self.is_es_disabled else NotesElasticSearchSerializer
+
+    @property
+    def paginator(self):
+        """
+        The paginator instance associated with the view and used data source, or `None`.
+        """
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class() if self.is_es_disabled else ESNotesPagination()
+
+        return self._paginator
+
+    def filter_queryset(self, queryset):
+        """
+        Given a queryset, filter it with whichever filter backend is in use.
+
+        Do not filter additionally if mysql db used or use `CompoundSearchFilterBackend`
+        and `HighlightBackend` if elasticsearch is the data source.
+        """
+        filter_backends = []
+        if not self.is_es_disabled:
+            filter_backends = [CompoundSearchFilterBackend]
+            if self.params.get('highlight'):
+                filter_backends.append(HighlightBackend)
+
+        for backend in list(filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, view=self)
+        return queryset
+
+    def list(self, *args, **kwargs):
+        """
+        Returns list of students notes.
+        """
+        # Do not send paginated result if usage id based search.
+        if self.search_with_usage_id:
+            queryset = self.filter_queryset(self.get_queryset())
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return super(AnnotationSearchView, self).list(*args, **kwargs)
 
     def get(self, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -125,71 +236,22 @@ class AnnotationSearchView(GenericAPIView):
         self.query_params = {}
         self.search_with_usage_id = False
         self.params = self.request.query_params.dict()
-
         usage_ids = self.request.query_params.getlist('usage_id')
-        if len(usage_ids) > 0:
+
+        if len(usage_ids):
             self.search_with_usage_id = True
             self.query_params['usage_id__in'] = usage_ids
 
         if 'course_id' in self.params:
             self.query_params['course_id'] = self.params['course_id']
 
-        # search in DB when ES is not available or there is no need to bother it
-        if settings.ES_DISABLED or 'text' not in self.params:
-            if 'user' in self.params:
+        if 'user' in self.params:
+            if self.is_es_disabled:
                 self.query_params['user_id'] = self.params['user']
-            return self.get_from_db(*args, **kwargs)
-        else:
-            if 'user' in self.params:
+            else:
                 self.query_params['user'] = self.params['user']
-            return self.get_from_es(*args, **kwargs)
 
-    def get_from_db(self, *args, **kwargs):  # pylint: disable=unused-argument
-        """
-        Search annotations in database.
-        """
-        query = Note.objects.filter(**self.query_params).order_by('-updated')
-
-        if 'text' in self.params:
-            query = query.filter(Q(text__icontains=self.params['text']) | Q(tags__icontains=self.params['text']))
-
-        # Do not send paginated result if usage id based search.
-        if self.search_with_usage_id:
-            serializer = NoteSerializer(query, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        page = self.paginate_queryset(query)
-        serializer = NoteSerializer(page, many=True)
-        response = self.get_paginated_response(serializer.data)
-        return response
-
-    def get_from_es(self, *args, **kwargs):  # pylint: disable=unused-argument
-        """
-        Search annotations in ElasticSearch.
-        """
-        query = SearchQuerySet().models(Note).filter(**self.query_params)
-
-        if 'text' in self.params:
-            clean_text = query.query.clean(self.params['text'])
-            query = query.filter(SQ(data=clean_text))
-
-        if self.params.get('highlight'):
-            opts = {
-                'pre_tags': ['{elasticsearch_highlight_start}'],
-                'post_tags': ['{elasticsearch_highlight_end}'],
-                'number_of_fragments': 0
-            }
-            query = query.highlight(**opts)
-
-        # Do not send paginated result if usage id based search.
-        if self.search_with_usage_id:
-            serializer = NotesElasticSearchSerializer(query, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        page = self.paginate_queryset(query)
-        serializer = NotesElasticSearchSerializer(page, many=True)
-        response = self.get_paginated_response(serializer.data)
-        return response
+        return super(AnnotationSearchView, self).get(*args, **kwargs)
 
 
 class AnnotationRetireView(GenericAPIView):
@@ -354,7 +416,7 @@ class AnnotationListView(GenericAPIView):
 
         try:
             total_notes = Note.objects.filter(
-                    user_id=self.request.data['user'], course_id=self.request.data['course_id']
+                user_id=self.request.data['user'], course_id=self.request.data['course_id']
             ).count()
             if total_notes >= settings.MAX_NOTES_PER_COURSE:
                 raise AnnotationsLimitReachedError
@@ -372,14 +434,9 @@ class AnnotationListView(GenericAPIView):
                 u'You can create up to {max_num_annotations_per_course} notes.'
                 u' You must remove some notes before you can add new ones.'
             ).format(max_num_annotations_per_course=settings.MAX_NOTES_PER_COURSE)
-            log.info(
-                u'Attempted to create more than %s annotations',
-                settings.MAX_NOTES_PER_COURSE
-            )
+            log.info(u'Attempted to create more than %s annotations', settings.MAX_NOTES_PER_COURSE)
 
-            return Response({
-                'error_msg': error_message
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error_msg': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
         note.save()
 
