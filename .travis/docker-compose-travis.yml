@@ -12,8 +12,23 @@ services:
       MYSQL_PASSWORD: "secret"
       MYSQL_DATABASE: "edx_notes_api"
   es:
-    image: elasticsearch:1.5.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
     container_name: es
+    environment:
+      - node.name=es
+      - cluster.name=docker-cluster
+      - cluster.initial_master_nodes=es
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - http.port=9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
   notes:
     # Uncomment this line to use the official course-discovery base image
     image: openedx/edx-notes-api:latest
@@ -38,3 +53,7 @@ services:
       DB_USER: "notes001"
       ENABLE_DJANGO_TOOLBAR: 1
       ELASTICSEARCH_URL: "http://es:9200"
+
+volumes:
+  elasticsearch_data:
+    driver: local
