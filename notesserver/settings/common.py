@@ -19,21 +19,12 @@ CLIENT_SECRET = 'CHANGEME'
 
 ES_DISABLED = False
 
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': '127.0.0.1:9200'
-    },
-}
+ELASTICSEARCH_DSL = {'default': {'hosts': '127.0.0.1:9200'}}
 
-ELASTICSEARCH_DSL_INDEX_SETTINGS = {
-    'number_of_shards': 1,
-    'number_of_replicas': 0
-}
+ELASTICSEARCH_DSL_INDEX_SETTINGS = {'number_of_shards': 1, 'number_of_replicas': 0}
 
 # Name of the Elasticsearch index
-ELASTICSEARCH_INDEX_NAMES = {
-    'notesapi.v1.search_indexes.documents.note': 'edx_notes_api',
-}
+ELASTICSEARCH_INDEX_NAMES = {'notesapi.v1.search_indexes.documents.note': 'edx_notes_api'}
 ELASTICSEARCH_DSL_SIGNAL_PROCESSOR = 'django_elasticsearch_dsl.signals.RealTimeSignalProcessor'
 
 # Number of rows to return by default in result.
@@ -53,11 +44,7 @@ MIDDLEWARE = (
     'edx_rest_framework_extensions.auth.jwt.middleware.EnsureJWTAuthSettingsMiddleware',
 )
 
-ES_APPS = (
-    'elasticsearch_dsl',
-    'django_elasticsearch_dsl',
-    'django_elasticsearch_dsl_drf',
-)
+ES_APPS = ('elasticsearch_dsl', 'django_elasticsearch_dsl', 'django_elasticsearch_dsl_drf',)
 
 INSTALLED_APPS = [
     'django.contrib.auth',

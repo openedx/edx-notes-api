@@ -8,6 +8,7 @@ import sys
 from logging.handlers import SysLogHandler
 from django.conf import settings
 
+
 def build_logging_config():
 
     """
@@ -20,13 +21,13 @@ def build_logging_config():
     """
     # Revert to INFO if an invalid string is passed in
 
-    log_dir=settings.LOG_SETTINGS_LOG_DIR
-    logging_env=settings.LOG_SETTINGS_LOGGING_ENV
-    edx_filename=settings.LOG_SETTINGS_EDX_FILENAME
-    dev_env=settings.LOG_SETTINGS_DEV_ENV
-    debug=settings.LOG_SETTINGS_DEBUG
-    local_loglevel=settings.LOG_SETTINGS_LOCAL_LOGLEVEL
-    service_variant=settings.LOG_SETTINGS_SERVICE_VARIANT
+    log_dir = settings.LOG_SETTINGS_LOG_DIR
+    logging_env = settings.LOG_SETTINGS_LOGGING_ENV
+    edx_filename = settings.LOG_SETTINGS_EDX_FILENAME
+    dev_env = settings.LOG_SETTINGS_DEV_ENV
+    debug = settings.LOG_SETTINGS_DEBUG
+    local_loglevel = settings.LOG_SETTINGS_LOCAL_LOGLEVEL
+    service_variant = settings.LOG_SETTINGS_SERVICE_VARIANT
 
     if local_loglevel not in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']:
         local_loglevel = 'INFO'
@@ -49,8 +50,7 @@ def build_logging_config():
         'disable_existing_loggers': False,
         'formatters': {
             'standard': {
-                'format': '%(asctime)s %(levelname)s %(process)d '
-                          '[%(name)s] %(filename)s:%(lineno)d - %(message)s',
+                'format': '%(asctime)s %(levelname)s %(process)d ' '[%(name)s] %(filename)s:%(lineno)d - %(message)s'
             },
             'syslog_format': {'format': syslog_format},
             'raw': {'format': '%(message)s'},
@@ -61,49 +61,41 @@ def build_logging_config():
                 'class': 'logging.StreamHandler',
                 'formatter': 'standard',
                 'stream': sys.stdout,
-            },
+            }
         },
         'loggers': {
-            'django': {
-                'handlers': handlers,
-                'propagate': True,
-                'level': 'INFO'
-            },
-            "elasticsearch.trace": {
-                'handlers': handlers,
-                'level': 'WARNING',
-                'propagate': False,
-            },
-            '': {
-                'handlers': handlers,
-                'level': 'DEBUG',
-                'propagate': False
-            },
-        }
+            'django': {'handlers': handlers, 'propagate': True, 'level': 'INFO'},
+            "elasticsearch.trace": {'handlers': handlers, 'level': 'WARNING', 'propagate': False},
+            '': {'handlers': handlers, 'level': 'DEBUG', 'propagate': False},
+        },
     }
 
     if dev_env:
         edx_file_loc = os.path.join(log_dir, edx_filename)
-        logger_config['handlers'].update({
-            'local': {
-                'class': 'logging.handlers.RotatingFileHandler',
-                'level': local_loglevel,
-                'formatter': 'standard',
-                'filename': edx_file_loc,
-                'maxBytes': 1024 * 1024 * 2,
-                'backupCount': 5,
-            },
-        })
+        logger_config['handlers'].update(
+            {
+                'local': {
+                    'class': 'logging.handlers.RotatingFileHandler',
+                    'level': local_loglevel,
+                    'formatter': 'standard',
+                    'filename': edx_file_loc,
+                    'maxBytes': 1024 * 1024 * 2,
+                    'backupCount': 5,
+                }
+            }
+        )
     else:
-        logger_config['handlers'].update({
-            'local': {
-                'level': local_loglevel,
-                'class': 'logging.handlers.SysLogHandler',
-                # Use a different address for Mac OS X
-                'address': '/var/run/syslog' if sys.platform == "darwin" else '/dev/log',
-                'formatter': 'syslog_format',
-                'facility': SysLogHandler.LOG_LOCAL0,
-            },
-        })
+        logger_config['handlers'].update(
+            {
+                'local': {
+                    'level': local_loglevel,
+                    'class': 'logging.handlers.SysLogHandler',
+                    # Use a different address for Mac OS X
+                    'address': '/var/run/syslog' if sys.platform == "darwin" else '/dev/log',
+                    'formatter': 'syslog_format',
+                    'facility': SysLogHandler.LOG_LOCAL0,
+                }
+            }
+        )
 
     return logger_config

@@ -6,9 +6,7 @@ DEBUG = True
 LOG_SETTINGS_DEBUG = True
 LOG_SETTINGS_DEV_ENV = True
 
-ELASTICSEARCH_INDEX_NAMES = {
-    'notesapi.v1.search_indexes.documents.note': 'notes_index_dev',
-}
+ELASTICSEARCH_INDEX_NAMES = {'notesapi.v1.search_indexes.documents.note': 'notes_index_dev'}
 
 DATABASES = {
     'default': {
