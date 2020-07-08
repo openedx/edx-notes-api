@@ -1,5 +1,6 @@
 import json
 import logging
+from functools import lru_cache
 
 import newrelic.agent
 from django.conf import settings
@@ -7,7 +8,6 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import ugettext as _
-from functools import lru_cache
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
@@ -210,7 +210,7 @@ class AnnotationSearchView(ListAPIView):
             if self.params.get('highlight'):
                 filter_backends.append(HighlightBackend)
 
-        for backend in list(filter_backends):
+        for backend in filter_backends:
             queryset = backend().filter_queryset(self.request, queryset, view=self)
         return queryset
 

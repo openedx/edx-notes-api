@@ -13,6 +13,10 @@ NOTE_INDEX = Index(settings.ELASTICSEARCH_INDEX_NAMES[__name__])
 
 @NOTE_INDEX.doc_type
 class NoteDocument(Document):
+    """
+    Document for the Note index.
+    """
+
     id = fields.IntegerField(attr='id')
     user = fields.KeywordField(attr='user_id')
     course_id = fields.KeywordField()

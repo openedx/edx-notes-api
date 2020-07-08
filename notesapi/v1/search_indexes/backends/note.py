@@ -8,6 +8,10 @@ __all__ = ('CompoundSearchFilterBackend',)
 
 
 class CompoundSearchFilterBackend(CompoundSearchFilterBackendOrigin):
+    """
+    Customized compound search backend.
+    """
+
     search_fields = (
         'text',
         'tags',
@@ -23,4 +27,9 @@ class CompoundSearchFilterBackend(CompoundSearchFilterBackendOrigin):
         :rtype: list
         """
         query_params = request.query_params.copy()
-        return list(chain.from_iterable(query_params.getlist(search_param, []) for search_param in self.search_fields))
+        return list(
+            chain.from_iterable(
+                query_params.getlist(search_param, [])
+                for search_param in self.search_fields
+            )
+        )

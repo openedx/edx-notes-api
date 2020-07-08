@@ -1,3 +1,3 @@
 from .note import CompoundSearchFilterBackend
 
-__all___ = ('CompoundSearchFilterBackend',)
+__all__ = ('CompoundSearchFilterBackend',)

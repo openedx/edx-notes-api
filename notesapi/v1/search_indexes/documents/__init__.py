@@ -1,3 +1,3 @@
 from .note import NoteDocument
 
-__all___ = ('NoteDocument',)
+__all__ = ('NoteDocument',)

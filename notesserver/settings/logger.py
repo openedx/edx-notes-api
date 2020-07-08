@@ -50,7 +50,7 @@ def build_logging_config():
         'disable_existing_loggers': False,
         'formatters': {
             'standard': {
-                'format': '%(asctime)s %(levelname)s %(process)d ' '[%(name)s] %(filename)s:%(lineno)d - %(message)s'
+                'format': '%(asctime)s %(levelname)s %(process)d ' '[%(name)s] %(filename)s:%(lineno)d - %(message)s',
             },
             'syslog_format': {'format': syslog_format},
             'raw': {'format': '%(message)s'},
@@ -61,7 +61,7 @@ def build_logging_config():
                 'class': 'logging.StreamHandler',
                 'formatter': 'standard',
                 'stream': sys.stdout,
-            }
+            },
         },
         'loggers': {
             'django': {'handlers': handlers, 'propagate': True, 'level': 'INFO'},

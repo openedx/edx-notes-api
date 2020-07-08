@@ -99,7 +99,7 @@ TEMPLATES = [
         'DIRS': [
             # The EdxNotes templates directory is not actually under any app
             # directory, so specify its absolute path.
-            os.path.join(BASE_DIR, 'templates')
+            os.path.join(BASE_DIR, 'templates'),
         ],
     }
 ]
@@ -129,7 +129,7 @@ USERNAME_REPLACEMENT_WORKER = 'OVERRIDE THIS WITH A VALID USERNAME'
 JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
     'JWT_ISSUER': [
-        {'AUDIENCE': 'SET-ME-PLEASE', 'ISSUER': 'http://127.0.0.1:8000/oauth2', 'SECRET_KEY': 'SET-ME-PLEASE'}
+        {'AUDIENCE': 'SET-ME-PLEASE', 'ISSUER': 'http://127.0.0.1:8000/oauth2', 'SECRET_KEY': 'SET-ME-PLEASE'},
     ],
     'JWT_PUBLIC_SIGNING_JWK_SET': None,
     'JWT_AUTH_COOKIE_HEADER_PAYLOAD': 'edx-jwt-cookie-header-payload',
