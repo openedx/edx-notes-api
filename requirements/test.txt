@@ -82,7 +82,7 @@ toml==0.10.1              # via tox
 tox==3.16.1               # via -r requirements/test.in
 uritemplate==3.0.1        # via -r requirements/base.txt, coreapi
 urllib3==1.25.9           # via -r requirements/base.txt, elasticsearch, requests
-virtualenv==20.0.25       # via tox
+virtualenv==20.0.26       # via tox
 wcwidth==0.2.5            # via pytest
 wrapt==1.12.1             # via astroid
 zipp==1.2.0               # via importlib-metadata, importlib-resources
