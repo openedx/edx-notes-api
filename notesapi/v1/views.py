@@ -151,7 +151,6 @@ class AnnotationSearchView(ListAPIView):
         super(AnnotationSearchView, self).__init__(*args, **kwargs)
 
     @property
-    @lru_cache()
     def is_es_disabled(self):
         """
         Predicate instance method.
@@ -234,7 +233,7 @@ class AnnotationSearchView(ListAPIView):
         self.params = self.request.query_params.dict()
         usage_ids = self.request.query_params.getlist('usage_id')
 
-        if len(usage_ids):
+        if usage_ids:
             self.search_with_usage_id = True
             self.query_params['usage_id__in'] = usage_ids
 
