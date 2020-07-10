@@ -1,7 +1,5 @@
 import json
 import logging
-from functools import lru_cache
-
 import newrelic.agent
 from django.conf import settings
 from django.core.exceptions import ValidationError
