@@ -5,87 +5,86 @@
 #    make upgrade
 #
 appdirs==1.4.4            # via virtualenv
-astroid==1.6.6            # via -r requirements/test.in, pylint
+astroid==1.6.6            # via -r test.in, pylint
 attrs==19.3.0             # via pytest
-certifi==2020.6.20        # via -r requirements/base.txt, requests
-cffi==1.14.0              # via -r requirements/base.txt, cryptography
-chardet==3.0.4            # via -r requirements/base.txt, requests
+certifi==2020.6.20        # via -r base.txt, requests
+cffi==1.14.0              # via -r base.txt, cryptography
+chardet==3.0.4            # via -r base.txt, requests
 click==7.1.2              # via code-annotations
-code-annotations==0.3.4   # via -r requirements/test.in
+code-annotations==0.3.4   # via -r test.in
 colorama==0.4.3           # via pylint
-coreapi==2.3.3            # via -r requirements/base.txt, django-rest-swagger, openapi-codec
-coreschema==0.0.4         # via -r requirements/base.txt, coreapi
-coverage==5.2             # via -r requirements/test.in, pytest-cov
-cryptography==2.9.2       # via -r requirements/base.txt, pyjwt
-ddt==1.4.1                # via -r requirements/test.in
-diff-cover==3.0.1         # via -r requirements/test.in
+coreapi==2.3.3            # via -r base.txt, django-rest-swagger, openapi-codec
+coreschema==0.0.4         # via -r base.txt, coreapi
+coverage==5.2             # via -r test.in, pytest-cov
+cryptography==2.9.2       # via -r base.txt, pyjwt
+ddt==1.4.1                # via -r test.in
+diff-cover==3.0.1         # via -r test.in
 distlib==0.3.1            # via virtualenv
-django-cors-headers==3.4.0  # via -r requirements/base.txt
-django-haystack==2.8.0    # via -r requirements/base.txt
-django-rest-swagger==2.1.2  # via -r requirements/base.txt
-django-waffle==1.0.0      # via -r requirements/base.txt, edx-django-utils, edx-drf-extensions
-djangorestframework==3.11.0  # via -r requirements/base.txt, django-rest-swagger, drf-jwt, edx-drf-extensions, rest-condition
-drf-jwt==1.16.2           # via -r requirements/base.txt, edx-drf-extensions
-edx-django-release-util==0.4.4  # via -r requirements/base.txt
-edx-django-utils==3.3.0   # via -r requirements/base.txt, edx-drf-extensions
-edx-drf-extensions==6.1.1  # via -r requirements/base.txt
-edx-opaque-keys==2.1.1    # via -r requirements/base.txt, edx-drf-extensions
-elasticsearch==1.9.0      # via -r requirements/base.txt
-factory-boy==2.12.0       # via -r requirements/test.in
+django-cors-headers==3.4.0  # via -r base.txt
+django-haystack==2.8.0    # via -r base.txt
+django-rest-swagger==2.1.2  # via -r base.txt
+django-waffle==1.0.0      # via -r base.txt, edx-django-utils, edx-drf-extensions
+django==2.2.14            # via -r base.txt, code-annotations, django-cors-headers, django-haystack, djangorestframework, drf-jwt, edx-django-release-util, edx-django-utils, edx-drf-extensions, rest-condition
+djangorestframework==3.11.0  # via -r base.txt, django-rest-swagger, drf-jwt, edx-drf-extensions, rest-condition
+drf-jwt==1.16.2           # via -r base.txt, edx-drf-extensions
+edx-django-release-util==0.4.4  # via -r base.txt
+edx-django-utils==3.3.0   # via -r base.txt, edx-drf-extensions
+edx-drf-extensions==6.1.1  # via -r base.txt
+edx-opaque-keys==2.1.1    # via -r base.txt, edx-drf-extensions
+elasticsearch==1.9.0      # via -r base.txt
+factory-boy==2.12.0       # via -r test.in
 faker==4.1.1              # via factory-boy
 filelock==3.0.12          # via tox, virtualenv
-future==0.18.2            # via -r requirements/base.txt, pyjwkest
-gunicorn==19.1.1          # via -r requirements/base.txt
-idna==2.8                 # via -r requirements/base.txt, requests
-importlib-metadata==1.7.0  # via inflect, pluggy, pytest, tox, virtualenv
-importlib-resources==3.0.0  # via virtualenv
+future==0.18.2            # via -r base.txt, pyjwkest
+gunicorn==19.5.0          # via -r base.txt
+idna==2.8                 # via -r base.txt, requests
+importlib-metadata==1.7.0  # via inflect
 inflect==3.0.2            # via jinja2-pluralize
-itypes==1.2.0             # via -r requirements/base.txt, coreapi
+itypes==1.2.0             # via -r base.txt, coreapi
 jinja2-pluralize==0.3.0   # via diff-cover
-jinja2==2.11.2            # via -r requirements/base.txt, code-annotations, coreschema, diff-cover, jinja2-pluralize
+jinja2==2.11.2            # via -r base.txt, code-annotations, coreschema, diff-cover, jinja2-pluralize
 lazy-object-proxy==1.5.0  # via astroid
-markupsafe==1.1.1         # via -r requirements/base.txt, jinja2
-mock==3.0.5               # via -r requirements/test.in
-more-itertools==5.0.0     # via -r requirements/test.in, pytest
-mysqlclient==2.0.1        # via -r requirements/base.txt
-newrelic==4.8.0.110       # via -r requirements/base.txt, edx-django-utils
-openapi-codec==1.3.2      # via -r requirements/base.txt, django-rest-swagger
+markupsafe==1.1.1         # via -r base.txt, jinja2
+mock==3.0.5               # via -r test.in
+more-itertools==5.0.0     # via -r test.in, pytest
+mysqlclient==2.0.1        # via -r base.txt
+newrelic==4.8.0.110       # via -r base.txt, edx-django-utils
+openapi-codec==1.3.2      # via -r base.txt, django-rest-swagger
 packaging==20.4           # via pytest, tox
-path.py==3.0.1            # via -r requirements/base.txt
-pathlib2==2.3.5           # via pytest
-pbr==5.4.5                # via -r requirements/base.txt, stevedore
-pep8==1.7.1               # via -r requirements/test.in
+path.py==3.0.1            # via -r base.txt
+pbr==5.4.5                # via -r base.txt, stevedore
+pep8==1.7.1               # via -r test.in
 pluggy==0.13.1            # via diff-cover, pytest, tox
-psutil==1.2.1             # via -r requirements/base.txt, edx-django-utils
+psutil==1.2.1             # via -r base.txt, edx-django-utils
 py==1.9.0                 # via pytest, tox
-pycparser==2.20           # via -r requirements/base.txt, cffi
-pycryptodomex==3.9.8      # via -r requirements/base.txt, pyjwkest
+pycparser==2.20           # via -r base.txt, cffi
+pycryptodomex==3.9.8      # via -r base.txt, pyjwkest
 pygments==2.6.1           # via diff-cover
-pyjwkest==1.4.2           # via -r requirements/base.txt, edx-drf-extensions
-pyjwt[crypto]==1.7.1      # via -r requirements/base.txt, drf-jwt
-pylint==1.5.0             # via -r requirements/test.in
-pymongo==3.10.1           # via -r requirements/base.txt, edx-opaque-keys
+pyjwkest==1.4.2           # via -r base.txt, edx-drf-extensions
+pyjwt[crypto]==1.7.1      # via -r base.txt, drf-jwt
+pylint==1.5.0             # via -r test.in
+pymongo==3.10.1           # via -r base.txt, edx-opaque-keys
 pyparsing==2.4.7          # via packaging
-pytest-cov==2.10.0        # via -r requirements/test.in
-pytest-django==3.9.0      # via -r requirements/test.in
-pytest==5.4.3             # via -r requirements/test.in, pytest-cov, pytest-django
-python-dateutil==2.4.0    # via -r requirements/base.txt, edx-drf-extensions, faker
+pytest-cov==2.10.0        # via -r test.in
+pytest-django==3.9.0      # via -r test.in
+pytest==5.4.3             # via -r test.in, pytest-cov, pytest-django
+python-dateutil==2.4.0    # via -r base.txt, edx-drf-extensions, faker
 python-slugify==4.0.1     # via code-annotations
-pytz==2020.1              # via -r requirements/base.txt, django
-pyyaml==5.3.1             # via -r requirements/base.txt, code-annotations, edx-django-release-util
-requests==2.22.0          # via -r requirements/base.txt, coreapi, edx-drf-extensions, pyjwkest
-rest-condition==1.0.3     # via -r requirements/base.txt, edx-drf-extensions
-semantic-version==2.8.5   # via -r requirements/base.txt, edx-drf-extensions
-simplejson==3.17.2        # via -r requirements/base.txt, django-rest-swagger
-six==1.15.0               # via -r requirements/base.txt, astroid, cryptography, diff-cover, edx-django-release-util, edx-drf-extensions, edx-opaque-keys, mock, more-itertools, packaging, pathlib2, pyjwkest, pylint, python-dateutil, stevedore, tox, virtualenv
-sqlparse==0.3.1           # via -r requirements/base.txt, django
-stevedore==1.32.0         # via -r requirements/base.txt, code-annotations, edx-opaque-keys
+pytz==2020.1              # via -r base.txt, django
+pyyaml==5.3.1             # via -r base.txt, code-annotations, edx-django-release-util
+requests==2.22.0          # via -r base.txt, coreapi, edx-drf-extensions, pyjwkest
+rest-condition==1.0.3     # via -r base.txt, edx-drf-extensions
+semantic-version==2.8.5   # via -r base.txt, edx-drf-extensions
+simplejson==3.17.2        # via -r base.txt, django-rest-swagger
+six==1.15.0               # via -r base.txt, astroid, cryptography, diff-cover, edx-django-release-util, edx-drf-extensions, edx-opaque-keys, mock, more-itertools, packaging, pyjwkest, pylint, python-dateutil, stevedore, tox, virtualenv
+sqlparse==0.3.1           # via -r base.txt, django
+stevedore==1.32.0         # via -r base.txt, code-annotations, edx-opaque-keys
 text-unidecode==1.3       # via faker, python-slugify
 toml==0.10.1              # via tox
-tox==3.17.1               # via -r requirements/test.in
-uritemplate==3.0.1        # via -r requirements/base.txt, coreapi
-urllib3==1.25.9           # via -r requirements/base.txt, elasticsearch, requests
+tox==3.17.1               # via -r test.in
+uritemplate==3.0.1        # via -r base.txt, coreapi
+urllib3==1.25.9           # via -r base.txt, elasticsearch, requests
 virtualenv==20.0.27       # via tox
 wcwidth==0.2.5            # via pytest
 wrapt==1.12.1             # via astroid
-zipp==1.2.0               # via importlib-metadata, importlib-resources
+zipp==1.2.0               # via importlib-metadata

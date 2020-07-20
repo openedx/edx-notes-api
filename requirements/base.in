@@ -10,7 +10,7 @@ elasticsearch>=1.0.0,<2.0.0
 django-cors-headers
 mysqlclient
 PyJWT
-gunicorn==19.1.1     # MIT
+gunicorn==19.5.0     # MIT
 path.py==3.0.1
 python-dateutil==2.4.0
 newrelic==4.8.0.110            # New Relic
