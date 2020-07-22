@@ -9,7 +9,7 @@ cffi==1.14.0              # via cryptography
 chardet==3.0.4            # via requests
 coreapi==2.3.3            # via django-rest-swagger, openapi-codec
 coreschema==0.0.4         # via coreapi
-cryptography==2.9.2       # via pyjwt
+cryptography==3.0         # via pyjwt
 django-cors-headers==3.4.0  # via -r requirements/base.in
 django-haystack==2.8.0    # via -r requirements/base.in
 django-rest-swagger==2.1.2  # via -r requirements/base.in
@@ -18,7 +18,7 @@ django==2.2.14            # via -c requirements/constraints.txt, -r requirements
 djangorestframework==3.11.0  # via -r requirements/base.in, django-rest-swagger, drf-jwt, edx-drf-extensions, rest-condition
 drf-jwt==1.16.2           # via edx-drf-extensions
 edx-django-release-util==0.4.4  # via -r requirements/base.in
-edx-django-utils==3.3.0   # via -r requirements/base.in, edx-drf-extensions
+edx-django-utils==3.4.0   # via -r requirements/base.in, edx-drf-extensions
 edx-drf-extensions==6.1.1  # via -r requirements/base.in
 edx-opaque-keys==2.1.1    # via edx-drf-extensions
 elasticsearch==1.9.0      # via -r requirements/base.in
