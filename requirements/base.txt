@@ -22,7 +22,6 @@ drf-jwt==1.16.2           # via edx-drf-extensions
 edx-django-release-util==0.4.4  # via -r requirements/base.in
 edx-drf-extensions==6.1.1  # via -r requirements/base.in
 edx-opaque-keys==2.1.1    # via edx-drf-extensions
-elasticsearch==1.9.0      # via -r requirements/base.in
 edx-django-utils==3.2.3   # via -r requirements/base.in, edx-drf-extensions
 elasticsearch-dsl==7.2.1  # via -r requirements/base.in, django-elasticsearch-dsl, django-elasticsearch-dsl-drf
 elasticsearch==7.8.0      # via -r requirements/base.in, django-elasticsearch-dsl-drf, elasticsearch-dsl

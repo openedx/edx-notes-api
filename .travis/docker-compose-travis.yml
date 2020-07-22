@@ -12,12 +12,10 @@ services:
       MYSQL_PASSWORD: "secret"
       MYSQL_DATABASE: "edx_notes_api"
   es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
+    image: elasticsearch:7.8.0
     container_name: es
     environment:
-      - node.name=es
-      - cluster.name=docker-cluster
-      - cluster.initial_master_nodes=es
+      - discovery.type=single-node
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - http.port=9200
