@@ -43,6 +43,5 @@ for override, value in DB_OVERRIDES.items():
 
 if ES_DISABLED:
     ELASTICSEARCH_DSL = {}
-    INSTALLED_APPS = [i for i in INSTALLED_APPS if i not in ES_APPS]
 
 LOGGING = build_logging_config()
