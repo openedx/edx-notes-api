@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import unittest
 from calendar import timegm
 from datetime import datetime, timedelta
@@ -8,7 +7,7 @@ from django.conf import settings
 from django.core.management import call_command
 from django.test.utils import override_settings
 from django.urls import reverse
-from mock import patch
+from unittest.mock import patch
 
 import ddt
 import jwt
@@ -177,7 +176,7 @@ class BaseAnnotationViewTests(APITestCase):
         """
         total_annotations = total_annotations
         for i in range(total_annotations):
-            self._create_annotation(text=u'annotation {}'.format(i))
+            self._create_annotation(text=f'annotation {i}')
 
         response = self.get_annotations(query_parameters=query_parameters)
         self.verify_pagination_info(
@@ -208,7 +207,7 @@ class BaseAnnotationViewTests(APITestCase):
         """
         total_annotations = total_annotations
         for i in range(total_annotations):
-            self._create_annotation(text=u'annotation {}'.format(i))
+            self._create_annotation(text=f'annotation {i}')
 
         response = self._get_search_results(**query_parameters)
         self.verify_pagination_info(
@@ -248,7 +247,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
         self.assertEqual(annotation, self.payload)
 
-        expected_location = '/api/v1/annotations/{0}'.format(response.data['id'])
+        expected_location = '/api/v1/annotations/{}'.format(response.data['id'])
         self.assertTrue(
             response['Location'].endswith(expected_location),
             "the response should have a Location header with the URL to read the annotation that was created"
@@ -354,7 +353,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         Also test if other user can create notes and Same user can create notes in other course
         """
         for i in range(5):
-            kwargs = {'text': 'Foo_{}'.format(i)}
+            kwargs = {'text': f'Foo_{i}'}
             self._create_annotation(**kwargs)
 
         # Creating more notes should result in 400 error
@@ -362,8 +361,8 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         response = self._create_annotation(expected_status=status.HTTP_400_BAD_REQUEST, **kwargs)
         self.assertEqual(
             response['error_msg'],
-            u'You can create up to {0} notes.'
-            u' You must remove some notes before you can add new ones.'.format(settings.MAX_NOTES_PER_COURSE)
+            'You can create up to {} notes.'
+            ' You must remove some notes before you can add new ones.'.format(settings.MAX_NOTES_PER_COURSE)
         )
 
         # if user tries to create note in a different course it should succeed
@@ -396,7 +395,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         Tests list all annotations.
         """
         for i in range(5):
-            kwargs = {'text': 'Foo_{}'.format(i)}
+            kwargs = {'text': f'Foo_{i}'}
             self._create_annotation(**kwargs)
 
         headers = self.headers.copy()
@@ -411,9 +410,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
         Sorting is by descending order (most recent first).
         """
-        self._create_annotation(text=u'First one')
-        self._create_annotation(text=u'Second note')
-        self._create_annotation(text=u'Third note')
+        self._create_annotation(text='First one')
+        self._create_annotation(text='Second note')
+        self._create_annotation(text='Third note')
 
         headers = self.headers.copy()
         headers["course_id"] = "test-course-id"
@@ -512,9 +511,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         """
         Verify that deleting all user annotations works
         """
-        self._create_annotation(text=u'Comment with foo', tags=[u'bar'])
-        self._create_annotation(text=u'Another comment', tags=[u'foo'])
-        self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
+        self._create_annotation(text='Comment with foo', tags=['bar'])
+        self._create_annotation(text='Another comment', tags=['foo'])
+        self._create_annotation(text='A longer comment with bar', tags=['foo'])
         response = self._get_search_results()
         self.assertEqual(response["total"], 3)
 
@@ -540,9 +539,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
             notesapi.v1.permissions: INFO: No user was present to compare in GET, POST or DATA
         """
-        self._create_annotation(text=u'Comment with foo', tags=[u'bar'])
-        self._create_annotation(text=u'Another comment', tags=[u'foo'])
-        self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
+        self._create_annotation(text='Comment with foo', tags=['bar'])
+        self._create_annotation(text='Another comment', tags=['foo'])
+        self._create_annotation(text='A longer comment with bar', tags=['foo'])
         response = self._get_search_results()
         self.assertEqual(response["total"], 3)
 
@@ -563,9 +562,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
 
             notesapi.v1.permissions: DEBUG: Token user test_user_id did not match data user test_other_user_id
         """
-        self._create_annotation(text=u'Comment with foo', tags=[u'bar'])
-        self._create_annotation(text=u'Another comment', tags=[u'foo'])
-        self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
+        self._create_annotation(text='Comment with foo', tags=['bar'])
+        self._create_annotation(text='Another comment', tags=['foo'])
+        self._create_annotation(text='A longer comment with bar', tags=['foo'])
         response = self._get_search_results()
         self.assertEqual(response["total"], 3)
 
@@ -613,7 +612,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         """
         Ensure we can update an existing annotation.
         """
-        data = self._create_annotation(text=u"Foo")
+        data = self._create_annotation(text="Foo")
         response, annotation = self._do_annotation_update(data, {'id': data['id'], 'text': 'Bar'})
         self.assertEqual(annotation['text'], "Bar", "annotation wasn't updated in db")
         self.assertEqual(response.data['text'], "Bar", "update annotation should be returned in response")
@@ -621,7 +620,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
     @ddt.data(
         (["new", "tags"], ["new", "tags"]),
         ([], []),
-        (None, [u"pink", u"lady"]),
+        (None, ["pink", "lady"]),
     )
     @ddt.unpack
     def test_update_tags(self, updated_tags, expected_tags):
@@ -641,7 +640,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
         """
         Ensure can not update an existing annotation with bad note.
         """
-        data = self._create_annotation(text=u"Foo")
+        data = self._create_annotation(text="Foo")
 
         # Bad note. Only id and user is present.
         payload = {'id': data['id'], 'user': TEST_USER}
@@ -656,7 +655,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
 
         Tests if id is used from URL, regardless of what arrives in JSON payload.
         """
-        note = self._create_annotation(text=u"Foo")
+        note = self._create_annotation(text="Foo")
         payload = self.payload.copy()
         payload.update({'text': 'Bar'})
         payload.update(self.headers)
@@ -673,7 +672,7 @@ class AnnotationDetailViewTests(BaseAnnotationViewTests):
 
         Tests if id is used from URL, regardless of what arrives in JSON payload.
         """
-        note = self._create_annotation(text=u"Foo")
+        note = self._create_annotation(text="Foo")
         payload = self.payload.copy()
         payload.update({'text': 'Bar', 'id': 'xxx'})
         payload.update(self.headers)
@@ -726,9 +725,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Tests for search method with case insensitivity for text param.
         """
-        self._create_annotation(text=u'First one', tags=[])
-        self._create_annotation(text=u'Second note', tags=[u'tag1', u'tag2'])
-        note = self._create_annotation(text=u'Third note')
+        self._create_annotation(text='First one', tags=[])
+        self._create_annotation(text='Second note', tags=['tag1', 'tag2'])
+        note = self._create_annotation(text='Third note')
         del note['created']
         del note['updated']
 
@@ -756,9 +755,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Verifies the search with usage id.
         """
-        self._create_annotation(text=u'First one', usage_id='test-1')
-        self._create_annotation(text=u'Second note', usage_id='test-2')
-        self._create_annotation(text=u'Third note', usage_id='test-3')
+        self._create_annotation(text='First one', usage_id='test-1')
+        self._create_annotation(text='Second note', usage_id='test-2')
+        self._create_annotation(text='Third note', usage_id='test-3')
 
         @patch('django.conf.settings.ES_DISABLED', is_es_disabled)
         def verify_usage_id_search(usage_ids):
@@ -781,8 +780,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Tests for search method to not return deleted notes.
         """
-        note = self._create_annotation(text=u'To-be-deleted one')
-        self._create_annotation(text=u'Second one')
+        note = self._create_annotation(text='To-be-deleted one')
+        self._create_annotation(text='Second one')
 
         results = self._get_search_results()
         self.assertEqual(results['total'], 2)
@@ -800,8 +799,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Tests highlighting.
         """
-        self._create_annotation(text=u'First note')
-        self._create_annotation(text=u'Second note')
+        self._create_annotation(text='First note')
+        self._create_annotation(text='Second note')
 
         results = self._get_search_results()
         self.assertEqual(results['total'], 2)
@@ -831,7 +830,7 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         )
 
         self._create_annotation(text=text)
-        self._create_annotation(text=u'Second note')
+        self._create_annotation(text='Second note')
 
         results = self._get_search_results()
         self.assertEqual(results['total'], 2)
@@ -851,9 +850,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
 
         MySQL sorting is by descending order by updated field (most recent first).
         """
-        self._create_annotation(text=u'First one')
-        note = self._create_annotation(text=u'Second note')
-        self._create_annotation(text=u'Third note')
+        self._create_annotation(text='First one')
+        note = self._create_annotation(text='Second note')
+        self._create_annotation(text='Third note')
 
         payload = self.payload.copy()
         payload.update({'id': note['id'], 'text': 'Updated Second Note'})
@@ -873,10 +872,10 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
 
         ElasticSearch sorting is based on the computed relevance of each hit.
         """
-        self._create_annotation(text=u'fox of the foxes')
-        self._create_annotation(text=u'a very long entry that contains the word fox')
-        self._create_annotation(text=u'the lead fox')
-        self._create_annotation(text=u'does not mention the word')
+        self._create_annotation(text='fox of the foxes')
+        self._create_annotation(text='a very long entry that contains the word fox')
+        self._create_annotation(text='the lead fox')
+        self._create_annotation(text='does not mention the word')
 
         results = self._get_search_results(text='fox')
         self.assertEqual(results['total'], 3)
@@ -889,18 +888,18 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Tests searching of unicode strings.
         """
-        self._create_annotation(text=u'Веселих свят')
+        self._create_annotation(text='Веселих свят')
 
-        response = self._get_search_results(text=u"веселих")
+        response = self._get_search_results(text="веселих")
         self.assertEqual(response['total'], 1)
-        self.assertEqual(response['rows'][0]['text'], u'Веселих свят')
+        self.assertEqual(response['rows'][0]['text'], 'Веселих свят')
 
-        response = self._get_search_results(text=u"Свят")
-        self.assertEqual(response['rows'][0]['text'], u'Веселих свят')
+        response = self._get_search_results(text="Свят")
+        self.assertEqual(response['rows'][0]['text'], 'Веселих свят')
 
     @ddt.unpack
     @ddt.data(
-        {"text": u"Веселих свят", 'text_to_search': u"веселих", 'result': u"{}Веселих{} свят"},
+        {"text": "Веселих свят", 'text_to_search': "веселих", 'result': "{}Веселих{} свят"},
         {"text": "The Hunger games", 'text_to_search': "Hunger", 'result': "The {}Hunger{} games"}
     )
     @unittest.skipIf(settings.ES_DISABLED, "MySQL cannot do highlighting")
@@ -921,39 +920,39 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Tests searching of complex words and word combinations
         """
-        self._create_annotation(text=u'Totally different something')
-        self.assertEqual(self._get_search_results(text=u"TOTALLY")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"different")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"differ")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"total")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"totil")['total'], 0)
-        self.assertEqual(self._get_search_results(text=u"something")['total'], 1)
-        self.assertEqual(self._get_search_results(text=u"totally different")['total'], 1)
+        self._create_annotation(text='Totally different something')
+        self.assertEqual(self._get_search_results(text="TOTALLY")['total'], 1)
+        self.assertEqual(self._get_search_results(text="different")['total'], 1)
+        self.assertEqual(self._get_search_results(text="differ")['total'], 1)
+        self.assertEqual(self._get_search_results(text="total")['total'], 1)
+        self.assertEqual(self._get_search_results(text="totil")['total'], 0)
+        self.assertEqual(self._get_search_results(text="something")['total'], 1)
+        self.assertEqual(self._get_search_results(text="totally different")['total'], 1)
 
     def test_search_by_course_id(self):
         """
         Tests searching with course_id provided
         """
-        self._create_annotation(text=u'First one', course_id="u'edX/DemoX/Demo_Course'")
-        self._create_annotation(text=u'Second note', course_id="u'edX/DemoX/Demo_Course'")
-        self._create_annotation(text=u'Third note', course_id="b")
-        self._create_annotation(text=u'Fourth note', course_id="c")
+        self._create_annotation(text='First one', course_id="u'edX/DemoX/Demo_Course'")
+        self._create_annotation(text='Second note', course_id="u'edX/DemoX/Demo_Course'")
+        self._create_annotation(text='Third note', course_id="b")
+        self._create_annotation(text='Fourth note', course_id="c")
 
         results = self._get_search_results(course_id="u'edX/DemoX/Demo_Course'")
         self.assertEqual(results['total'], 2)
 
         results = self._get_search_results(course_id="b")
         self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], u'Third note')
+        self.assertEqual(results['rows'][0]['text'], 'Third note')
 
     def test_search_tag(self):
         """
         Tests searching for tags
         """
-        self._create_annotation(text=u'First note', tags=[u'foo', u'bar'])
-        self._create_annotation(text=u'Another one', tags=[u'bar'])
-        self._create_annotation(text=u'A third note', tags=[u'bar', u'baz'])
-        self._create_annotation(text=u'One final note', tags=[])
+        self._create_annotation(text='First note', tags=['foo', 'bar'])
+        self._create_annotation(text='Another one', tags=['bar'])
+        self._create_annotation(text='A third note', tags=['bar', 'baz'])
+        self._create_annotation(text='One final note', tags=[])
 
         results = self._get_search_results(text='Foo')
         self.assertEqual(results['total'], 1)
@@ -984,10 +983,10 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Tests that searches can match against tags or text
         """
-        self._create_annotation(text=u'A great comment', tags=[])
-        self._create_annotation(text=u'Another comment', tags=['good'])
-        self._create_annotation(text=u'Not as good', tags=['comment'])
-        self._create_annotation(text=u'Last note', tags=[])
+        self._create_annotation(text='A great comment', tags=[])
+        self._create_annotation(text='Another comment', tags=['good'])
+        self._create_annotation(text='Not as good', tags=['comment'])
+        self._create_annotation(text='Last note', tags=[])
 
         results = self._get_search_results(text='note')
         self.assertEqual(results['total'], 1)
@@ -1005,16 +1004,16 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Tests that the set of expected text is exactly the text in rows, ignoring order.
         """
-        self.assertEqual(set(row['text'] for row in rows), set(expected))
+        self.assertEqual({row['text'] for row in rows}, set(expected))
 
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do data templating")
     def test_search_across_tag_and_text(self):
         """
         Tests that searches can match if some terms are in the text and the rest are in the tags.
         """
-        self._create_annotation(text=u'Comment with foo', tags=[u'bar'])
-        self._create_annotation(text=u'Another comment', tags=[u'foo'])
-        self._create_annotation(text=u'A longer comment with bar', tags=[u'foo'])
+        self._create_annotation(text='Comment with foo', tags=['bar'])
+        self._create_annotation(text='Another comment', tags=['foo'])
+        self._create_annotation(text='A longer comment with bar', tags=['foo'])
 
         results = self._get_search_results(text='foo bar')
         self.assertEqual(results['total'], 2)
@@ -1026,8 +1025,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Tests highlighting in tags
         """
-        self._create_annotation(text=u'First note', tags=[u'foo', u'bar'])
-        self._create_annotation(text=u'Second note', tags=[u'baz'])
+        self._create_annotation(text='First note', tags=['foo', 'bar'])
+        self._create_annotation(text='Second note', tags=['baz'])
 
         results = self._get_search_results()
         self.assertEqual(results['total'], 2)
@@ -1120,11 +1119,11 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
 
     @ddt.unpack
     @ddt.data(
-        {"text": u"Ammar محمد عمار Muhammad", "search": u"محمد عمار", "tags": [u"عمار", u"Muhammad", u"محمد"]},
-        {"text": u"Ammar محمد عمار Muhammad", "search": u"محمد", "tags": [u"محمد", u"Muhammad"]},
-        {"text": u"Ammar محمد عمار Muhammad", "search": u"عمار", "tags": [u"ammar", u"عمار"]},
-        {"text": u"Muhammad Ammar", "search": u"عمار", "tags": [u"ammar", u"عمار"]},
-        {"text": u"محمد عمار", "search": u"Muhammad", "tags": [u"Muhammad", u"عمار"]}
+        {"text": "Ammar محمد عمار Muhammad", "search": "محمد عمار", "tags": ["عمار", "Muhammad", "محمد"]},
+        {"text": "Ammar محمد عمار Muhammad", "search": "محمد", "tags": ["محمد", "Muhammad"]},
+        {"text": "Ammar محمد عمار Muhammad", "search": "عمار", "tags": ["ammar", "عمار"]},
+        {"text": "Muhammad Ammar", "search": "عمار", "tags": ["ammar", "عمار"]},
+        {"text": "محمد عمار", "search": "Muhammad", "tags": ["Muhammad", "عمار"]}
     )
     @unittest.skipIf(settings.ES_DISABLED, "MySQL cannot do highlighting")
     def test_search_unicode_text_and_tags(self, text, search, tags):

@@ -369,11 +369,11 @@ class AnnotationListView(GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except AnnotationsLimitReachedError:
             error_message = _(
-                u'You can create up to {max_num_annotations_per_course} notes.'
-                u' You must remove some notes before you can add new ones.'
+                'You can create up to {max_num_annotations_per_course} notes.'
+                ' You must remove some notes before you can add new ones.'
             ).format(max_num_annotations_per_course=settings.MAX_NOTES_PER_COURSE)
             log.info(
-                u'Attempted to create more than %s annotations',
+                'Attempted to create more than %s annotations',
                 settings.MAX_NOTES_PER_COURSE
             )
 

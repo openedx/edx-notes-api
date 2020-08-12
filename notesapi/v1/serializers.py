@@ -13,7 +13,7 @@ class NoteSerializer(serializers.ModelSerializer):
     """
     Student Notes Model Serializer.
     """
-    class Meta(object):
+    class Meta:
         """
         Model Serializer Meta Class.
         """

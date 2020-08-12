@@ -24,13 +24,13 @@ class UpdateIndexTest(BaseAnnotationViewTests):
         period of time.
         """
         start = datetime.datetime.now()
-        self._create_annotation(text=u'First note')
+        self._create_annotation(text='First note')
 
         second_start = datetime.datetime.now()
-        self._create_annotation(text=u'Second note')
+        self._create_annotation(text='Second note')
         second_end = datetime.datetime.now()
 
-        self._create_annotation(text=u'Third note')
+        self._create_annotation(text='Third note')
         end = datetime.datetime.now()
 
         results = self._get_search_results(text='note')
@@ -53,9 +53,9 @@ class UpdateIndexTest(BaseAnnotationViewTests):
         Ensure we can update index with deleted notes.
         """
 
-        first_note = self._create_annotation(text=u'First note')
-        second_note = self._create_annotation(text=u'Second note')
-        self._create_annotation(text=u'Third note')
+        first_note = self._create_annotation(text='First note')
+        second_note = self._create_annotation(text='Second note')
+        self._create_annotation(text='Third note')
 
         results = self._get_search_results(text='note')
         self.assertEqual(results['total'], 3)

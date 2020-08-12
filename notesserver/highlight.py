@@ -33,7 +33,7 @@ class ElasticsearchSearchBackend(OrigElasticsearchSearchBackend):
     Subclassed backend that lets user modify highlighting options
     """
     def build_search_kwargs(self, *args, **kwargs):
-        res = super(ElasticsearchSearchBackend, self).build_search_kwargs(*args, **kwargs)
+        res = super().build_search_kwargs(*args, **kwargs)
         index = haystack.connections[self.connection_alias].get_unified_index()
         content_field = index.document_field
         highlight = kwargs.get('highlight')
@@ -55,7 +55,7 @@ class ElasticsearchSearchBackend(OrigElasticsearchSearchBackend):
         """
         Overrides _process_results from Haystack's ElasticsearchSearchBackend to add highlighted tags to the result
         """
-        result = super(ElasticsearchSearchBackend, self)._process_results(
+        result = super()._process_results(
             raw_results, highlight, result_class, distance_point, geo_sort
         )
 

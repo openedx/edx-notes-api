@@ -7,7 +7,7 @@ from django.urls import reverse
 from elasticsearch.exceptions import TransportError
 from rest_framework.test import APITestCase
 
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 
 
 class OperationalEndpointsTest(APITestCase):
