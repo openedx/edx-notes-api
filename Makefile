@@ -78,15 +78,15 @@ docker_build:
 	docker build . --target app -t "openedx/edx-notes-api:latest"
 	docker build . --target newrelic -t "openedx/edx-notes-api:latest-newrelic"
 
-travis_docker_auth:
+docker_auth:
 	echo "$$DOCKER_PASSWORD" | docker login -u "$$DOCKER_USERNAME" --password-stdin
 
-travis_docker_tag: docker_build
-	docker tag "openedx/edx-notes-api:latest" "openedx/edx-notes-api:$$TRAVIS_COMMIT"
-	docker tag "openedx/edx-notes-api:latest-newrelic" "openedx/edx-notes-api:$$TRAVIS_COMMIT-newrelic"
+docker_tag: docker_build
+	docker tag "openedx/edx-notes-api:latest" "openedx/edx-notes-api:$$GITHUB_SHA"
+	docker tag "openedx/edx-notes-api:latest-newrelic" "openedx/edx-notes-api:$$GITHUB_SHA-newrelic"
 
-travis_docker_push: travis_docker_tag travis_docker_auth ## push to docker hub
+docker_push: docker_tag docker_auth ## push to docker hub
 	docker push "openedx/edx-notes-api:latest"
-	docker push "openedx/edx-notes-api:$$TRAVIS_COMMIT"
+	docker push "openedx/edx-notes-api:$$GITHUB_SHA"
 	docker push "openedx/edx-notes-api:latest-newrelic"
-	docker push "openedx/edx-notes-api:$$TRAVIS_COMMIT-newrelic"
+	docker push "openedx/edx-notes-api:$$GITHUB_SHA-newrelic"
