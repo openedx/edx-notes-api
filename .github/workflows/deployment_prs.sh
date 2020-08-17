@@ -16,7 +16,7 @@ tar -zxvf hub.tgz
 hub-linux*/bin/hub api repos/edx/${REPO_NAME}/issues/${GITHUB_UPSTREAM_PR_NUMBER}/comments -f body="travis has started building this code into a docker file.  Check status at ${TRAVIS_BUILD_WEB_URL}" 
 
 cd -
-make travis_docker_push
+make docker_push
 cd ..
 
 hub-linux*/bin/hub api repos/edx/${REPO_NAME}/issues/${GITHUB_UPSTREAM_PR_NUMBER}/comments -f body="A docker container including this PR has been built and shipped to docker hub.  Check it out at https://hub.docker.com/r/openedx/${REPO_NAME}/tags?page=1&name=${GITHUB_SHA}" 
