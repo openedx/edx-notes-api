@@ -1,0 +1,17 @@
+name: Push Docker Images
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build and Push docker image
+        run : ./.github/workflows/deployment_prs.sh
