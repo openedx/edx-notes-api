@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 export GITHUB_USER='edx-deployment'
-export GITHUB_TOKEN=$GITHUB_TOKEN
+export GITHUB_TOKEN=$GH_TOKEN
 export REPO_NAME='edx-notes-api'
 
 export GITHUB_UPSTREAM_PR_NUMBER=$(echo $TRAVIS_COMMIT_MESSAGE | sed -e 's/.*#//' -e 's/ .*//');
@@ -16,7 +16,7 @@ tar -zxvf hub.tgz
 hub-linux*/bin/hub api repos/edx/${REPO_NAME}/issues/${GITHUB_UPSTREAM_PR_NUMBER}/comments -f body="travis has started building this code into a docker file.  Check status at ${TRAVIS_BUILD_WEB_URL}" 
 
 cd -
-make docker_push
+make docker_push $DOCKERHUB_PASSWORD $DOCKERHUB_USERNAME
 cd ..
 
 
