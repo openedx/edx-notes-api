@@ -1,8 +1,9 @@
 #! /usr/bin/env bash
 
 export GITHUB_USER='edx-deployment'
-export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
+export GITHUB_TOKEN=$GH_TOKEN
 export REPO_NAME='edx-notes-api'
+export GITHUB_EMAIL='edx-deployment@edx.org'
 
 export GITHUB_UPSTREAM_PR_NUMBER=$(echo $TRAVIS_COMMIT_MESSAGE | sed -e 's/.*#//' -e 's/ .*//');
 
@@ -23,6 +24,9 @@ hub-linux*/bin/hub api repos/edx/${REPO_NAME}/issues/${GITHUB_UPSTREAM_PR_NUMBER
 
 cd edx-internal
 
+git config --global user.name "${GITHUB_USER}"
+git config --global user.email "${GITHUB_EMAIL}"
+
 # stage
 git checkout -b edx-deployment/stage/$GITHUB_SHA
 sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REPO_NAME}/stage/kustomization.yaml
@@ -39,10 +43,11 @@ git commit -a -m "${REPO_NAME} prod deploy: $TRAVIS_COMMIT_MESSAGE" --author "Tr
 git push --set-upstream origin edx-deployment/prod/$GITHUB_SHA
 ../hub-linux*/bin/hub pull-request -m "${REPO_NAME} prod deploy: $TRAVIS_COMMIT_MESSAGE" -m "Production environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edx.org"
 
+
 # edge
 git checkout master
-git checkout -b edx-deployment/edge/$GITHUB_SHA
-sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REPO_NAME}/edge/kustomization.yaml
+git checkout -b edx-deployment/edge/$TRAVIS_COMMIT
+sed -i -e "s/newTag: .*/newTag: $TRAVIS_COMMIT-newrelic/" argocd/applications/${REPO_NAME}/edge/kustomization.yaml
 git commit -a -m "${REPO_NAME} edge deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
-git push --set-upstream origin edx-deployment/edge/$GITHUB_SHA
+git push --set-upstream origin edx-deployment/edge/$TRAVIS_COMMIT
 ../hub-linux*/bin/hub pull-request -m "${REPO_NAME} edge deploy: $TRAVIS_COMMIT_MESSAGE" -m "Edge environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edge.edx.org"
