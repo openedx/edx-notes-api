@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 export GITHUB_USER='edx-deployment'
-export GITHUB_TOKEN=$GH_TOKEN
+export GITHUB_ACCESS_TOKEN=$GH_TOKEN
 export REPO_NAME='edx-notes-api'
 export GITHUB_EMAIL='edx-deployment@edx.org'
 
@@ -51,3 +51,4 @@ sed -i -e "s/newTag: .*/newTag: $TRAVIS_COMMIT-newrelic/" argocd/applications/${
 git commit -a -m "${REPO_NAME} edge deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
 git push --set-upstream origin edx-deployment/edge/$TRAVIS_COMMIT
 ../hub-linux*/bin/hub pull-request -m "${REPO_NAME} edge deploy: $TRAVIS_COMMIT_MESSAGE" -m "Edge environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edge.edx.org"
+
