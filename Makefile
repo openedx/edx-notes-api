@@ -79,7 +79,7 @@ docker_build:
 	docker build . --target newrelic -t "openedx/edx-notes-api:latest-newrelic"
 
 docker_auth:
-	echo "$$DOCKER_PASSWORD" | docker login -u "$$DOCKER_USERNAME" --password-stdin
+	echo "$$DOCKERHUB_PASSWORD" | docker login -u "$$DOCKERHUB_USERNAME" --password-stdin
 
 docker_tag: docker_build
 	docker tag "openedx/edx-notes-api:latest" "openedx/edx-notes-api:$$GITHUB_SHA"

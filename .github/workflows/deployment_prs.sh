@@ -18,7 +18,7 @@ hub-linux*/bin/hub api repos/edx/${REPO_NAME}/issues/${GITHUB_UPSTREAM_PR_NUMBER
 cd -
 echo ${DOCKERHUB_USERNAME}
 echo $DOCKERHUB_USERNAME
-make docker_push ${DOCKERHUB_PASSWORD} ${DOCKERHUB_USERNAME}
+make docker_push
 cd ..
 
 
@@ -26,20 +26,20 @@ hub-linux*/bin/hub api repos/edx/${REPO_NAME}/issues/${GITHUB_UPSTREAM_PR_NUMBER
 
 cd edx-internal
 
-# stage
-git config --global user.name "${GITHUB_USER}"
-git config --global user.email "edx-deployment@edx.org"
-git checkout -b edx-deployment/stage/$GITHUB_SHA
-sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REPO_NAME}/stage/kustomization.yaml
-git commit -a -m "${REPO_NAME} stage deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
-git push --set-upstream origin edx-deployment/stage/$GITHUB_SHA
-../hub-linux*/bin/hub pull-request -m "${REPO_NAME} stage deploy: $TRAVIS_COMMIT_MESSAGE" -m "Staging environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to stage.edx.org" -l staging-deployment
+# # stage
+# git config --global user.name "${GITHUB_USER}"
+# git config --global user.email "edx-deployment@edx.org"
+# git checkout -b edx-deployment/stage/$GITHUB_SHA
+# sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REPO_NAME}/stage/kustomization.yaml
+# git commit -a -m "${REPO_NAME} stage deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
+# git push --set-upstream origin edx-deployment/stage/$GITHUB_SHA
+# ../hub-linux*/bin/hub pull-request -m "${REPO_NAME} stage deploy: $TRAVIS_COMMIT_MESSAGE" -m "Staging environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to stage.edx.org" -l staging-deployment
 
 
-# prod
-git checkout master
-git checkout -b edx-deployment/prod/$GITHUB_SHA
-sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REPO_NAME}/prod/kustomization.yaml
-git commit -a -m "${REPO_NAME} prod deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
-git push --set-upstream origin edx-deployment/prod/$GITHUB_SHA
-../hub-linux*/bin/hub pull-request -m "${REPO_NAME} prod deploy: $TRAVIS_COMMIT_MESSAGE" -m "Production environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edx.org"
+# # prod
+# git checkout master
+# git checkout -b edx-deployment/prod/$GITHUB_SHA
+# sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REPO_NAME}/prod/kustomization.yaml
+# git commit -a -m "${REPO_NAME} prod deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
+# git push --set-upstream origin edx-deployment/prod/$GITHUB_SHA
+# ../hub-linux*/bin/hub pull-request -m "${REPO_NAME} prod deploy: $TRAVIS_COMMIT_MESSAGE" -m "Production environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edx.org"
