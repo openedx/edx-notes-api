@@ -16,7 +16,9 @@ tar -zxvf hub.tgz
 hub-linux*/bin/hub api repos/edx/${REPO_NAME}/issues/${GITHUB_UPSTREAM_PR_NUMBER}/comments -f body="travis has started building this code into a docker file.  Check status at ${TRAVIS_BUILD_WEB_URL}" 
 
 cd -
-make docker_push $DOCKERHUB_PASSWORD $DOCKERHUB_USERNAME
+echo ${DOCKERHUB_USERNAME}
+echo $DOCKERHUB_USERNAME
+make docker_push ${DOCKERHUB_PASSWORD} ${DOCKERHUB_USERNAME}
 cd ..
 
 
@@ -25,6 +27,8 @@ hub-linux*/bin/hub api repos/edx/${REPO_NAME}/issues/${GITHUB_UPSTREAM_PR_NUMBER
 cd edx-internal
 
 # stage
+git config --global user.name "${GITHUB_USER}"
+git config --global user.email "edx-deployment@edx.org"
 git checkout -b edx-deployment/stage/$GITHUB_SHA
 sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REPO_NAME}/stage/kustomization.yaml
 git commit -a -m "${REPO_NAME} stage deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
@@ -39,11 +43,3 @@ sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REP
 git commit -a -m "${REPO_NAME} prod deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
 git push --set-upstream origin edx-deployment/prod/$GITHUB_SHA
 ../hub-linux*/bin/hub pull-request -m "${REPO_NAME} prod deploy: $TRAVIS_COMMIT_MESSAGE" -m "Production environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edx.org"
-
-# edge
-git checkout master
-git checkout -b edx-deployment/edge/$GITHUB_SHA
-sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REPO_NAME}/edge/kustomization.yaml
-git commit -a -m "${REPO_NAME} edge deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
-git push --set-upstream origin edx-deployment/edge/$GITHUB_SHA
-../hub-linux*/bin/hub pull-request -m "${REPO_NAME} edge deploy: $TRAVIS_COMMIT_MESSAGE" -m "Edge environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edge.edx.org"
