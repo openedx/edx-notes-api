@@ -46,9 +46,9 @@ git push --set-upstream origin edx-deployment/prod/$GITHUB_SHA
 
 # edge
 git checkout master
-git checkout -b edx-deployment/edge/$TRAVIS_COMMIT
-sed -i -e "s/newTag: .*/newTag: $TRAVIS_COMMIT-newrelic/" argocd/applications/${REPO_NAME}/edge/kustomization.yaml
+git checkout -b edx-deployment/edge/$GITHUB_SHA
+sed -i -e "s/newTag: .*/newTag: $GITHUB_SHA-newrelic/" argocd/applications/${REPO_NAME}/edge/kustomization.yaml
 git commit -a -m "${REPO_NAME} edge deploy: $TRAVIS_COMMIT_MESSAGE" --author "Travis CI Deployment automation <admin@edx.org>"
-git push --set-upstream origin edx-deployment/edge/$TRAVIS_COMMIT
+git push --set-upstream origin edx-deployment/edge/$GITHUB_SHA
 ../hub-linux*/bin/hub pull-request -m "${REPO_NAME} edge deploy: $TRAVIS_COMMIT_MESSAGE" -m "Edge environment deployment of https://github.com/edx/${REPO_NAME}/pull/$GITHUB_UPSTREAM_PR_NUMBER" -m "Review and merge this PR to deploy your code to edge.edx.org"
 
