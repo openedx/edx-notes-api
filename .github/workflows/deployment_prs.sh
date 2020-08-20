@@ -1,14 +1,14 @@
 #! /usr/bin/env bash
 
 export GITHUB_USER='edx-deployment'
-export GITHUB_ACCESS_TOKEN=$GH_TOKEN
+export GITHUB_TOKEN=$GH_TOKEN
 export REPO_NAME='edx-notes-api'
 export GITHUB_EMAIL='edx-deployment@edx.org'
 
 export GITHUB_UPSTREAM_PR_NUMBER=$(echo $TRAVIS_COMMIT_MESSAGE | sed -e 's/.*#//' -e 's/ .*//');
 
 cd ..
-git clone https://edx-deployment:${GITHUB_ACCESS_TOKEN}@github.com/edx/edx-internal
+git clone https://edx-deployment:${GITHUB_TOKEN}@github.com/edx/edx-internal
 
 # install hub
 curl -L -o hub.tgz https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz
