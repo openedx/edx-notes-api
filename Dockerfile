@@ -25,9 +25,14 @@ RUN apt-get update && \
     apt-get install -y software-properties-common && \
     apt-add-repository -y ppa:deadsnakes/ppa && \
     apt-get update && apt-get upgrade -qy && \
-    apt-get install language-pack-en locales git python3.6 python3-pip libmysqlclient-dev libssl-dev python3-dev python3.8-dev python3.8-distutils -qy && \
-    pip3 install --upgrade pip setuptools && \
+    apt-get install language-pack-en locales git libmysqlclient-dev libssl-dev python3.8-dev python3.8-venv -qy && \
     rm -rf /var/lib/apt/lists/*
+
+ENV VIRTUAL_ENV=/venv
+RUN python3.8 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+RUN pip install pip==20.2.3 setuptools==50.3.0
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -46,7 +51,7 @@ WORKDIR /edx/app/notes
 COPY requirements/base.txt /edx/app/notes/requirements/base.txt
 
 # Dependencies are installed as root so they cannot be modified by the application user.
-RUN pip3 install -r requirements/base.txt
+RUN pip install -r requirements/base.txt
 
 RUN mkdir -p /edx/var/log
 
