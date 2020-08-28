@@ -6,12 +6,14 @@ MAINTAINER devops@edx.org
 # git; Used to pull in particular requirements from github rather than pypi, 
 # and to check the sha of the code checkout.
 
+# ppa:deadsnakes/ppa; since Ubuntu doesn't ship with python 3.8 till 20, we need deadsnakes to install
+# python 3.8 on older ubuntu versions
+
 # language-pack-en locales; ubuntu locale support so that system utilities have a consistent
 # language and time zone.
 
-# python; ubuntu doesnt ship with python, so this is the python we will use to run the application
-
-# python3-pip; install pip to install application requirements.txt files
+# python3.8-dev; to install python 3.8
+# python3-venv; installs venv module required to create virtual environments
 
 # libssl-dev; # mysqlclient wont install without this.
 
@@ -25,9 +27,21 @@ RUN apt-get update && \
     apt-get install -y software-properties-common && \
     apt-add-repository -y ppa:deadsnakes/ppa && \
     apt-get update && apt-get upgrade -qy && \
-    apt-get install language-pack-en locales git python3.6 python3-pip libmysqlclient-dev libssl-dev python3-dev python3.8-dev python3.8-distutils -qy && \
-    pip3 install --upgrade pip setuptools && \
+    apt-get install \
+    language-pack-en \
+    locales \
+    git \
+    libmysqlclient-dev \
+    libssl-dev \
+    build-essential \
+    python3.8-dev \
+    python3.8-venv -qy && \
     rm -rf /var/lib/apt/lists/*
+
+ENV VIRTUAL_ENV=/edx/app/edx-notes-api/venvs/edx-notes-api
+RUN python3.8 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -44,9 +58,11 @@ WORKDIR /edx/app/notes
 # Copy the requirements explicitly even though we copy everything below
 # this prevents the image cache from busting unless the dependencies have changed.
 COPY requirements/base.txt /edx/app/notes/requirements/base.txt
+COPY requirements/pip.txt /edx/app/notes/requirements/pip.txt
 
 # Dependencies are installed as root so they cannot be modified by the application user.
-RUN pip3 install -r requirements/base.txt
+RUN pip install -r requirements/pip.txt
+RUN pip install -r requirements/base.txt
 
 RUN mkdir -p /edx/var/log
 
