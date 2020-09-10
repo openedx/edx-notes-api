@@ -27,7 +27,7 @@ with open(CONFIG_ROOT / "edx_notes_api.yml") as yaml_file:
     config_from_yaml = yaml.safe_load(yaml_file)
 
 vars().update(config_from_yaml)
-#
+
 # Support environment overrides for migrations
 DB_OVERRIDES = dict(
     PASSWORD=environ.get('DB_MIGRATION_PASS', DATABASES['default']['PASSWORD']),
@@ -42,7 +42,6 @@ for override, value in DB_OVERRIDES.items():
     DATABASES['default'][override] = value
 
 if ES_DISABLED:
-    HAYSTACK_CONNECTIONS = {}
-    INSTALLED_APPS.remove('haystack')
+    ELASTICSEARCH_DSL = {}
 
 LOGGING = build_logging_config()

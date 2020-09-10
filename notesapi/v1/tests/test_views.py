@@ -21,7 +21,7 @@ TEST_USER = "test_user_id"
 TEST_OTHER_USER = "test_other_user_id"
 
 if not settings.ES_DISABLED:
-    import haystack
+    from notesapi.v1.search_indexes.documents import NoteDocument
 else:
     def call_command(*args, **kwargs):
         pass
@@ -32,7 +32,8 @@ class BaseAnnotationViewTests(APITestCase):
     Abstract class for testing annotation views.
     """
     def setUp(self):
-        call_command('clear_index', interactive=False)
+        call_command('search_index', '--delete', '-f')
+        call_command('search_index', '--create')
 
         token = get_id_token(TEST_USER)
         self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
@@ -1037,7 +1038,7 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(len(results['rows']), 1)
         self.assertEqual(
             results['rows'][0]['tags'],
-            ['foo', '{elasticsearch_highlight_start}bar{elasticsearch_highlight_end}']
+            ['{elasticsearch_highlight_start}bar{elasticsearch_highlight_end}']
         )
 
     @ddt.unpack

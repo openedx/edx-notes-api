@@ -15,10 +15,11 @@ try:
 except ImportError:  # pragma: no cover
     newrelic = None  # pylint: disable=invalid-name
 if not settings.ES_DISABLED:
-    from haystack import connections
+    from elasticsearch_dsl.connections import connections
+
 
     def get_es():
-        return connections['default'].get_backend().conn
+        return connections.get_connection()
 
 
 @api_view(['GET'])

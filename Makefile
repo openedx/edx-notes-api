@@ -43,7 +43,7 @@ diff-quality:
 coverage: diff-coverage diff-quality
 
 create-index:
-	python manage.py rebuild_index
+	python manage.py search_index --rebuild -f
 
 migrate:
 	python manage.py migrate --noinput
