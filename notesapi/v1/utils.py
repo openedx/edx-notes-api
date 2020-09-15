@@ -34,9 +34,9 @@ class NotesPaginatorMixin:
 
 def dict_to_querydict(dict_):
     """
-    Converts a dict value into a Django's QueryDict object.
+    Converts a dict value into the Django's QueryDict object.
     """
-    query_dict = QueryDict("", mutable=True)
+    query_dict = QueryDict('', mutable=True)
     for name, value in dict_.items():
         if isinstance(name, list):
             query_dict.setlist(name, value)
@@ -48,7 +48,7 @@ def dict_to_querydict(dict_):
 
 class Request:
     """
-    Specifies custom behavior of the standard Django request class.
+    Specifies custom behavior of the standard Django's request class.
 
     Implementation of the `duck typing` pattern.
     Using an object of class `Request` allows you to define the desired logic,

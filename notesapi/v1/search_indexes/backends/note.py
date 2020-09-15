@@ -29,7 +29,12 @@ class CompoundSearchFilterBackend(CompoundSearchFilterBackendOrigin):
         :rtype: list
         """
         query_params = request.query_params.copy()
-        return list(chain.from_iterable(query_params.getlist(search_param, []) for search_param in self.search_fields))
+        return list(
+            chain.from_iterable(
+                query_params.getlist(search_param, [])
+                for search_param in self.search_fields
+            )
+        )
 
 
 class FilteringFilterBackend(FilteringFilterBackendOrigin):

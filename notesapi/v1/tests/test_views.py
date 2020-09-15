@@ -964,8 +964,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
 
         self._create_annotation(text=u'First one. I am a simple note.', course_id="u'edX/DemoX/Demo_Course'")
         self._create_annotation(text=u'Second note. I am a simple note.', course_id="u'edX/DemoX/Demo_Course'")
-        self._create_annotation(text=u'Third note. I am a simple note.', course_id="b")
-        self._create_annotation(text=u'Fourth note. I am a simple note.', course_id="c")
+        self._create_annotation(text=u'Third note. I am a simple note.', course_id='b')
+        self._create_annotation(text=u'Fourth note. I am a simple note.', course_id='c')
 
         @patch('django.conf.settings.ES_DISABLED', is_es_disabled)
         def verify_course_id_search():
