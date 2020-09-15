@@ -757,9 +757,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         """
         Verifies the search with usage id.
         """
-        self._create_annotation(text=u'First one', usage_id='test-1')
-        self._create_annotation(text=u'Second note', usage_id='test-2')
-        self._create_annotation(text=u'Third note', usage_id='test-3')
+        self._create_annotation(text=u'First one. I am a simple note.', usage_id='test-1')
+        self._create_annotation(text=u'Second note. I am a simple note.', usage_id='test-2')
+        self._create_annotation(text=u'Third note. I am a simple note.', usage_id='test-3')
 
         @patch('django.conf.settings.ES_DISABLED', is_es_disabled)
         def verify_usage_id_search(usage_ids):
@@ -769,7 +769,7 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
             Arguments:
                 usage_ids: List. The identifier string of the annotations XBlock(s).
             """
-            results = self._get_search_results(usage_id=usage_ids)
+            results = self._get_search_results(usage_id=usage_ids, text='I am a simple note.')
             self.assertEqual(len(results), len(usage_ids))
             # Here we are reverse-traversing usage_ids because response has descending ordered rows.
             for index, u_id in enumerate(usage_ids[::-1]):
@@ -777,6 +777,31 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
 
         verify_usage_id_search(usage_ids=['test-1'])
         verify_usage_id_search(usage_ids=['test-1', 'test-2', 'test-3'])
+
+    @ddt.data(True, False)
+    def test_user_search(self, is_es_disabled):
+        """
+        Verifies the search based on `user` field.
+        """
+        self._create_annotation(text=u'First one. I am a simple note.')
+        self._create_annotation(text=u'Second note. I am a simple note.')
+        token = get_id_token(TEST_OTHER_USER)
+        self.client.credentials(HTTP_X_ANNOTATOR_AUTH_TOKEN=token)
+        self.headers = {'user': TEST_OTHER_USER}
+        self._create_annotation(text=u'Third note. I am a simple note.', user=TEST_OTHER_USER)
+        self._create_annotation(text=u'Forth note. I am a simple note.', user=TEST_OTHER_USER)
+
+        @patch('django.conf.settings.ES_DISABLED', is_es_disabled)
+        def verify_user_search():
+            """
+            Verify search results based on user operation.
+            """
+            results = self._get_search_results(user=TEST_OTHER_USER, text='I am a simple note')
+            self.assertEqual(results['total'], 2)
+            self.assertEqual(results['rows'][0]['text'], u'Forth note. I am a simple note.')
+            self.assertEqual(results['rows'][1]['text'], u'Third note. I am a simple note.')
+
+        verify_user_search()
 
     def test_search_deleted(self):
         """
@@ -881,9 +906,9 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
 
         results = self._get_search_results(text='fox')
         self.assertEqual(results['total'], 3)
-        self.assertEqual(results['rows'][0]['text'], 'fox of the foxes')
-        self.assertEqual(results['rows'][1]['text'], 'the lead fox')
-        self.assertEqual(results['rows'][2]['text'], 'a very long entry that contains the word fox')
+        self.assertEqual(results['rows'][0]['text'], 'the lead fox')
+        self.assertEqual(results['rows'][1]['text'], 'a very long entry that contains the word fox')
+        self.assertEqual(results['rows'][2]['text'], 'fox of the foxes')
 
     @unittest.skipIf(settings.ES_DISABLED, "Unicode support in MySQL is limited")
     def test_search_unicode(self):
@@ -931,21 +956,30 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         self.assertEqual(self._get_search_results(text=u"something")['total'], 1)
         self.assertEqual(self._get_search_results(text=u"totally different")['total'], 1)
 
-    def test_search_by_course_id(self):
+    @ddt.data(True, False)
+    def test_search_by_course_id(self, is_es_disabled):
         """
-        Tests searching with course_id provided
+        Tests searching with `course_id` provided
         """
-        self._create_annotation(text=u'First one', course_id="u'edX/DemoX/Demo_Course'")
-        self._create_annotation(text=u'Second note', course_id="u'edX/DemoX/Demo_Course'")
-        self._create_annotation(text=u'Third note', course_id="b")
-        self._create_annotation(text=u'Fourth note', course_id="c")
 
-        results = self._get_search_results(course_id="u'edX/DemoX/Demo_Course'")
-        self.assertEqual(results['total'], 2)
+        self._create_annotation(text=u'First one. I am a simple note.', course_id="u'edX/DemoX/Demo_Course'")
+        self._create_annotation(text=u'Second note. I am a simple note.', course_id="u'edX/DemoX/Demo_Course'")
+        self._create_annotation(text=u'Third note. I am a simple note.', course_id="b")
+        self._create_annotation(text=u'Fourth note. I am a simple note.', course_id="c")
 
-        results = self._get_search_results(course_id="b")
-        self.assertEqual(results['total'], 1)
-        self.assertEqual(results['rows'][0]['text'], u'Third note')
+        @patch('django.conf.settings.ES_DISABLED', is_es_disabled)
+        def verify_course_id_search():
+            """
+            Verify search results based on course id operation.
+            """
+            results = self._get_search_results(course_id="u'edX/DemoX/Demo_Course'", text='I am a simple note')
+            self.assertEqual(results['total'], 2)
+
+            results = self._get_search_results(course_id="b", text='I am a simple note')
+            self.assertEqual(results['total'], 1)
+            self.assertEqual(results['rows'][0]['text'], u'Third note. I am a simple note.')
+
+        verify_course_id_search()
 
     def test_search_tag(self):
         """
@@ -1019,8 +1053,8 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
 
         results = self._get_search_results(text='foo bar')
         self.assertEqual(results['total'], 2)
-        self.assertEqual(results['rows'][0]['text'], 'Comment with foo')
-        self.assertEqual(results['rows'][1]['text'], 'A longer comment with bar')
+        self.assertEqual(results['rows'][1]['text'], 'Comment with foo')
+        self.assertEqual(results['rows'][0]['text'], 'A longer comment with bar')
 
     @unittest.skipIf(settings.ES_DISABLED, "MySQL does not do highlighing")
     def test_search_highlight_tag(self):
