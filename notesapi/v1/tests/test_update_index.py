@@ -34,7 +34,7 @@ class UpdateIndexTest(BaseAnnotationViewTests):
 
         results = self._get_search_results(text='note')
         self.assertEqual(results['total'], 3)
-        self.assertEqual(results['rows'][0]['text'], 'First note')
+        self.assertEqual(results['rows'][0]['text'], 'Third note')
 
     @factory.django.mute_signals(signals.post_delete)
     def test_delete(self):

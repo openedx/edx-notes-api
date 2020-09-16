@@ -2,14 +2,16 @@ from itertools import chain
 
 from django_elasticsearch_dsl_drf.filter_backends import (
     CompoundSearchFilterBackend as CompoundSearchFilterBackendOrigin,
+    FilteringFilterBackend as FilteringFilterBackendOrigin,
 )
+from notesapi.v1.utils import Request
 
-__all__ = ('CompoundSearchFilterBackend',)
+__all__ = ('CompoundSearchFilterBackend', 'FilteringFilterBackend')
 
 
 class CompoundSearchFilterBackend(CompoundSearchFilterBackendOrigin):
     """
-    Customized compound search backend.
+    Extends compound search backend.
     """
 
     search_fields = (
@@ -33,3 +35,22 @@ class CompoundSearchFilterBackend(CompoundSearchFilterBackendOrigin):
                 for search_param in self.search_fields
             )
         )
+
+
+class FilteringFilterBackend(FilteringFilterBackendOrigin):
+    """
+    Extends filtering filter backend.
+    """
+
+    def get_filter_query_params(self, request, view):
+        """
+        Get query params to be filtered on.
+
+        Extends the standard behavior of the parent class method to pass
+        a simulated (not real) request to this method.
+        Since we need to use the dict `query_params` defined in the view
+        and present it as `request.query_params`.
+        """
+        simulated_request = Request(view.query_params)
+
+        return super().get_filter_query_params(simulated_request, view)

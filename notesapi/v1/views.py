@@ -18,9 +18,14 @@ from notesapi.v1.serializers import NoteSerializer
 if not settings.ES_DISABLED:
     from elasticsearch_dsl import Search
     from elasticsearch_dsl.connections import connections
-    from django_elasticsearch_dsl_drf.filter_backends import HighlightBackend
+    from django_elasticsearch_dsl_drf.filter_backends import DefaultOrderingFilterBackend, HighlightBackend
+    from django_elasticsearch_dsl_drf.constants import (
+        LOOKUP_FILTER_TERM,
+        LOOKUP_QUERY_IN,
+        SEPARATOR_LOOKUP_COMPLEX_VALUE,
+    )
     from notesapi.v1.search_indexes.paginators import NotesPagination as ESNotesPagination
-    from notesapi.v1.search_indexes.backends import CompoundSearchFilterBackend
+    from notesapi.v1.search_indexes.backends import CompoundSearchFilterBackend, FilteringFilterBackend
     from notesapi.v1.search_indexes.serializers import NoteDocumentSerializer as NotesElasticSearchSerializer
 
 log = logging.getLogger(__name__)
@@ -123,6 +128,18 @@ class AnnotationSearchView(ListAPIView):
     search_with_usage_id = False
     document = NoteDocument
     search_fields = ('text', 'tags')
+    filter_fields = {
+        'course_id': 'course_id',
+        'user': 'user',
+        'usage_id': {
+            'field': 'usage_id',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_FILTER_TERM,
+            ],
+        },
+
+    }
     highlight_fields = {
         'text': {
             'enabled': True,
@@ -141,12 +158,23 @@ class AnnotationSearchView(ListAPIView):
             },
         },
     }
+    ordering = ('-updated',)
 
     def __init__(self, *args, **kwargs):
-        self.client = connections.get_connection(self.document._get_using())
-        self.index = self.document._index._name
-        self.search = Search(using=self.client, index=self.index, doc_type=self.document._doc_type.name)
+        self.initiate_es_specific_state_if_is_enabled()
         super(AnnotationSearchView, self).__init__(*args, **kwargs)
+
+    def initiate_es_specific_state_if_is_enabled(self):
+        """
+        Initiates elasticsearch specific state if elasticsearch is enabled.
+
+        Should be called in the class `__init__` method.
+        """
+        if not settings.ES_DISABLED:
+            self.client = connections.get_connection(self.document._get_using())
+            self.index = self.document._index._name
+            self.mapping = self.document._doc_type.mapping.properties.name
+            self.search = Search(using=self.client, index=self.index, doc_type=self.document._doc_type.name)
 
     @property
     def is_es_disabled(self):
@@ -203,7 +231,11 @@ class AnnotationSearchView(ListAPIView):
         """
         filter_backends = []
         if not self.is_es_disabled:
-            filter_backends = [CompoundSearchFilterBackend]
+            filter_backends = [
+                FilteringFilterBackend,
+                CompoundSearchFilterBackend,
+                DefaultOrderingFilterBackend,
+            ]
             if self.params.get('highlight'):
                 filter_backends.append(HighlightBackend)
 
@@ -222,17 +254,20 @@ class AnnotationSearchView(ListAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return super(AnnotationSearchView, self).list(*args, **kwargs)
 
-    def get(self, *args, **kwargs):  # pylint: disable=unused-argument
+    def build_query_params_state(self):
         """
-        Search annotations in most appropriate storage
+        Builds a custom query params.
+
+        Use them in order to search annotations in most appropriate storage.
         """
         self.query_params = {}
-        self.search_with_usage_id = False
         self.params = self.request.query_params.dict()
         usage_ids = self.request.query_params.getlist('usage_id')
-
         if usage_ids:
             self.search_with_usage_id = True
+            if not self.is_es_disabled:
+                usage_ids = SEPARATOR_LOOKUP_COMPLEX_VALUE.join(usage_ids)
+
             self.query_params['usage_id__in'] = usage_ids
 
         if 'course_id' in self.params:
@@ -243,6 +278,13 @@ class AnnotationSearchView(ListAPIView):
                 self.query_params['user_id'] = self.params['user']
             else:
                 self.query_params['user'] = self.params['user']
+
+    def get(self, *args, **kwargs):  # pylint: disable=unused-argument
+        """
+        Search annotations in most appropriate storage
+        """
+        self.search_with_usage_id = False
+        self.build_query_params_state()
 
         return super(AnnotationSearchView, self).get(*args, **kwargs)
 
