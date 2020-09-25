@@ -13,7 +13,7 @@ CLIENT_ID = 'edx_notes_api-backend-service-key'
 CLIENT_SECRET = 'edx_notes_api-backend-service-secret'
 
 ELASTICSEARCH_INDEX_NAMES = {'notesapi.v1.search_indexes.documents.note': 'notes_index'}
-ELASTICSEARCH_DSL['default']['hosts'] = 'edx.devstack.elasticsearch:9200'
+ELASTICSEARCH_DSL['default']['hosts'] = 'edx.devstack.elasticsearch7:9200'
 
 DATABASES = {
     'default': {
