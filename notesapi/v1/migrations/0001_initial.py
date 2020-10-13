@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """ Initial migration file for creating Note model """
 
 from django.db import migrations, models

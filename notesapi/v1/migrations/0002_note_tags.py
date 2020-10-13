@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """ Add tags field to Note model """
 
 from django.db import migrations, models

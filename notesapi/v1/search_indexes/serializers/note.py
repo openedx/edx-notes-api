@@ -19,7 +19,7 @@ class NoteDocumentSerializer(DocumentSerializer):
     ranges = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
 
-    class Meta(object):
+    class Meta:
         """
         Meta options.
         """

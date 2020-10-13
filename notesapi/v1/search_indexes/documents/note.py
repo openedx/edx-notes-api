@@ -35,7 +35,7 @@ class NoteDocument(Document):
         """
         Prepare data.
         """
-        return '{0}{1}'.format(instance.text, instance.tags)
+        return f'{instance.text}{instance.tags}'
 
     def prepare_tags(self, instance):
         try:
