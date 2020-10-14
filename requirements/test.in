@@ -1,7 +1,6 @@
 -r base.txt
 
 astroid==1.6.6
-mock
 code-annotations
 coverage
 more-itertools==5.0.0

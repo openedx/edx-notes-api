@@ -10,20 +10,20 @@ class NoteTest(TestCase):
     def setUp(self):
 
         self.note_dict = {
-            "user": u"test_user_id",
-            "usage_id": u"i4x://org/course/html/52aa9816425a4ce98a07625b8cb70811",
-            "course_id": u"org/course/run",
-            "text": u"test note text",
-            "quote": u"test note quote",
+            "user": "test_user_id",
+            "usage_id": "i4x://org/course/html/52aa9816425a4ce98a07625b8cb70811",
+            "course_id": "org/course/run",
+            "text": "test note text",
+            "quote": "test note quote",
             "ranges": [
                 {
-                    "start": u"/p[1]",
-                    "end": u"/p[1]",
+                    "start": "/p[1]",
+                    "end": "/p[1]",
                     "startOffset": 0,
                     "endOffset": 10,
                 }
             ],
-            "tags": [u"apple", u"pear"],
+            "tags": ["apple", "pear"],
         }
 
     def test_create_valid_note(self):

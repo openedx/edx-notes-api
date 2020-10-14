@@ -162,7 +162,7 @@ class AnnotationSearchView(ListAPIView):
 
     def __init__(self, *args, **kwargs):
         self.initiate_es_specific_state_if_is_enabled()
-        super(AnnotationSearchView, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def initiate_es_specific_state_if_is_enabled(self):
         """
@@ -252,7 +252,7 @@ class AnnotationSearchView(ListAPIView):
             queryset = self.filter_queryset(self.get_queryset())
             serializer = self.get_serializer(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return super(AnnotationSearchView, self).list(*args, **kwargs)
+        return super().list(*args, **kwargs)
 
     def build_query_params_state(self):
         """
@@ -286,7 +286,7 @@ class AnnotationSearchView(ListAPIView):
         self.search_with_usage_id = False
         self.build_query_params_state()
 
-        return super(AnnotationSearchView, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
 
 
 class AnnotationRetireView(GenericAPIView):
@@ -466,10 +466,10 @@ class AnnotationListView(GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except AnnotationsLimitReachedError:
             error_message = _(
-                u'You can create up to {max_num_annotations_per_course} notes.'
-                u' You must remove some notes before you can add new ones.'
+                'You can create up to {max_num_annotations_per_course} notes.'
+                ' You must remove some notes before you can add new ones.'
             ).format(max_num_annotations_per_course=settings.MAX_NOTES_PER_COURSE)
-            log.info(u'Attempted to create more than %s annotations', settings.MAX_NOTES_PER_COURSE)
+            log.info('Attempted to create more than %s annotations', settings.MAX_NOTES_PER_COURSE)
 
             return Response({'error_msg': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
