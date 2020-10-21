@@ -35,6 +35,7 @@ RUN apt-get update && \
     libssl-dev \
     build-essential \
     python3.8-dev \
+    python3.8-distutils \
     python3.8-venv -qy && \
     rm -rf /var/lib/apt/lists/*
 
