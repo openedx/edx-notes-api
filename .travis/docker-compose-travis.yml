@@ -2,7 +2,7 @@ version: "2"
 
 services:
   db:
-    image: mysql:5.6.45
+    image: mysql:5.7
     container_name: db
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
     environment:
@@ -46,9 +46,9 @@ services:
       DB_ENGINE: "django.db.backends.mysql"
       DB_HOST: "db"
       DB_NAME: "edx_notes_api"
-      DB_PASSWORD: "secret"
+      DB_PASSWORD: ""
       DB_PORT: "3306"
-      DB_USER: "notes001"
+      DB_USER: "root"
       ENABLE_DJANGO_TOOLBAR: 1
       ELASTICSEARCH_URL: "http://es:9200"
 
