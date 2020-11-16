@@ -1,0 +1,32 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: ['py38']
+        django-version: ['django22', 'django30']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Start container
+      run: |
+        docker-compose -f .travis/docker-compose-travis.yml up -d
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements/travis.txt
+    - name: Run Tests
+      run: |
+        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} -u root edx_notes_api /edx/app/edx_notes_api/edx_notes_api/.travis/run_tests.sh
+    - name: Run PII Check
+      run: |
+        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} -u root edx_notes_api /edx/app/edx_notes_api/edx_notes_api/.travis/run_pii_checker.sh
