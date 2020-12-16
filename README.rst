@@ -92,7 +92,7 @@ You can discuss this code on the `edx-code Google Group`__ or in the
 
 __ https://groups.google.com/forum/#!forum/edx-code
 
-.. |build-status| image:: https://travis-ci.org/edx/edx-notes-api.svg?branch=master
-   :target: https://travis-ci.org/edx/edx-notes-api
+.. |build-status| image:: https://travis-ci.com/edx/edx-notes-api.svg?branch=master
+   :target: https://travis-ci.com/edx/edx-notes-api
 .. |coverage-status| image:: https://coveralls.io/repos/edx/edx-notes-api/badge.png?branch=master
    :target: https://coveralls.io/r/edx/edx-notes-api?branch=master
