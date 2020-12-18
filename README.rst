@@ -96,4 +96,3 @@ __ https://groups.google.com/forum/#!forum/edx-code
    :target: https://travis-ci.com/edx/edx-notes-api
 .. |coverage-status| image:: https://coveralls.io/repos/edx/edx-notes-api/badge.png?branch=master
    :target: https://coveralls.io/r/edx/edx-notes-api?branch=master
-
