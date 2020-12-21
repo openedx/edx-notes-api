@@ -18,11 +18,11 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          docker build --target newrelic -t "openedx/edx-notes-api:latest-newrelic" .
+          docker build --target newrelic -t "openedx/edx-notes-api:latest" .
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'openedx/edx-notes-api:latest-newrelic'
+          image-ref: 'openedx/edx-notes-api:latest'
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
