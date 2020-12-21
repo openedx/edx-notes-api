@@ -10,7 +10,8 @@ jobs:
     if: github.event_name == 'push'
 
     steps:
-      - name: Checkout
+      -
+        name: Checkout
         uses: actions/checkout@v2
       -
         name: Docker meta
@@ -29,14 +30,9 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          github-token: ${{ secrets.EDX_DEPLOYMENT_GH_TOKEN }}  
-      
-      - name: Build and Push docker image
-        run : ./.github/workflows/deployment_prs.sh
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-          PR_TITLE: ${{ steps.findPr.outputs.title }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          GH_ACCESS_TOKEN: ${{ secrets.EDX_DEPLOYMENT_GH_TOKEN }}
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
