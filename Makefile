@@ -73,20 +73,3 @@ upgrade: piptools ## update the requirements/*.txt files with the latest package
 	grep -e "^django==" requirements/base.txt > requirements/django.txt
 	sed '/^[dD]jango==/d' requirements/test.txt > requirements/test.tmp
 	mv requirements/test.tmp requirements/test.txt
-
-docker_build:
-	docker build . --target app -t "openedx/edx-notes-api:latest"
-	docker build . --target newrelic -t "openedx/edx-notes-api:latest-newrelic"
-
-docker_auth:
-	echo "$$DOCKERHUB_PASSWORD" | docker login -u "$$DOCKERHUB_USERNAME" --password-stdin
-
-docker_tag: docker_build
-	docker tag "openedx/edx-notes-api:latest" "openedx/edx-notes-api:$$GITHUB_SHA"
-	docker tag "openedx/edx-notes-api:latest-newrelic" "openedx/edx-notes-api:$$GITHUB_SHA-newrelic"
-
-docker_push: docker_tag docker_auth ## push to docker hub
-	docker push "openedx/edx-notes-api:latest"
-	docker push "openedx/edx-notes-api:$$GITHUB_SHA"
-	docker push "openedx/edx-notes-api:latest-newrelic"
-	docker push "openedx/edx-notes-api:$$GITHUB_SHA-newrelic"
