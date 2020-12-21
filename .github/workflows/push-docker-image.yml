@@ -25,4 +25,4 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: openedx/edx-notes-api
-          tags: latest,$GITHUB_SHA
+          tags: latest,${{ github.sha }}
