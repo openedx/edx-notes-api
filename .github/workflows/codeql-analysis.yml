@@ -1,4 +1,5 @@
-name: "CodeQL"
+name: "CodeQL Scanning"
+# https://securitylab.github.com/tools/codeql
 
 on:
   push:

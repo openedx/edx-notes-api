@@ -1,4 +1,5 @@
 name: "Trivy Code Scanning"
+# https://github.com/aquasecurity/trivy#readme
 
 on:
   push:
