@@ -316,7 +316,7 @@ urllib3==1.25.11
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.4.2
+virtualenv==20.4.3
     # via tox
 wrapt==1.12.1
     # via astroid
