@@ -38,7 +38,7 @@ django-waffle==2.1.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
-django==2.2.19
+django==2.2.20
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
