@@ -97,7 +97,7 @@ djangorestframework==3.12.4
     #   drf-jwt
     #   edx-drf-extensions
     #   rest-condition
-drf-jwt==1.19.0
+drf-jwt==1.19.1
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -217,7 +217,7 @@ pyjwkest==1.4.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-pyjwt[crypto]==1.7.1
+pyjwt[crypto]==2.1.0
     # via
     #   -r requirements/base.txt
     #   drf-jwt
