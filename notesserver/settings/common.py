@@ -35,6 +35,11 @@ RESULTS_MAX_SIZE = 250
 
 ROOT_URLCONF = 'notesserver.urls'
 
+DEFAULT_HASHING_ALGORITHM = "sha1"
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+
 MIDDLEWARE = (
     'edx_django_utils.cache.middleware.RequestCacheMiddleware',
     'corsheaders.middleware.CorsMiddleware',
