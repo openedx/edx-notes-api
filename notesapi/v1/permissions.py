@@ -3,6 +3,7 @@ import logging
 import jwt
 from django.conf import settings
 from rest_framework.permissions import BasePermission
+from rest_framework_jwt.settings import api_settings
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,12 @@ class HasAccessToken(BasePermission):
             logger.debug("No token found in headers")
             return False
         try:
-            data = jwt.decode(token, settings.CLIENT_SECRET, audience=settings.CLIENT_ID)
+            data = jwt.decode(
+                token,
+                settings.CLIENT_SECRET,
+                algorithms=[api_settings.JWT_ALGORITHM],
+                audience=settings.CLIENT_ID
+            )
             auth_user = data['sub']
             user_found = False
             for request_field in ('GET', 'POST', 'data'):
@@ -55,7 +61,7 @@ class HasAccessToken(BasePermission):
                 return True
             else:
                 logger.info("No user was present to compare in GET, POST or DATA")
-        except jwt.ExpiredSignature:
+        except jwt.ExpiredSignatureError:
             logger.debug("Token was expired: %s", token)
         except jwt.DecodeError:
             logger.debug("Could not decode token %s", token)
