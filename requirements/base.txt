@@ -131,7 +131,7 @@ pytz==2021.1
     # via django
 pyyaml==5.4.1
     # via edx-django-release-util
-requests==2.22.0
+requests==2.25.0
     # via
     #   -r requirements/base.in
     #   coreapi
@@ -160,8 +160,9 @@ stevedore==3.4.0
     #   edx-opaque-keys
 uritemplate==3.0.1
     # via coreapi
-urllib3==1.25.11
+urllib3==1.26.6
     # via
+    #   -r requirements/base.in
     #   elasticsearch
     #   requests
 
