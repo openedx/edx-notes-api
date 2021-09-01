@@ -22,6 +22,7 @@ cryptography==3.4.8
     # via pyjwt
 django==2.2.24
     # via
+    #   -c requirements/common_constraints.txt
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-cors-headers
@@ -59,8 +60,10 @@ djangorestframework==3.12.4
     #   drf-jwt
     #   edx-drf-extensions
     #   rest-condition
-drf-jwt==1.19.1
-    # via edx-drf-extensions
+drf-jwt==1.19.0
+    # via
+    #   -c requirements/common_constraints.txt
+    #   edx-drf-extensions
 edx-django-release-util==1.1.0
     # via -r requirements/base.in
 edx-django-utils==4.3.0
@@ -73,8 +76,9 @@ edx-drf-extensions==6.6.0
     #   -r requirements/base.in
 edx-opaque-keys==2.2.2
     # via edx-drf-extensions
-elasticsearch==7.14.0
+elasticsearch==7.13.4
     # via
+    #   -c requirements/common_constraints.txt
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
     #   elasticsearch-dsl
