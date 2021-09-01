@@ -188,7 +188,7 @@ pbr==5.6.0
     #   stevedore
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==2.2.0
+platformdirs==2.3.0
     # via virtualenv
 pluggy==0.13.1
     # via
@@ -229,7 +229,7 @@ pymongo==3.12.0
     #   edx-opaque-keys
 pyparsing==2.4.7
     # via packaging
-pytest==6.2.4
+pytest==6.2.5
     # via
     #   -r requirements/test.in
     #   pytest-cov
