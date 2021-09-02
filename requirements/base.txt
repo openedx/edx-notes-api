@@ -18,7 +18,7 @@ coreapi==2.3.3
     #   openapi-codec
 coreschema==0.0.4
     # via coreapi
-cryptography==3.4.7
+cryptography==3.4.8
     # via pyjwt
 django==2.2.24
     # via
@@ -42,9 +42,9 @@ django-elasticsearch-dsl==7.2.0
     # via
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
-django-elasticsearch-dsl-drf==0.22.1
+django-elasticsearch-dsl-drf==0.22.2
     # via -r requirements/base.in
-django-nine==0.2.4
+django-nine==0.2.5
     # via django-elasticsearch-dsl-drf
 django-rest-swagger==2.1.2
     # via -r requirements/base.in
@@ -66,7 +66,7 @@ drf-jwt==1.19.0
     #   edx-drf-extensions
 edx-django-release-util==1.1.0
     # via -r requirements/base.in
-edx-django-utils==4.2.0
+edx-django-utils==4.3.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -91,7 +91,7 @@ future==0.18.2
     # via pyjwkest
 gunicorn==20.1.0
     # via -r requirements/base.in
-idna==2.8
+idna==2.10
     # via requests
 itypes==1.2.0
     # via coreapi
@@ -135,7 +135,7 @@ pytz==2021.1
     # via django
 pyyaml==5.4.1
     # via edx-django-release-util
-requests==2.22.0
+requests==2.25.0
     # via
     #   -r requirements/base.in
     #   coreapi
@@ -145,7 +145,7 @@ rest-condition==1.0.3
     # via edx-drf-extensions
 semantic-version==2.8.5
     # via edx-drf-extensions
-simplejson==3.17.4
+simplejson==3.17.5
     # via django-rest-swagger
 six==1.16.0
     # via
@@ -164,7 +164,7 @@ stevedore==3.4.0
     #   edx-opaque-keys
 uritemplate==3.0.1
     # via coreapi
-urllib3==1.25.11
+urllib3==1.26.6
     # via
     #   elasticsearch
     #   requests
