@@ -66,7 +66,7 @@ drf-jwt==1.19.0
     #   edx-drf-extensions
 edx-django-release-util==1.1.0
     # via -r requirements/base.in
-edx-django-utils==4.3.0
+edx-django-utils==4.4.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
