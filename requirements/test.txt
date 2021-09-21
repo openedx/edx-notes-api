@@ -4,6 +4,10 @@
 #
 #    make upgrade
 #
+asgiref==3.4.1
+    # via
+    #   -r requirements/base.txt
+    #   django
 astroid==1.6.6
     # via
     #   -r requirements/test.in
@@ -103,7 +107,7 @@ drf-jwt==1.19.0
     #   edx-drf-extensions
 edx-django-release-util==1.1.0
     # via -r requirements/base.txt
-edx-django-utils==4.3.0
+edx-django-utils==4.4.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -125,7 +129,7 @@ elasticsearch-dsl==7.4.0
     #   django-elasticsearch-dsl-drf
 factory-boy==3.2.0
     # via -r requirements/test.in
-faker==8.12.1
+faker==8.13.2
     # via factory-boy
 filelock==3.0.12
     # via
@@ -288,7 +292,7 @@ six==1.16.0
     #   python-dateutil
     #   tox
     #   virtualenv
-sqlparse==0.4.1
+sqlparse==0.4.2
     # via
     #   -r requirements/base.txt
     #   django

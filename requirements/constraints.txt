@@ -14,7 +14,7 @@
 -c common_constraints.txt
 
 # Stay on latest LTS release
-Django>=2.2,<3.0
+Django>=3.2,<4.0
 
 
 # PyJWT[crypto] 2.0.0 has a number of breaking changes that we are

@@ -4,6 +4,8 @@
 #
 #    make upgrade
 #
+asgiref==3.4.1
+    # via django
 certifi==2021.5.30
     # via
     #   elasticsearch
@@ -20,9 +22,8 @@ coreschema==0.0.4
     # via coreapi
 cryptography==3.4.8
     # via pyjwt
-django==2.2.24
+django==3.2.7
     # via
-    #   -c requirements/common_constraints.txt
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-cors-headers
@@ -66,7 +67,7 @@ drf-jwt==1.19.0
     #   edx-drf-extensions
 edx-django-release-util==1.1.0
     # via -r requirements/base.in
-edx-django-utils==4.3.0
+edx-django-utils==4.4.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -156,7 +157,7 @@ six==1.16.0
     #   elasticsearch-dsl
     #   pyjwkest
     #   python-dateutil
-sqlparse==0.4.1
+sqlparse==0.4.2
     # via django
 stevedore==3.4.0
     # via
