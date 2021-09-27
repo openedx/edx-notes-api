@@ -41,6 +41,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 MIDDLEWARE = (
+    'edx_django_utils.monitoring.DeploymentMonitoringMiddleware',
     'edx_django_utils.cache.middleware.RequestCacheMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
