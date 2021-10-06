@@ -1,5 +1,5 @@
 FROM ubuntu:focal as app
-MAINTAINER devops@edx.org
+MAINTAINER sre@edx.org
 
 
 # Packages installed:
