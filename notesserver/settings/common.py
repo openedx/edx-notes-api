@@ -55,8 +55,8 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'rest_framework',
-    'rest_framework_swagger',
     'corsheaders',
     'notesapi.v1',
     # additional release utilities to ease automation
