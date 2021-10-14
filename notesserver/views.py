@@ -4,6 +4,7 @@ import traceback
 from django.conf import settings
 from django.db import connection
 from django.http import JsonResponse
+from django.http import HttpResponse
 from elasticsearch.exceptions import TransportError
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -32,6 +33,14 @@ def root(request):  # pylint: disable=unused-argument
         "name": "edX Notes API",
         "version": "1"
     })
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def robots(request):  # pylint: disable=unused-argument
+    """
+    robots.txt
+    """
+    return HttpResponse("User-agent: * Disallow: /", content_type="text/plain")
 
 
 @api_view(['GET'])
