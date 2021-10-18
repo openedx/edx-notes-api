@@ -21,7 +21,7 @@ certifi==2021.10.8
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-cffi==1.14.6
+cffi==1.15.0
     # via
     #   -r requirements/base.txt
     #   cryptography
@@ -100,7 +100,7 @@ djangorestframework==3.12.4
     #   drf-yasg
     #   edx-drf-extensions
     #   rest-condition
-drf-jwt==1.19.0
+drf-jwt==1.19.1
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -132,7 +132,7 @@ factory-boy==3.2.0
     # via -r requirements/test.in
 faker==9.3.1
     # via factory-boy
-filelock==3.3.0
+filelock==3.3.1
     # via
     #   tox
     #   virtualenv
@@ -259,7 +259,7 @@ pytz==2021.3
     # via
     #   -r requirements/base.txt
     #   django
-pyyaml==5.4.1
+pyyaml==6.0
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -305,7 +305,7 @@ sqlparse==0.4.2
     # via
     #   -r requirements/base.txt
     #   django
-stevedore==3.4.0
+stevedore==3.5.0
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -323,7 +323,7 @@ tomli==1.2.1
     # via coverage
 tox==3.24.4
     # via -r requirements/test.in
-uritemplate==4.0.0
+uritemplate==4.1.1
     # via
     #   -r requirements/base.txt
     #   coreapi
@@ -335,7 +335,7 @@ urllib3==1.26.7
     #   requests
 virtualenv==20.8.1
     # via tox
-wrapt==1.13.1
+wrapt==1.13.2
     # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
