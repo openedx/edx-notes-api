@@ -1,5 +1,5 @@
 PACKAGES = notesserver notesapi
-.PHONY: requirements
+.PHONY: requirements check_keywords
 
 ifdef TOXENV
 TOX := tox -- #to isolate each tox environment if TOXENV is defined
@@ -15,6 +15,9 @@ test: clean
 pii_check: test.requirements pii_clean
 	code_annotations django_find_annotations --config_file .pii_annotations.yml \
 		--lint --report --coverage
+
+check_keywords: ## Scan the Django models in all installed apps in this project for restricted field names
+	python manage.py check_reserved_keywords --override_file db_keyword_overrides.yml
 
 run:
 	./manage.py runserver 0.0.0.0:8120
