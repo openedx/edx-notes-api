@@ -11,8 +11,9 @@ django-cors-headers
 mysqlclient
 PyJWT
 gunicorn==19.1.1     # MIT
-path.py==3.0.1
+path.py
 python-dateutil==2.4.0
+testresources
 newrelic==4.8.0.110            # New Relic
 edx-django-release-util
 edx-django-utils
