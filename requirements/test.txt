@@ -181,7 +181,7 @@ packaging==20.9
     # via
     #   pytest
     #   tox
-path.py==3.0.1
+path.py==9.1
     # via -r requirements/base.txt
 pbr==5.5.1
     # via

@@ -101,11 +101,11 @@ newrelic==4.8.0.110
     #   edx-django-utils
 openapi-codec==1.3.2
     # via django-rest-swagger
-path.py==3.0.1
+path.py==9.1
     # via -r requirements/base.in
-pbr==5.5.1
+pbr==5.8.0
     # via stevedore
-psutil==5.8.0
+psutil==5.9.0
     # via edx-django-utils
 pycparser==2.20
     # via cffi
@@ -155,7 +155,7 @@ stevedore==3.3.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
-uritemplate==3.0.1
+uritemplate==4.1.1
     # via coreapi
 urllib3==1.25.11
     # via
