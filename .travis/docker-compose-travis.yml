@@ -1,9 +1,19 @@
 version: "2"
 
 services:
-  db:
+  mysql57:
     image: mysql:5.7
-    container_name: db
+    container_name: mysql57
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: "notes001"
+      MYSQL_PASSWORD: "secret"
+      MYSQL_DATABASE: "edx_notes_api"
+  mysql80:
+    image: mysql:8.0
+    container_name: mysql80
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
     environment:
       MYSQL_ROOT_PASSWORD: ""
@@ -39,7 +49,8 @@ services:
       - ..:/edx/app/edx_notes_api/edx_notes_api
     command: tail -f /dev/null
     depends_on:
-      - "db"
+      - "mysql57"
+      - "mysql80"
       - "es"
     environment:
       CONN_MAX_AGE: 60
@@ -55,4 +66,3 @@ services:
 volumes:
   elasticsearch_data:
     driver: local
-    
