@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-asgiref==3.4.1
+asgiref==3.5.0
     # via
     #   -r requirements/base.txt
     #   django
@@ -12,16 +12,14 @@ astroid==1.6.6
     # via
     #   -r requirements/test.in
     #   pylint
-attrs==21.2.0
+attrs==21.4.0
     # via pytest
-backports.entry-points-selectable==1.1.0
-    # via virtualenv
 certifi==2021.10.8
     # via
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-cffi==1.14.6
+cffi==1.15.0
     # via
     #   -r requirements/base.txt
     #   cryptography
@@ -30,9 +28,9 @@ chardet==3.0.4
     #   -r requirements/base.txt
     #   diff-cover
     #   requests
-click==8.0.3
+click==8.1.2
     # via code-annotations
-code-annotations==1.2.0
+code-annotations==1.3.0
     # via -r requirements/test.in
 colorama==0.4.4
     # via pylint
@@ -45,19 +43,19 @@ coreschema==0.0.4
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==6.0.2
+coverage[toml]==6.3.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==35.0.0
+cryptography==36.0.2
     # via
     #   -r requirements/base.txt
     #   pyjwt
 ddt==1.4.4
     # via -r requirements/test.in
-diff-cover==6.4.2
+diff-cover==6.4.5
     # via -r requirements/test.in
-distlib==0.3.3
+distlib==0.3.4
     # via virtualenv
     # via
     #   -r requirements/base.txt
@@ -71,28 +69,28 @@ distlib==0.3.3
     #   edx-django-utils
     #   edx-drf-extensions
     #   rest-condition
-django-cors-headers==3.10.0
+django-cors-headers==3.11.0
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-django-elasticsearch-dsl==7.2.0
+django-elasticsearch-dsl==7.2.2
     # via
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl-drf
-django-elasticsearch-dsl-drf==0.22.2
+django-elasticsearch-dsl-drf==0.22.4
     # via -r requirements/base.txt
 django-nine==0.2.5
     # via
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl-drf
-django-waffle==2.2.1
+django-waffle==2.4.1
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.12.4
+djangorestframework==3.13.1
     # via
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl-drf
@@ -100,21 +98,21 @@ djangorestframework==3.12.4
     #   drf-yasg
     #   edx-drf-extensions
     #   rest-condition
-drf-jwt==1.19.0
+drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
 drf-yasg==1.20.0
     # via -r requirements/base.txt
-edx-django-release-util==1.1.0
+edx-django-release-util==1.2.0
     # via -r requirements/base.txt
-edx-django-utils==4.4.0
+edx-django-utils==4.6.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
 edx-drf-extensions==6.6.0
     # via -r requirements/base.txt
-edx-opaque-keys==2.2.2
+edx-opaque-keys==2.3.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -128,11 +126,11 @@ elasticsearch-dsl==7.4.0
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
-factory-boy==3.2.0
+factory-boy==3.2.1
     # via -r requirements/test.in
-faker==9.3.1
+faker==13.3.4
     # via factory-boy
-filelock==3.3.0
+filelock==3.6.0
     # via
     #   tox
     #   virtualenv
@@ -146,8 +144,6 @@ idna==2.10
     # via
     #   -r requirements/base.txt
     #   requests
-inflect==5.3.0
-    # via jinja2-pluralize
 inflection==0.5.1
     # via
     #   -r requirements/base.txt
@@ -158,67 +154,64 @@ itypes==1.2.0
     # via
     #   -r requirements/base.txt
     #   coreapi
-jinja2==3.0.2
+jinja2==3.1.1
     # via
     #   -r requirements/base.txt
     #   code-annotations
     #   coreschema
     #   diff-cover
-    #   jinja2-pluralize
-jinja2-pluralize==0.3.0
-    # via diff-cover
-lazy-object-proxy==1.6.0
+lazy-object-proxy==1.7.1
     # via astroid
-markupsafe==2.0.1
+markupsafe==2.1.1
     # via
     #   -r requirements/base.txt
     #   jinja2
 more-itertools==5.0.0
     # via -r requirements/test.in
-mysqlclient==2.0.3
+mysqlclient==2.1.0
     # via -r requirements/base.txt
 newrelic==4.8.0.110
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-packaging==21.0
+packaging==21.3
     # via
     #   -r requirements/base.txt
     #   drf-yasg
     #   pytest
     #   tox
-path.py==9.1
+path-py==9.1
     # via -r requirements/base.txt
-pbr==5.6.0
+pbr==5.8.1
     # via
     #   -r requirements/base.txt
     #   stevedore
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==2.4.0
+platformdirs==2.5.1
     # via virtualenv
 pluggy==1.0.0
     # via
     #   diff-cover
     #   pytest
     #   tox
-psutil==5.8.0
+psutil==5.9.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-py==1.10.0
+py==1.11.0
     # via
     #   pytest
     #   tox
-pycparser==2.20
+pycparser==2.21
     # via
     #   -r requirements/base.txt
     #   cffi
-pycryptodomex==3.11.0
+pycryptodomex==3.14.1
     # via
     #   -r requirements/base.txt
     #   pyjwkest
-pygments==2.10.0
+pygments==2.11.2
     # via diff-cover
 pyjwkest==1.4.2
     # via
@@ -230,22 +223,22 @@ pyjwt[crypto]==1.7.1
     #   drf-jwt
 pylint==1.5.0
     # via -r requirements/test.in
-pymongo==3.12.0
+pymongo==3.12.3
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
-pyparsing==2.4.7
+pyparsing==3.0.7
     # via
     #   -r requirements/base.txt
     #   packaging
-pytest==6.2.5
+pytest==7.1.1
     # via
     #   -r requirements/test.in
     #   pytest-cov
     #   pytest-django
 pytest-cov==3.0.0
     # via -r requirements/test.in
-pytest-django==4.4.0
+pytest-django==4.5.2
     # via -r requirements/test.in
 python-dateutil==2.4.0
     # via
@@ -253,13 +246,14 @@ python-dateutil==2.4.0
     #   edx-drf-extensions
     #   elasticsearch-dsl
     #   faker
-python-slugify==5.0.2
+python-slugify==6.1.1
     # via code-annotations
-pytz==2021.3
+pytz==2022.1
     # via
     #   -r requirements/base.txt
     #   django
-pyyaml==5.4.1
+    #   djangorestframework
+pyyaml==6.0
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -274,15 +268,15 @@ rest-condition==1.0.3
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-ruamel.yaml==0.17.16
+ruamel-yaml==0.17.21
     # via
     #   -r requirements/base.txt
     #   drf-yasg
-ruamel.yaml.clib==0.2.6
+ruamel-yaml-clib==0.2.6
     # via
     #   -r requirements/base.txt
-    #   ruamel.yaml
-semantic-version==2.8.5
+    #   ruamel-yaml
+semantic-version==2.9.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -305,37 +299,35 @@ sqlparse==0.4.2
     # via
     #   -r requirements/base.txt
     #   django
-stevedore==3.4.0
+stevedore==3.5.0
     # via
     #   -r requirements/base.txt
     #   code-annotations
     #   edx-django-utils
     #   edx-opaque-keys
 text-unidecode==1.3
-    # via
-    #   faker
-    #   python-slugify
+    # via python-slugify
 toml==0.10.2
+    # via tox
+tomli==2.0.1
     # via
+    #   coverage
     #   pytest
-    #   tox
-tomli==1.2.1
-    # via coverage
-tox==3.24.4
+tox==3.24.5
     # via -r requirements/test.in
-uritemplate==4.0.0
+uritemplate==4.1.1
     # via
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.7
+urllib3==1.26.9
     # via
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.8.1
+virtualenv==20.14.0
     # via tox
-wrapt==1.13.1
+wrapt==1.14.0
     # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
