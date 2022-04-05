@@ -10,12 +10,3 @@
 
 # This file contains all common constraints for edx-repos
 -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
-
-# PyJWT[crypto] 2.0.0 has a number of breaking changes that we are
-# actively working to fix. A number of the active constraints are all related
-# to this effort. Additionally, your IDA/service may also be affected directly
-# by these changes. You should not upgrade without knowing what you are doing.
-pyjwt[crypto]<2.0.0
-
-# 7.0.0 requires pyjwt[crypto] 2.1.0. See pyjwt[crypto]<2.0.0 comment.
-edx-drf-extensions<7.0.0
