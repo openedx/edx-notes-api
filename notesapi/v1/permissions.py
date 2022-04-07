@@ -38,6 +38,10 @@ class HasAccessToken(BasePermission):
             logger.debug("No token found in headers")
             return False
         try:
+            # TODO: Determine how and if we could remove `jwt.decode` from being called directly from this
+            #   service. Instead, use `jwt_decode_handler` or other library code that is used in other services.
+            #   It would be useful to simplify authentication within the platform, especially during upgrades of
+            #   authentication related dependencies.
             data = jwt.decode(
                 token,
                 settings.CLIENT_SECRET,
