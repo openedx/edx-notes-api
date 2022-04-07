@@ -35,7 +35,6 @@ django==3.2.12
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
-    #   rest-condition
 django-cors-headers==3.11.0
     # via -r requirements/base.in
 django-crum==0.7.9
@@ -59,7 +58,6 @@ djangorestframework==3.13.1
     #   drf-jwt
     #   drf-yasg
     #   edx-drf-extensions
-    #   rest-condition
 drf-jwt==1.19.2
     # via edx-drf-extensions
 drf-yasg==1.20.0
@@ -70,10 +68,8 @@ edx-django-utils==4.6.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
-edx-drf-extensions==6.6.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
+edx-drf-extensions==8.0.1
+    # via -r requirements/base.in
 edx-opaque-keys==2.3.0
     # via edx-drf-extensions
 elasticsearch==7.13.4
@@ -121,11 +117,11 @@ pycryptodomex==3.14.1
     # via pyjwkest
 pyjwkest==1.4.2
     # via edx-drf-extensions
-pyjwt[crypto]==1.7.1
+pyjwt[crypto]==2.3.0
     # via
-    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   drf-jwt
+    #   edx-drf-extensions
 pymongo==3.12.3
     # via edx-opaque-keys
 pyparsing==3.0.7
@@ -147,8 +143,6 @@ requests==2.25.0
     #   coreapi
     #   edx-drf-extensions
     #   pyjwkest
-rest-condition==1.0.3
-    # via edx-drf-extensions
 ruamel-yaml==0.17.21
     # via drf-yasg
 ruamel-yaml-clib==0.2.6

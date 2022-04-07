@@ -68,7 +68,6 @@ distlib==0.3.4
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
-    #   rest-condition
 django-cors-headers==3.11.0
     # via -r requirements/base.txt
 django-crum==0.7.9
@@ -97,7 +96,6 @@ djangorestframework==3.13.1
     #   drf-jwt
     #   drf-yasg
     #   edx-drf-extensions
-    #   rest-condition
 drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
@@ -110,7 +108,7 @@ edx-django-utils==4.6.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-edx-drf-extensions==6.6.0
+edx-drf-extensions==8.0.1
     # via -r requirements/base.txt
 edx-opaque-keys==2.3.0
     # via
@@ -217,10 +215,11 @@ pyjwkest==1.4.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-pyjwt[crypto]==1.7.1
+pyjwt[crypto]==2.3.0
     # via
     #   -r requirements/base.txt
     #   drf-jwt
+    #   edx-drf-extensions
 pylint==1.5.0
     # via -r requirements/test.in
 pymongo==3.12.3
@@ -264,10 +263,6 @@ requests==2.25.0
     #   coreapi
     #   edx-drf-extensions
     #   pyjwkest
-rest-condition==1.0.3
-    # via
-    #   -r requirements/base.txt
-    #   edx-drf-extensions
 ruamel-yaml==0.17.21
     # via
     #   -r requirements/base.txt
