@@ -22,7 +22,7 @@ coreschema==0.0.4
     #   drf-yasg
 cryptography==35.0.0
     # via pyjwt
-django==3.2.12
+django==3.2.13
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
