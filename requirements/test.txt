@@ -61,6 +61,7 @@ diff-cover==6.5.0
     # via -r requirements/test.in
 distlib==0.3.4
     # via virtualenv
+django==3.2.13
     # via
     #   -r requirements/base.txt
     #   django-cors-headers
