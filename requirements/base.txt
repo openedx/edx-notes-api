@@ -6,11 +6,11 @@
 #
 asgiref==3.5.2
     # via django
-certifi==2022.5.18.1
+certifi==2022.6.15
     # via
     #   elasticsearch
     #   requests
-cffi==1.15.0
+cffi==1.15.1
     # via
     #   cryptography
     #   pynacl
@@ -24,9 +24,9 @@ coreschema==0.0.4
     # via
     #   coreapi
     #   drf-yasg
-cryptography==37.0.2
+cryptography==37.0.4
     # via pyjwt
-django==3.2.13
+django==3.2.15
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -47,11 +47,11 @@ django-elasticsearch-dsl==7.2.2
     # via
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
-django-elasticsearch-dsl-drf==0.22.4
+django-elasticsearch-dsl-drf==0.22.5
     # via -r requirements/base.in
 django-nine==0.2.5
     # via django-elasticsearch-dsl-drf
-django-waffle==2.5.0
+django-waffle==2.6.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
@@ -64,7 +64,7 @@ djangorestframework==3.13.1
     #   edx-drf-extensions
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-yasg==1.20.0
+drf-yasg==1.21.3
     # via -r requirements/base.in
 edx-django-release-util==1.2.0
     # via -r requirements/base.in
@@ -101,7 +101,7 @@ jinja2==3.1.2
     # via coreschema
 markupsafe==2.1.1
     # via jinja2
-mysqlclient==2.1.0
+mysqlclient==2.1.1
     # via -r requirements/base.in
 newrelic==4.8.0.110
     # via
@@ -117,7 +117,7 @@ psutil==5.9.1
     # via edx-django-utils
 pycparser==2.21
     # via cffi
-pycryptodomex==3.14.1
+pycryptodomex==3.15.0
     # via pyjwkest
 pyjwkest==1.4.2
     # via edx-drf-extensions
@@ -141,6 +141,7 @@ pytz==2022.1
     # via
     #   django
     #   djangorestframework
+    #   drf-yasg
 pyyaml==6.0
     # via edx-django-release-util
 requests==2.25.0
@@ -166,7 +167,7 @@ six==1.16.0
     #   python-dateutil
 sqlparse==0.4.2
     # via django
-stevedore==3.5.0
+stevedore==4.0.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
@@ -174,7 +175,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==1.26.9
+urllib3==1.26.11
     # via
     #   elasticsearch
     #   requests
