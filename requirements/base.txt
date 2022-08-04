@@ -22,7 +22,7 @@ coreschema==0.0.4
     #   drf-yasg
 cryptography==36.0.2
     # via pyjwt
-django==3.2.13
+django==3.2.15
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
