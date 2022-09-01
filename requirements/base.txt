@@ -51,7 +51,7 @@ django-elasticsearch-dsl-drf==0.22.5
     # via -r requirements/base.in
 django-nine==0.2.5
     # via django-elasticsearch-dsl-drf
-django-waffle==2.6.0
+django-waffle==3.0.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
@@ -72,7 +72,7 @@ edx-django-utils==5.0.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
-edx-drf-extensions==8.0.1
+edx-drf-extensions==8.2.0
     # via -r requirements/base.in
 edx-opaque-keys==2.3.0
     # via edx-drf-extensions
@@ -111,7 +111,7 @@ packaging==21.3
     # via drf-yasg
 path-py==9.1
     # via -r requirements/base.in
-pbr==5.9.0
+pbr==5.10.0
     # via stevedore
 psutil==5.9.1
     # via edx-django-utils
@@ -137,7 +137,7 @@ python-dateutil==2.4.0
     #   -r requirements/base.in
     #   edx-drf-extensions
     #   elasticsearch-dsl
-pytz==2022.1
+pytz==2022.2.1
     # via
     #   django
     #   djangorestframework
@@ -175,7 +175,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==1.26.11
+urllib3==1.26.12
     # via
     #   elasticsearch
     #   requests
