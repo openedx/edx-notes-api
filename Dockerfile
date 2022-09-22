@@ -45,7 +45,7 @@ ARG SUPERVISOR_CFG_DIR="${SUPERVISOR_APP_DIR}/conf.d"
 
 ENV HOME /root
 ENV PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
-ENV PATH "${EDX_NOTES_API_VENV_DIR}}/bin:$PATH"
+ENV PATH "${EDX_NOTES_API_VENV_DIR}/bin:$PATH"
 ENV COMMON_CFG_DIR "/edx/etc"
 ENV EDX_NOTES_API_CFG_DIR "${COMMON_CFG_DIR}/edx_notes_api"
 ENV EDX_NOTES_API_CFG "/edx/etc/edx_notes_api.yml"
