@@ -6,7 +6,7 @@
 #
 asgiref==3.5.2
     # via django
-certifi==2022.6.15
+certifi==2022.9.24
     # via
     #   elasticsearch
     #   requests
@@ -24,9 +24,9 @@ coreschema==0.0.4
     # via
     #   coreapi
     #   drf-yasg
-cryptography==37.0.4
+cryptography==38.0.1
     # via pyjwt
-django==3.2.15
+django==3.2.16
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -51,11 +51,11 @@ django-elasticsearch-dsl-drf==0.22.5
     # via -r requirements/base.in
 django-nine==0.2.5
     # via django-elasticsearch-dsl-drf
-django-waffle==2.6.0
+django-waffle==3.0.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.13.1
+djangorestframework==3.14.0
     # via
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
@@ -64,15 +64,15 @@ djangorestframework==3.13.1
     #   edx-drf-extensions
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-yasg==1.21.3
+drf-yasg==1.21.4
     # via -r requirements/base.in
 edx-django-release-util==1.2.0
     # via -r requirements/base.in
-edx-django-utils==5.0.0
+edx-django-utils==5.2.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
-edx-drf-extensions==8.0.1
+edx-drf-extensions==8.3.1
     # via -r requirements/base.in
 edx-opaque-keys==2.3.0
     # via edx-drf-extensions
@@ -111,9 +111,9 @@ packaging==21.3
     # via drf-yasg
 path-py==9.1
     # via -r requirements/base.in
-pbr==5.9.0
+pbr==5.11.0
     # via stevedore
-psutil==5.9.1
+psutil==5.9.3
     # via edx-django-utils
 pycparser==2.21
     # via cffi
@@ -121,7 +121,7 @@ pycryptodomex==3.15.0
     # via pyjwkest
 pyjwkest==1.4.2
     # via edx-drf-extensions
-pyjwt[crypto]==2.4.0
+pyjwt[crypto]==2.6.0
     # via
     #   -r requirements/base.in
     #   drf-jwt
@@ -137,7 +137,7 @@ python-dateutil==2.4.0
     #   -r requirements/base.in
     #   edx-drf-extensions
     #   elasticsearch-dsl
-pytz==2022.1
+pytz==2022.6
     # via
     #   django
     #   djangorestframework
@@ -152,7 +152,7 @@ requests==2.25.0
     #   pyjwkest
 ruamel-yaml==0.17.21
     # via drf-yasg
-ruamel-yaml-clib==0.2.6
+ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
 semantic-version==2.10.0
     # via edx-drf-extensions
@@ -165,9 +165,9 @@ six==1.16.0
     #   elasticsearch-dsl
     #   pyjwkest
     #   python-dateutil
-sqlparse==0.4.2
+sqlparse==0.4.3
     # via django
-stevedore==4.0.0
+stevedore==4.1.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
@@ -175,7 +175,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==1.26.11
+urllib3==1.26.12
     # via
     #   elasticsearch
     #   requests
