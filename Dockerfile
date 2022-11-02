@@ -1,6 +1,4 @@
 FROM ubuntu:focal as app
-MAINTAINER sre@edx.org
-
 
 # Packages installed:
 # git; Used to pull in particular requirements from github rather than pypi, 
