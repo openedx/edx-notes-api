@@ -1,11 +1,13 @@
+-c constraints.txt
+
 -r base.txt
 
-astroid==1.6.6
+astroid
 code-annotations
 coverage
-more-itertools==5.0.0
+more-itertools
 pep8
-pylint==1.5.0
+pylint
 diff-cover
 factory_boy
 ddt

@@ -2,20 +2,20 @@
 -c constraints.txt
 
 Django
-requests==2.25.0
+requests
 djangorestframework
 drf-yasg
-elasticsearch>=7.8,<8.0
-elasticsearch-dsl>=7.2,<8.0
-django-elasticsearch-dsl>=7.1,<8.0
+elasticsearch
+elasticsearch-dsl
+django-elasticsearch-dsl
 django-elasticsearch-dsl-drf
 django-cors-headers
 mysqlclient
 PyJWT
 gunicorn     # MIT
-path.py==9.1
-python-dateutil==2.4.0
-newrelic==4.8.0.110            # New Relic
+path.py
+python-dateutil
+newrelic
 edx-django-release-util
 edx-django-utils
 edx-drf-extensions
