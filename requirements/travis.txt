@@ -10,7 +10,7 @@ chardet==3.0.4
     # via requests
 codecov==2.1.12
     # via -r requirements/travis.in
-coverage==7.1.0
+coverage==7.2.1
     # via codecov
 distlib==0.3.6
     # via virtualenv
@@ -45,5 +45,5 @@ tox-battery==0.6.1
     # via -r requirements/travis.in
 urllib3==1.26.14
     # via requests
-virtualenv==20.19.0
+virtualenv==20.20.0
     # via tox

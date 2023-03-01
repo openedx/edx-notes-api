@@ -39,7 +39,7 @@ django==3.2.18
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
-django-cors-headers==3.13.0
+django-cors-headers==3.14.0
     # via -r requirements/base.in
 django-crum==0.7.9
     # via edx-django-utils
