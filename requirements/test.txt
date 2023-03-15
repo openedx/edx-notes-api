@@ -48,17 +48,17 @@ coreschema==0.0.4
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==7.1.0
+coverage[toml]==7.2.1
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==39.0.1
+cryptography==39.0.2
     # via
     #   -r requirements/base.txt
     #   pyjwt
 ddt==1.6.0
     # via -r requirements/test.in
-diff-cover==7.4.0
+diff-cover==7.5.0
     # via -r requirements/test.in
 distlib==0.3.6
     # via virtualenv
@@ -74,7 +74,7 @@ distlib==0.3.6
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
-django-cors-headers==3.13.0
+django-cors-headers==3.14.0
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
@@ -128,19 +128,19 @@ elasticsearch==7.13.4
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl-drf
     #   elasticsearch-dsl
-elasticsearch-dsl==7.4.0
+elasticsearch-dsl==7.4.1
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
-exceptiongroup==1.1.0
+exceptiongroup==1.1.1
     # via pytest
 factory-boy==3.2.1
     # via -r requirements/test.in
-faker==17.0.0
+faker==17.6.0
     # via factory-boy
-filelock==3.9.0
+filelock==3.9.1
     # via
     #   tox
     #   virtualenv
@@ -204,7 +204,7 @@ pbr==5.11.1
     #   stevedore
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==3.0.0
+platformdirs==3.1.1
     # via virtualenv
 pluggy==1.0.0
     # via
@@ -248,7 +248,7 @@ pynacl==1.5.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pytest==7.2.1
+pytest==7.2.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -264,7 +264,7 @@ python-dateutil==2.4.0
     #   edx-drf-extensions
     #   elasticsearch-dsl
     #   faker
-python-slugify==8.0.0
+python-slugify==8.0.1
     # via code-annotations
 pytz==2022.7.1
     # via
@@ -336,14 +336,14 @@ uritemplate==4.1.1
     #   -r requirements/base.txt
     #   coreapi
     #   drf-yasg
-urllib3==1.26.14
+urllib3==1.26.15
     # via
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.19.0
+virtualenv==20.21.0
     # via tox
-wrapt==1.14.1
+wrapt==1.15.0
     # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
