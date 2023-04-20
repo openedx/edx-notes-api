@@ -2,8 +2,8 @@ Part of `edX code`__.
 
 __ http://code.edx.org/
 
-edX Student Notes API |build-status| |coverage-status|
-======================================================
+edX Student Notes API |build-status|
+====================================
 
 This is a backend store for edX Student Notes.
 
@@ -94,6 +94,4 @@ __ https://groups.google.com/forum/#!forum/edx-code
 
 .. |build-status| image:: https://travis-ci.com/edx/edx-notes-api.svg?branch=master
    :target: https://travis-ci.com/edx/edx-notes-api
-.. |coverage-status| image:: https://coveralls.io/repos/edx/edx-notes-api/badge.png?branch=master
-   :target: https://coveralls.io/r/edx/edx-notes-api?branch=master
 
