@@ -85,6 +85,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'notesapi.v1.paginators.NotesPaginator',
 }
 
+# CORS is configured to allow all origins because requests to the
+# Notes API do not rely on ambient authority; instead, they are
+# authorized explicitly via an X-Annotator-Auth-Token header. (The
+# default permission class is HasAccessToken, which checks it.)
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = (
     'x-requested-with',

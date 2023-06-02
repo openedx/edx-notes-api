@@ -2,8 +2,8 @@ Part of `edX code`__.
 
 __ http://code.edx.org/
 
-edX Student Notes API |build-status| |coverage-status|
-======================================================
+edX Student Notes API |build-status|
+====================================
 
 This is a backend store for edX Student Notes.
 
@@ -74,10 +74,7 @@ How To Contribute
 
 Contributions are very welcome.
 
-Please read `How To Contribute <https://github.com/openedx/edx-platform/blob/master/CONTRIBUTING.rst>`_ for details.
-
-Even though it was written with ``edx-platform`` in mind, the guidelines
-should be followed for Open edX code in general.
+Please read `How To Contribute <https://github.com/openedx/.github/blob/master/CONTRIBUTING.md>`_ for details.
 
 Reporting Security Issues
 -------------------------
@@ -94,6 +91,4 @@ __ https://groups.google.com/forum/#!forum/edx-code
 
 .. |build-status| image:: https://travis-ci.com/edx/edx-notes-api.svg?branch=master
    :target: https://travis-ci.com/edx/edx-notes-api
-.. |coverage-status| image:: https://coveralls.io/repos/edx/edx-notes-api/badge.png?branch=master
-   :target: https://coveralls.io/r/edx/edx-notes-api?branch=master
 
