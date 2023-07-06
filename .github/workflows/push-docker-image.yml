@@ -49,9 +49,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           target: dev
-          repository: openedx/edx-notes-api-dev
+          # repository: openedx/edx-notes-api-dev
           # tags: ${{ steps.get-tag-name.outputs.result }},${{ github.sha }}
-          tags: edx-notes-api-test
+          tags: test
           platforms: linux/amd64,linux/arm64
 
       # - name: Build and push prod Docker image
