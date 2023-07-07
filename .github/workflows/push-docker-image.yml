@@ -44,12 +44,11 @@ jobs:
       - name: Build and push Dev Docker image
         uses: docker/build-push-action@v2
         with:
-          push: ${{ github.event_name == 'pull_request' }}
-          # push: true
+          push: true
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           target: dev
-          # repository: openedx/edx-notes-api-dev
+          repository: openedx/edx-notes-api-dev
           # tags: ${{ steps.get-tag-name.outputs.result }},${{ github.sha }}
           tags: test
           platforms: linux/amd64,linux/arm64
