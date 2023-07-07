@@ -1,7 +1,6 @@
 name: Build and Push Docker Images
 
 on:
-  pull_request:
   push:
     branches:
       - master
@@ -9,7 +8,7 @@ on:
 jobs:
   push:
     runs-on: ubuntu-latest
-    # if: github.event_name == 'push'
+    if: github.event_name == 'push'
 
     steps:
       - name: Checkout
@@ -50,8 +49,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           target: dev
           repository: openedx/edx-notes-api-dev
-          # tags: ${{ steps.get-tag-name.outputs.result }},${{ github.sha }}
-          tags: openedx/edx-notes-api-dev:test
+          tags: ${{ steps.get-tag-name.outputs.result }},${{ github.sha }}
           platforms: linux/amd64,linux/arm64
 
       # - name: Build and push prod Docker image
