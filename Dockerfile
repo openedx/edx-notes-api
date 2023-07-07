@@ -26,6 +26,7 @@ RUN apt-get update && \
     locales \
     git \
     libmysqlclient-dev \
+    pkg-config \
     libssl-dev \
     build-essential \
     python3.8-dev \
