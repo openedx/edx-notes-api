@@ -53,7 +53,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
       # - name: Build and push prod Docker image
-      #   uses: docker/build-push-action@v1
+      #   uses: docker/build-push-action@v4
       #   with:
       #     push: true
       #     username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -61,3 +61,4 @@ jobs:
       #     target: prod
       #     repository: openedx/edx-notes-api
       #     tags: ${{ steps.get-tag-name.outputs.result }},${{ github.sha }}
+      #     platforms: linux/amd64,linux/arm64
