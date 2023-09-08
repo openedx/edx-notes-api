@@ -33,7 +33,7 @@ class HasAccessToken(BasePermission):
     def has_permission(self, request, view):
         if getattr(settings, 'DISABLE_TOKEN_CHECK', False):
             return True
-        token = request.META.get('HTTP_X_ANNOTATOR_AUTH_TOKEN', '')
+        token = request.headers.get('x-annotator-auth-token', '')
         if not token:
             logger.debug("No token found in headers")
             return False

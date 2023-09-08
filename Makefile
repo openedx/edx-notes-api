@@ -57,10 +57,10 @@ static:  # provide the static target for devstack's tooling.
 requirements:
 	pip install -q -r requirements/base.txt --exists-action=w
 
-test.requirements: requirements
+test.requirements:
 	pip install -q -r requirements/test.txt --exists-action=w
 
-develop: test.requirements
+develop: requirements test.requirements
 
 piptools: ## install pinned version of pip-compile and pip-sync
 	pip install -r requirements/pip-tools.txt
