@@ -14,20 +14,15 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: ['py38']
-        django-version: ['django32', 'django42']
-        db-version: ['mysql57', 'mysql80']
-        # excluding mysql5.7 with Django 4.2 since Django 4.2 has
-        # dropped support for MySQL<8
-        exclude:
-         - django-version: 'django42'
-           db-version: 'mysql57'
+        django-version: ['django42']
+        db-version: ['mysql80']
 
     steps:
     - uses: actions/checkout@v2
     - name: Start container
       run: |
         docker-compose -f .travis/docker-compose-travis.yml up -d
-    - name: Install Dependencies
+    - name: Install system packages
       run: |
         docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
         /bin/bash -c "apt-get update && apt-get install python3-dev default-libmysqlclient-dev build-essential pkg-config"
