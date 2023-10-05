@@ -13,6 +13,10 @@ astroid==1.6.6
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
     #   pylint
+backports-zoneinfo==0.2.1
+    # via
+    #   -r requirements/base.txt
+    #   django
 certifi==2023.7.22
     # via
     #   -r requirements/base.txt
@@ -52,7 +56,6 @@ diff-cover==7.7.0
 distlib==0.3.7
     # via virtualenv
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
     #   django-cors-headers
     #   django-crum
@@ -111,9 +114,8 @@ edx-opaque-keys==2.5.1
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-elasticsearch==7.13.4
+elasticsearch==7.17.9
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl-drf
@@ -239,7 +241,6 @@ python-slugify==8.0.1
 pytz==2023.3.post1
     # via
     #   -r requirements/base.txt
-    #   django
     #   djangorestframework
     #   drf-yasg
 pyyaml==6.0.1
@@ -287,9 +288,7 @@ tomli==2.0.1
     #   pytest
     #   tox
 tox==3.28.0
-    # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   -r requirements/test.in
+    # via -r requirements/test.in
 typing-extensions==4.8.0
     # via
     #   -r requirements/base.txt
