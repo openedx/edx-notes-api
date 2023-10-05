@@ -6,6 +6,8 @@
 #
 asgiref==3.7.2
     # via django
+backports-zoneinfo==0.2.1
+    # via django
 certifi==2023.7.22
     # via
     #   elasticsearch
@@ -20,9 +22,9 @@ click==8.1.7
     # via edx-django-utils
 cryptography==41.0.4
     # via pyjwt
-django==3.2.22
+django==4.2.6
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-cors-headers
     #   django-crum
@@ -34,10 +36,8 @@ django==3.2.22
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
-django-cors-headers==3.14.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
+django-cors-headers==4.2.0
+    # via -r requirements/base.in
 django-crum==0.7.9
     # via edx-django-utils
 django-elasticsearch-dsl==7.4
@@ -70,13 +70,13 @@ edx-django-utils==5.7.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
-edx-drf-extensions==8.12.0
+edx-drf-extensions==8.10.0
     # via -r requirements/base.in
 edx-opaque-keys==2.5.1
     # via edx-drf-extensions
 elasticsearch==7.13.4
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/common_constraints.txt
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
@@ -111,7 +111,7 @@ path-py==9.1
     #   -r requirements/base.in
 pbr==5.11.1
     # via stevedore
-psutil==5.9.6
+psutil==5.9.5
     # via edx-django-utils
 pycparser==2.21
     # via cffi
@@ -131,7 +131,6 @@ python-dateutil==2.4.0
     #   elasticsearch-dsl
 pytz==2023.3.post1
     # via
-    #   django
     #   djangorestframework
     #   drf-yasg
 pyyaml==6.0.1
@@ -164,7 +163,7 @@ typing-extensions==4.8.0
     #   edx-opaque-keys
 uritemplate==4.1.1
     # via drf-yasg
-urllib3==1.26.18
+urllib3==1.26.17
     # via
     #   elasticsearch
     #   requests
