@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import include, path, re_path
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
@@ -16,10 +16,10 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    url(r'^heartbeat/$', notesserver.views.heartbeat, name='heartbeat'),
-    url(r'^selftest/$', notesserver.views.selftest, name='selftest'),
-    url(r'^robots.txt$', notesserver.views.robots, name='robots'),
-    url(r'^$', notesserver.views.root, name='root'),
-    url(r'^api/', include('notesapi.urls', namespace='api')),
-    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('heartbeat/', notesserver.views.heartbeat, name='heartbeat'),
+    path('selftest/', notesserver.views.selftest, name='selftest'),
+    re_path(r'^robots.txt$', notesserver.views.robots, name='robots'),
+    path('', notesserver.views.root, name='root'),
+    path('api/', include('notesapi.urls', namespace='api')),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

@@ -148,3 +148,10 @@ JWT_AUTH = {
     'JWT_AUTH_REFRESH_COOKIE': 'edx-jwt-refresh-cookie',
     'JWT_ALGORITHM': 'HS256',
 }
+
+CSRF_TRUSTED_ORIGINS = []
+
+# Django 4.0+ uses zoneinfo if this is not set. We can remove this and
+# migrate to zoneinfo after Django 4.2 upgrade. See more on following url
+# https://docs.djangoproject.com/en/4.2/releases/4.0/#zoneinfo-default-timezone-implementation
+USE_DEPRECATED_PYTZ = True

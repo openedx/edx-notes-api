@@ -1,7 +1,7 @@
-from django.conf.urls import include, url
+from django.urls import include, path
 
 app_name = "notesapi.v1"
 
 urlpatterns = [
-    url(r'^v1/', include('notesapi.v1.urls', namespace='v1')),
+    path('v1/', include('notesapi.v1.urls', namespace='v1')),
 ]
