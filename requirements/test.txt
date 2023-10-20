@@ -64,8 +64,10 @@ distlib==0.3.7
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
-django-cors-headers==4.3.0
-    # via -r requirements/base.txt
+django-cors-headers==3.14.0
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.txt
 django-crum==0.7.9
     # via
     #   -r requirements/base.txt
