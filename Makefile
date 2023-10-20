@@ -66,7 +66,7 @@ piptools: ## install pinned version of pip-compile and pip-sync
 	pip install -r requirements/pip-tools.txt
 
 upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
-upgrade: ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
+upgrade: piptools ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
 	# Make sure to compile files after any other files they include!
 	pip-compile --upgrade --rebuild --allow-unsafe -o requirements/pip.txt requirements/pip.in
 	pip-compile --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
