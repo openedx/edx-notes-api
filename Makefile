@@ -66,9 +66,8 @@ piptools: ## install pinned version of pip-compile and pip-sync
 	pip install -r requirements/pip-tools.txt
 
 upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
-upgrade: piptools ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
+upgrade: ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
 	# Make sure to compile files after any other files they include!
-	pip-compile --upgrade -o requirements/travis.txt requirements/travis.in
 	pip-compile --upgrade --rebuild --allow-unsafe -o requirements/pip.txt requirements/pip.in
 	pip-compile --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
 	pip install -qr requirements/pip.txt
@@ -77,4 +76,6 @@ upgrade: piptools ## update the requirements/*.txt files with the latest package
 	pip-compile --upgrade -o requirements/test.txt requirements/test.in
 	# Let tox control the Django version for tests
 	grep -e "^django==" requirements/base.txt > requirements/django.txt
-	sed -i '/^[dD]jango==/d' requirements/test.txt
+	sed '/^[dD]jango==/d' requirements/test.txt > requirements/test.tmp
+	mv requirements/test.tmp requirements/test.txt
+
