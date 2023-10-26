@@ -51,7 +51,7 @@ cryptography==41.0.5
     #   pyjwt
 ddt==1.6.0
     # via -r requirements/test.in
-diff-cover==7.7.0
+diff-cover==8.0.0
     # via -r requirements/test.in
 distlib==0.3.7
     # via virtualenv
