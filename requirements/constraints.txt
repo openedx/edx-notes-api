@@ -1,4 +1,4 @@
-# Version constraints for pip installation.
+# Version constraints for pip-installation.
 #
 # This file doesn't install any packages. It specifies version constraints
 # that will be applied if a package is needed.
@@ -8,8 +8,11 @@
 # pin when possible.  Writing an issue against the offending project and
 # linking to it here is good.
 
-# This file contains all common constraints for edx-repos
--c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+-c common_constraints.txt
+
+# Keeping Django to latest Django 4.2 LTS
+# This constraint can be removed once the global constraint has been updated
+Django<4.3
 
 astroid==1.6.6
 requests==2.25.0
@@ -21,4 +24,4 @@ python-dateutil==2.4.0
 newrelic==4.8.0.110
 more-itertools==5.0.0
 pylint==1.5.0
-django-cors-headers==3.14.0
+
