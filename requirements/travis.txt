@@ -24,10 +24,10 @@ tomli==2.0.1
     # via tox
 tox==3.28.0
     # via
-    #   -c requirements/common_constraints.txt
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/travis.in
     #   tox-battery
 tox-battery==0.6.2
     # via -r requirements/travis.in
-virtualenv==20.24.6
+virtualenv==20.24.5
     # via tox
