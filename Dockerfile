@@ -83,9 +83,14 @@ FROM app as production
 ENV EDXNOTES_CONFIG_ROOT /edx/etc
 ENV DJANGO_SETTINGS_MODULE "notesserver.settings.yaml_config"
 
+COPY edx_notes_api.yml "/edx/etc/edx_notes_api.yml"
+
 # Code is owned by root so it cannot be modified by the application user.
 # So we copy it before changing users.
 USER app
 
+# RUN python manage.py migrate
+
 # Gunicorn 19 does not log to stdout or stderr by default. Once we are past gunicorn 19, the logging to STDOUT need not be specified.
-CMD gunicorn --workers=2 --name notes -c /edx/app/notes/notesserver/docker_gunicorn_configuration.py --log-file - --max-requests=1000 notesserver.wsgi:application
+# CMD gunicorn --workers=2 --name notes -c /edx/app/notes/notesserver/docker_gunicorn_configuration.py --log-file - --max-requests=1000 notesserver.wsgi:application
+CMD newrelic-admin run-program gunicorn --workers=2 --name notes -c /edx/app/notes/notesserver/docker_gunicorn_configuration.py --log-file - --max-requests=1000 notesserver.wsgi:application

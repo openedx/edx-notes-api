@@ -18,6 +18,9 @@ DISABLE_TOKEN_CHECK = False
 
 EDXNOTES_CONFIG_ROOT = os.environ.get('EDXNOTES_CONFIG_ROOT')
 
+LOG_SETTINGS_DEBUG = True
+LOG_SETTINGS_DEV_ENV = True
+
 if not EDXNOTES_CONFIG_ROOT:
     raise ImproperlyConfigured("EDXNOTES_CONFIG_ROOT must be defined in the environment.")
 
@@ -28,18 +31,30 @@ with open(CONFIG_ROOT / "edx_notes_api.yml") as yaml_file:
 
 vars().update(config_from_yaml)
 
-# Support environment overrides for migrations
-DB_OVERRIDES = dict(
-    PASSWORD=environ.get('DB_MIGRATION_PASS', DATABASES['default']['PASSWORD']),
-    ENGINE=environ.get('DB_MIGRATION_ENGINE', DATABASES['default']['ENGINE']),
-    USER=environ.get('DB_MIGRATION_USER', DATABASES['default']['USER']),
-    NAME=environ.get('DB_MIGRATION_NAME', DATABASES['default']['NAME']),
-    HOST=environ.get('DB_MIGRATION_HOST', DATABASES['default']['HOST']),
-    PORT=environ.get('DB_MIGRATION_PORT', DATABASES['default']['PORT']),
-)
+# # Support environment overrides for migrations
+# DB_OVERRIDES = dict(
+#     PASSWORD=environ.get('DB_MIGRATION_PASS', DATABASES['default']['PASSWORD']),
+#     ENGINE=environ.get('DB_MIGRATION_ENGINE', DATABASES['default']['ENGINE']),
+#     USER=environ.get('DB_MIGRATION_USER', DATABASES['default']['USER']),
+#     NAME=environ.get('DB_MIGRATION_NAME', DATABASES['default']['NAME']),
+#     HOST=environ.get('DB_MIGRATION_HOST', DATABASES['default']['HOST']),
+#     PORT=environ.get('DB_MIGRATION_PORT', DATABASES['default']['PORT']),
+# )
 
-for override, value in DB_OVERRIDES.items():
-    DATABASES['default'][override] = value
+# for override, value in DB_OVERRIDES.items():
+#     DATABASES['default'][override] = value
+
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DB_NAME', 'default.db'),
+        'USER': os.environ.get('DB_USER', ''),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', ''),
+        'PORT': os.environ.get('DB_PORT', ''),
+        'CONN_MAX_AGE': int(os.environ.get('CONN_MAX_AGE', 0)),
+    }
+}
 
 if ES_DISABLED:
     ELASTICSEARCH_DSL = {}
