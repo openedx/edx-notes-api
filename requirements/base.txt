@@ -97,7 +97,6 @@ mysqlclient==2.2.0
     # via -r requirements/base.in
 newrelic==4.8.0.110
     # via
-    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   edx-django-utils
 packaging==23.2
