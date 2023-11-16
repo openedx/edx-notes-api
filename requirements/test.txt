@@ -182,9 +182,8 @@ more-itertools==5.0.0
     #   -r requirements/test.in
 mysqlclient==2.1.1
     # via -r requirements/base.txt
-newrelic==4.8.0.110
+newrelic==9.1.2
     # via
-    #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   edx-django-utils
 packaging==23.0
