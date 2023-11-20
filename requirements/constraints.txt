@@ -9,7 +9,7 @@
 # linking to it here is good.
 
 # This file contains all common constraints for edx-repos
--c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+-c common_constraints.txt
 
 astroid==1.6.6
 requests==2.25.0
@@ -20,3 +20,7 @@ path.py==9.1
 python-dateutil==2.4.0
 more-itertools==5.0.0
 pylint==1.5.0
+django-cors-headers==3.14.0
+
+# Stay on LTS
+Django<5.0
