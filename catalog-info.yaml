@@ -6,12 +6,6 @@ kind: "Component"
 metadata:
   name: 'edx-notes-api'
   description: "A backend store for edX Student Notes"
-  annotations:
-    # (Optional) Annotation keys and values can be whatever you want.
-    # We use it in Open edX repos to have a comma-separated list of GitHub user
-    # names that might be interested in changes to the architecture of this
-    # component.
-    openedx.org/arch-interest-groups: ""
 spec:
 
   # (Required) This can be a group(`group:<group_name>` or a user(`user:<github_username>`)
@@ -22,3 +16,4 @@ spec:
 
   # (Required) Acceptable Lifecycle Values: experimental, production, deprecated
   lifecycle: 'production'
+  
