@@ -14,13 +14,8 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: ['py38']
-        django-version: ['django32', 'django42']
-        db-version: ['mysql57', 'mysql80']
-        # excluding mysql5.7 with Django 4.2 since Django 4.2 has
-        # dropped support for MySQL<8
-        exclude:
-         - django-version: 'django42'
-           db-version: 'mysql57'
+        django-version: ['django42']
+        db-version: ['mysql80']
 
     steps:
     - uses: actions/checkout@v2

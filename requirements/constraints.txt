@@ -21,3 +21,6 @@ python-dateutil==2.4.0
 more-itertools==5.0.0
 pylint==1.5.0
 django-cors-headers==3.14.0
+
+# Stay on LTS
+Django<5.0
