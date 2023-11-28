@@ -54,7 +54,7 @@ coverage[toml]==7.2.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==41.0.5
+cryptography==41.0.4
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -62,7 +62,7 @@ ddt==1.7.0
     # via -r requirements/test.in
 diff-cover==8.0.1
     # via -r requirements/test.in
-distlib==0.3.6
+distlib==0.3.7
     # via virtualenv
     # via
     #   -c requirements/constraints.txt
@@ -77,7 +77,9 @@ distlib==0.3.6
     #   edx-django-utils
     #   edx-drf-extensions
 django-cors-headers==3.14.0
-    # via -r requirements/base.txt
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.txt
 django-crum==0.7.9
     # via
     #   -r requirements/base.txt
@@ -113,7 +115,7 @@ drf-yasg==1.21.5
     # via -r requirements/base.txt
 edx-django-release-util==1.2.0
     # via -r requirements/base.txt
-edx-django-utils==5.8.0
+edx-django-utils==5.7.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -224,6 +226,10 @@ pycparser==2.21
     # via
     #   -r requirements/base.txt
     #   cffi
+pycryptodomex==3.17
+    # via
+    #   -r requirements/base.txt
+    #   pyjwkest
 pygments==2.17.1
     # via diff-cover
 pyjwkest==1.4.2
@@ -326,9 +332,9 @@ tomli==2.0.1
     #   pytest
     #   tox
 tox==3.28.0
-    # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   -r requirements/test.in
+    # via -r requirements/test.in
+typing-extensions==4.8.0
+    # via faker
 uritemplate==4.1.1
     # via
     #   -r requirements/base.txt
