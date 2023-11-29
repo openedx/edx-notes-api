@@ -6,7 +6,9 @@
 #
 asgiref==3.6.0
     # via django
-certifi==2022.12.7
+backports-zoneinfo==0.2.1
+    # via django
+certifi==2023.11.17
     # via
     #   elasticsearch
     #   requests
@@ -24,11 +26,11 @@ coreschema==0.0.4
     # via
     #   coreapi
     #   drf-yasg
-cryptography==40.0.1
+cryptography==41.0.4
     # via pyjwt
-django==3.2.20
+django==4.2.7
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-cors-headers
     #   django-crum
@@ -40,7 +42,9 @@ django==3.2.20
     #   edx-django-utils
     #   edx-drf-extensions
 django-cors-headers==3.14.0
-    # via -r requirements/base.in
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.in
 django-crum==0.7.9
     # via edx-django-utils
 django-elasticsearch-dsl==7.3
@@ -69,7 +73,7 @@ drf-yasg==1.21.5
     # via -r requirements/base.in
 edx-django-release-util==1.2.0
     # via -r requirements/base.in
-edx-django-utils==5.3.0
+edx-django-utils==5.7.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -79,7 +83,7 @@ edx-opaque-keys==2.3.0
     # via edx-drf-extensions
 elasticsearch==7.13.4
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/common_constraints.txt
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
@@ -106,9 +110,8 @@ markupsafe==2.1.2
     # via jinja2
 mysqlclient==2.1.1
     # via -r requirements/base.in
-newrelic==4.8.0.110
+newrelic==9.2.0
     # via
-    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   edx-django-utils
 packaging==23.0
@@ -119,7 +122,7 @@ path-py==9.1
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-pbr==5.11.1
+pbr==6.0.0
     # via stevedore
 psutil==5.9.4
     # via edx-django-utils
@@ -146,7 +149,6 @@ python-dateutil==2.4.0
     #   elasticsearch-dsl
 pytz==2023.3
     # via
-    #   django
     #   djangorestframework
     #   drf-yasg
 pyyaml==6.0
