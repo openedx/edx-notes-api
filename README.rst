@@ -89,6 +89,6 @@ You can discuss this code on the `edx-code Google Group`__ or in the
 
 __ https://groups.google.com/forum/#!forum/edx-code
 
-.. |build-status| image:: https://travis-ci.com/edx/edx-notes-api.svg?branch=master
-   :target: https://travis-ci.com/edx/edx-notes-api
+.. |build-status| image:: https://github.com/openedx/edx-notes-api/actions/workflows/ci.yml/badge.svg
+   :target: https://github.com/openedx/edx-notes-api/actions/workflows/ci.yml
 
