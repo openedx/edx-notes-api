@@ -21,17 +21,17 @@ jobs:
     - uses: actions/checkout@v2
     - name: Start container
       run: |
-        docker-compose -f .travis/docker-compose-travis.yml up -d
+        docker-compose -f .ci/docker-compose-ci.yml up -d
     - name: Install Dependencies
       run: |
         docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
         /bin/bash -c "apt-get update && apt-get install python3-dev default-libmysqlclient-dev build-essential pkg-config"
     - name: Run Tests
       run: |
-        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api /edx/app/edx_notes_api/edx_notes_api/.travis/run_tests.sh
+        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api /edx/app/edx_notes_api/edx_notes_api/.ci/run_tests.sh
     - name: Run PII Check
       run: |
-        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} -u root edx_notes_api /edx/app/edx_notes_api/edx_notes_api/.travis/run_pii_checker.sh
+        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} -u root edx_notes_api /edx/app/edx_notes_api/edx_notes_api/.ci/run_pii_checker.sh
     - name: Run Reserved Keywords Check
       run: |
-        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} -u root edx_notes_api /edx/app/edx_notes_api/edx_notes_api/.travis/run_check_keywords.sh
+        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} -u root edx_notes_api /edx/app/edx_notes_api/edx_notes_api/.ci/run_check_keywords.sh
