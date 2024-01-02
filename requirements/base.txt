@@ -22,7 +22,7 @@ click==8.1.7
     # via edx-django-utils
 cryptography==41.0.7
     # via pyjwt
-django==4.2.8
+django==4.2.9
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
