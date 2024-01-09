@@ -49,7 +49,7 @@ cryptography==41.0.7
     # via
     #   -r requirements/base.txt
     #   pyjwt
-ddt==1.7.0
+ddt==1.7.1
     # via -r requirements/test.in
 diff-cover==8.0.2
     # via -r requirements/test.in
@@ -111,7 +111,7 @@ edx-django-utils==5.9.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-edx-drf-extensions==9.0.1
+edx-drf-extensions==9.1.2
     # via -r requirements/base.txt
 edx-opaque-keys==2.5.1
     # via
@@ -134,7 +134,7 @@ exceptiongroup==1.2.0
     # via pytest
 factory-boy==3.3.0
     # via -r requirements/test.in
-faker==22.0.0
+faker==22.1.0
     # via factory-boy
 filelock==3.13.1
     # via
@@ -166,7 +166,7 @@ more-itertools==5.0.0
     #   -r requirements/test.in
 mysqlclient==2.2.1
     # via -r requirements/base.txt
-newrelic==9.3.0
+newrelic==9.4.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
