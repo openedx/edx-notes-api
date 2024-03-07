@@ -12,9 +12,10 @@ jobs:
     name: check migrations
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu-20.04 ]
-        python-version: [ 3.8 ]
+        python-version: [ '3.8', '3.12' ]
 
     steps:
     - name: Checkout repo
