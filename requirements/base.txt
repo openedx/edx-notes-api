@@ -70,7 +70,7 @@ drf-yasg==1.21.7
     # via -r requirements/base.in
 edx-django-release-util==1.3.0
     # via -r requirements/base.in
-edx-django-utils==5.10.1
+edx-django-utils==5.11.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -99,11 +99,11 @@ inflection==0.5.1
     # via drf-yasg
 mysqlclient==2.2.4
     # via -r requirements/base.in
-newrelic==9.7.0
+newrelic==9.7.1
     # via
     #   -r requirements/base.in
     #   edx-django-utils
-packaging==23.2
+packaging==24.0
     # via
     #   django-nine
     #   drf-yasg
