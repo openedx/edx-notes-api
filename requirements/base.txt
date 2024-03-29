@@ -4,12 +4,13 @@
 #
 #    make upgrade
 #
-asgiref==3.7.2
+asgiref==3.8.1
     # via django
 backports-zoneinfo==0.2.1 ; python_version < "3.9"
     # via
     #   -c requirements/constraints.txt
     #   django
+    #   djangorestframework
 certifi==2024.2.2
     # via
     #   elasticsearch
@@ -57,7 +58,7 @@ django-waffle==4.1.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.14.0
+djangorestframework==3.15.1
     # via
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
@@ -74,7 +75,7 @@ edx-django-utils==5.11.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
-edx-drf-extensions==10.2.0
+edx-drf-extensions==10.3.0
     # via -r requirements/base.in
 edx-opaque-keys==2.5.1
     # via edx-drf-extensions
@@ -99,7 +100,7 @@ inflection==0.5.1
     # via drf-yasg
 mysqlclient==2.2.4
     # via -r requirements/base.in
-newrelic==9.7.1
+newrelic==9.8.0
     # via
     #   -r requirements/base.in
     #   edx-django-utils
@@ -133,9 +134,7 @@ python-dateutil==2.4.0
     #   -r requirements/base.in
     #   elasticsearch-dsl
 pytz==2024.1
-    # via
-    #   djangorestframework
-    #   drf-yasg
+    # via drf-yasg
 pyyaml==6.0.1
     # via
     #   drf-yasg
