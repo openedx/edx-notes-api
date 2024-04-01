@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        python-version: ['py38', 'py312']
+        python-version: ['py38', 'py311', 'py312']
         django-version: ['django42']
         db-version: ['mysql80']
 
