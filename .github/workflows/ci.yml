@@ -27,15 +27,16 @@ jobs:
       run: |
         docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
         /bin/bash -c "apt-get update && apt-get install python3-dev default-libmysqlclient-dev build-essential pkg-config"
-    - name: setup python
-      if: ${{ matrix.python-version == 'py311' }}
-      run: |
-        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
-        /bin/bash -c "add-apt-repository ppa:deadsnakes/ppa -y && apt install python3.11 python3.11-dev python3.11-distutils -y"
-      if: ${{ matrix.python-version == 'py312' }}
-      run: |
-        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
-        /bin/bash -c "add-apt-repository ppa:deadsnakes/ppa -y && apt install python3.12 python3.12-dev python3.12-distutils -y"  
+    - name: Setup Python 3.11
+        if: ${{ matrix.python-version == 'py311' }}
+        run: |
+          docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
+          /bin/bash -c "add-apt-repository ppa:deadsnakes/ppa -y && apt install python3.11 python3.11-dev python3.11-distutils -y"
+    - name: Setup Python 3.12
+        if: ${{ matrix.python-version == 'py312' }}
+        run: |
+          docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
+          /bin/bash -c "add-apt-repository ppa:deadsnakes/ppa -y && apt install python3.12 python3.12-dev python3.12-distutils -y"
     - name: Run Tests
       run: |
         docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api /edx/app/edx_notes_api/edx_notes_api/.ci/run_tests.sh
