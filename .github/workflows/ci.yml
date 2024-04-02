@@ -27,6 +27,11 @@ jobs:
       run: |
         docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
         /bin/bash -c "apt-get update && apt-get install python3-dev default-libmysqlclient-dev build-essential pkg-config"
+    - name: setup python 311
+      if: ${{ matrix.python-version == 'py311' }}
+      run: |
+        docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
+        /bin/bash -c "add-apt-repository ppa:deadsnakes/ppa -y && apt install python3.11 python3.11-dev python3.11-distutils -y"    
     - name: setup python 312
       if: ${{ matrix.python-version == 'py312' }}
       run: |
