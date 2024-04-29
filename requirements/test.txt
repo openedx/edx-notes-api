@@ -39,11 +39,11 @@ click==8.1.7
     #   -r requirements/base.txt
     #   code-annotations
     #   edx-django-utils
-code-annotations==1.7.0
+code-annotations==1.8.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via pylint
-coverage[toml]==7.4.4
+coverage[toml]==7.5.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -53,7 +53,7 @@ cryptography==42.0.5
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.in
-diff-cover==8.0.3
+diff-cover==9.0.0
     # via -r requirements/test.in
 distlib==0.3.8
     # via virtualenv
@@ -101,21 +101,25 @@ djangorestframework==3.15.1
     #   drf-jwt
     #   drf-yasg
     #   edx-drf-extensions
+dnspython==2.6.1
+    # via
+    #   -r requirements/base.txt
+    #   pymongo
 drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
 drf-yasg==1.21.7
     # via -r requirements/base.txt
-edx-django-release-util==1.3.0
+edx-django-release-util==1.4.0
     # via -r requirements/base.txt
-edx-django-utils==5.11.0
+edx-django-utils==5.12.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
 edx-drf-extensions==10.3.0
     # via -r requirements/base.txt
-edx-opaque-keys==2.5.1
+edx-opaque-keys==2.9.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -132,17 +136,17 @@ elasticsearch-dsl==7.4.1
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
-exceptiongroup==1.2.0
+exceptiongroup==1.2.1
     # via pytest
 factory-boy==3.3.0
     # via -r requirements/test.in
-faker==24.4.0
+faker==24.14.1
     # via factory-boy
-filelock==3.13.3
+filelock==3.13.4
     # via
     #   tox
     #   virtualenv
-gunicorn==21.2.0
+gunicorn==22.0.0
     # via -r requirements/base.txt
 idna==2.10
     # via
@@ -168,7 +172,7 @@ more-itertools==5.0.0
     #   -r requirements/test.in
 mysqlclient==2.2.4
     # via -r requirements/base.txt
-newrelic==9.8.0
+newrelic==9.9.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -190,9 +194,9 @@ pbr==6.0.0
     #   stevedore
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==4.2.0
+platformdirs==4.2.1
     # via virtualenv
-pluggy==1.4.0
+pluggy==1.5.0
     # via
     #   diff-cover
     #   pytest
@@ -203,7 +207,7 @@ psutil==5.9.8
     #   edx-django-utils
 py==1.11.0
     # via tox
-pycparser==2.21
+pycparser==2.22
     # via
     #   -r requirements/base.txt
     #   cffi
@@ -218,7 +222,7 @@ pylint==1.5.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-pymongo==3.13.0
+pymongo==4.4.0
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -226,7 +230,7 @@ pynacl==1.5.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pytest==8.1.1
+pytest==8.2.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -274,7 +278,7 @@ six==1.16.0
     #   pylint
     #   python-dateutil
     #   tox
-sqlparse==0.4.4
+sqlparse==0.5.0
     # via
     #   -r requirements/base.txt
     #   django
@@ -293,7 +297,7 @@ tomli==2.0.1
     #   tox
 tox==3.28.0
     # via -r requirements/test.in
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via
     #   -r requirements/base.txt
     #   asgiref
@@ -308,7 +312,7 @@ urllib3==1.26.18
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.25.1
+virtualenv==20.26.0
     # via tox
 wrapt==1.16.0
     # via astroid
