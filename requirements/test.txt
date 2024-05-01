@@ -113,7 +113,7 @@ drf-yasg==1.21.7
     # via -r requirements/base.txt
 edx-django-release-util==1.4.0
     # via -r requirements/base.txt
-edx-django-utils==5.12.0
+edx-django-utils==5.13.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -140,9 +140,9 @@ exceptiongroup==1.2.1
     # via pytest
 factory-boy==3.3.0
     # via -r requirements/test.in
-faker==24.14.1
+faker==25.0.0
     # via factory-boy
-filelock==3.13.4
+filelock==3.14.0
     # via
     #   tox
     #   virtualenv
@@ -302,7 +302,6 @@ typing-extensions==4.11.0
     #   -r requirements/base.txt
     #   asgiref
     #   edx-opaque-keys
-    #   faker
 uritemplate==4.1.1
     # via
     #   -r requirements/base.txt
@@ -312,7 +311,7 @@ urllib3==1.26.18
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.26.0
+virtualenv==20.26.1
     # via tox
 wrapt==1.16.0
     # via astroid
