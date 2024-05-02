@@ -48,12 +48,12 @@ jobs:
             openedx/edx-notes-api-dev:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
 
-      # - name: Build and push prod Docker image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     push: true
-      #     target: prod
-      #     tags: |
-      #         openedx/edx-notes-api:${{ steps.get-tag-name.outputs.result }}
-      #         openedx/edx-notes-api:${{ github.sha }}
-      #     platforms: linux/amd64,linux/arm64
+      - name: Build and push Prod Docker image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          target: prod
+          tags: |
+              openedx/edx-notes-api:${{ steps.get-tag-name.outputs.result }}
+              openedx/edx-notes-api:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
