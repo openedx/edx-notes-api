@@ -83,6 +83,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
     'DEFAULT_PERMISSION_CLASSES': ['notesapi.v1.permissions.HasAccessToken'],
     'DEFAULT_PAGINATION_CLASS': 'notesapi.v1.paginators.NotesPaginator',
+    'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
 }
 
 # CORS is configured to allow all origins because requests to the

@@ -1,42 +1,38 @@
-Part of `edX code`__.
-
-__ http://code.edx.org/
-
 edX Student Notes API |build-status|
-====================================
+####################################
 
 This is a backend store for edX Student Notes.
 
 Overview
---------
+********
 
 The edX Notes API is designed to be compatible with the `Annotator <http://annotatorjs.org/>`__.
 
 Getting Started
----------------
+***************
 
 1. Install `ElasticSearch 7.8.0 <https://www.elastic.co/blog/elasticsearch-7-8-0-released>`__.
 
 2. Install the requirements:
 
-   ::
+   .. code-block:: bash
 
-       $ make develop
+      make develop
 
 3. Create index and put mapping:
 
-   ::
+   .. code-block:: bash
 
-       $ make create-index
+      make create-index
 
 4. Run the server:
 
-   ::
+   .. code-block:: bash
 
-       $ make run
+      make run
 
-Configuration:
---------------
+Configuration
+*************
 
 ``CLIENT_ID`` - OAuth2 Client ID, which is to be found in ``aud`` field of IDTokens which authorize users
 
@@ -49,20 +45,21 @@ Configuration:
 ``ELASTICSEARCH_DSL['default']['hosts']`` - Your ElasticSearch host
 
 Running Tests
--------------
+*************
 
 Run ``make validate`` install the requirements, run the tests, and run
 lint.
 
 How To Resync The Index
------------------------
+***********************
+
 edX Notes Store uses `Django elasticsearch DSL <https://django-elasticsearch-dsl.readthedocs.io/>`_ which comes with several management commands.
 
 Please read more about ``search_index`` management commands
 `here <https://django-elasticsearch-dsl.readthedocs.io/en/latest/management.html>`_.
 
 License
--------
+*******
 
 The code in this repository is licensed under version 3 of the AGPL unless
 otherwise noted.
@@ -70,19 +67,19 @@ otherwise noted.
 Please see ``LICENSE.txt`` for details.
 
 How To Contribute
------------------
+*****************
 
 Contributions are very welcome.
 
 Please read `How To Contribute <https://github.com/openedx/.github/blob/master/CONTRIBUTING.md>`_ for details.
 
 Reporting Security Issues
--------------------------
+*************************
 
 Please do not report security issues in public. Please email security@openedx.org
 
 Mailing List and IRC Channel
-----------------------------
+****************************
 
 You can discuss this code on the `edx-code Google Group`__ or in the
 ``edx-code`` IRC channel on Freenode.
