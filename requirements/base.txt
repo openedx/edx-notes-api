@@ -23,7 +23,7 @@ chardet==3.0.4
     # via requests
 click==8.1.7
     # via edx-django-utils
-cryptography==42.0.5
+cryptography==42.0.7
     # via pyjwt
 django==4.2.13
     # via
@@ -102,7 +102,7 @@ inflection==0.5.1
     # via drf-yasg
 mysqlclient==2.2.4
     # via -r requirements/base.in
-newrelic==9.9.0
+newrelic==9.9.1
     # via
     #   -r requirements/base.in
     #   edx-django-utils
