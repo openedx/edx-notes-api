@@ -73,7 +73,7 @@ drf-yasg==1.21.7
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==5.14.1
+edx-django-utils==5.14.2
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
