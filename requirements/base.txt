@@ -58,7 +58,7 @@ django-waffle==4.1.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.15.1
+djangorestframework==3.15.2
     # via
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
@@ -117,7 +117,7 @@ path-py==9.1
     #   -r requirements/base.in
 pbr==6.0.0
     # via stevedore
-psutil==5.9.8
+psutil==6.0.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
@@ -126,7 +126,7 @@ pyjwt[crypto]==2.8.0
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.7.3
+pymongo==4.8.0
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -167,7 +167,7 @@ typing-extensions==4.12.2
     #   edx-opaque-keys
 uritemplate==4.1.1
     # via drf-yasg
-urllib3==1.26.18
+urllib3==1.26.19
     # via
     #   elasticsearch
     #   requests
