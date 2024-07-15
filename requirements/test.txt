@@ -19,7 +19,7 @@ backports-zoneinfo==0.2.1 ; python_version < "3.9"
     #   -r requirements/base.txt
     #   django
     #   djangorestframework
-certifi==2024.6.2
+certifi==2024.7.4
     # via
     #   -r requirements/base.txt
     #   elasticsearch
@@ -43,7 +43,7 @@ code-annotations==1.8.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via pylint
-coverage[toml]==7.5.4
+coverage[toml]==7.6.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -136,7 +136,7 @@ elasticsearch-dsl==7.4.1
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
-exceptiongroup==1.2.1
+exceptiongroup==1.2.2
     # via pytest
 factory-boy==3.3.0
     # via -r requirements/test.in
@@ -172,7 +172,7 @@ more-itertools==5.0.0
     #   -r requirements/test.in
 mysqlclient==2.2.4
     # via -r requirements/base.txt
-newrelic==9.11.0
+newrelic==9.12.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
