@@ -388,14 +388,9 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         headers["course_id"] = "a/b/c"
         response = self.client.get(reverse('api:v1:annotations'), headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        if sys.version_info[1] == 12:  # python 3.12
-            self.assertEqual(
-                {'total': 0, 'rows': []} | response.data, response.data, "no annotation should be returned in response"
-            )
-        else:  # remove this code after removing python 3.8 dependency
-            self.assertDictContainsSubset(
-                {'total': 0, 'rows': []}, response.data, "no annotation should be returned in response"
-            )
+        self.assertEqual(
+            {'total': 0, 'rows': []} | response.data, response.data, "no annotation should be returned in response"
+        )
 
     def test_read_all(self):
         """
