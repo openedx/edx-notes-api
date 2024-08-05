@@ -22,7 +22,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Start container
       run: |
-        docker-compose -f .ci/docker-compose-ci.yml up -d
+        docker compose -f .ci/docker-compose-ci.yml up -d
     - name: Install Dependencies
       run: |
         docker exec -e TOXENV=${{ matrix.python-version }}-${{ matrix.django-version }} --env DB_HOST=${{ matrix.db-version }} -u root edx_notes_api \
