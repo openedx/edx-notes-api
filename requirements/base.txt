@@ -6,7 +6,7 @@
 #
 asgiref==3.8.1
     # via django
-certifi==2024.7.4
+certifi==2024.8.30
     # via
     #   elasticsearch
     #   requests
@@ -110,7 +110,7 @@ path-py==9.1
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-pbr==6.0.0
+pbr==6.1.0
     # via stevedore
 psutil==6.0.0
     # via edx-django-utils
@@ -160,7 +160,7 @@ typing-extensions==4.12.2
     # via edx-opaque-keys
 uritemplate==4.1.1
     # via drf-yasg
-urllib3==1.26.19
+urllib3==1.26.20
     # via
     #   elasticsearch
     #   requests

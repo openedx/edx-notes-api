@@ -13,7 +13,7 @@ astroid==1.6.6
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
     #   pylint
-certifi==2024.7.4
+certifi==2024.8.30
     # via
     #   -r requirements/base.txt
     #   elasticsearch
@@ -132,7 +132,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.1
     # via -r requirements/test.in
-faker==28.0.0
+faker==28.1.0
     # via factory-boy
 filelock==3.15.4
     # via
@@ -180,7 +180,7 @@ path-py==9.1
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
-pbr==6.0.0
+pbr==6.1.0
     # via
     #   -r requirements/base.txt
     #   stevedore
@@ -292,7 +292,7 @@ uritemplate==4.1.1
     # via
     #   -r requirements/base.txt
     #   drf-yasg
-urllib3==1.26.19
+urllib3==1.26.20
     # via
     #   -r requirements/base.txt
     #   elasticsearch
