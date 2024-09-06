@@ -21,6 +21,3 @@ python-dateutil==2.4.0
 more-itertools==5.0.0
 pylint==1.5.0
 django-cors-headers==3.14.0
-
-
-backports-zoneinfo==0.2.1; python_version < '3.9'

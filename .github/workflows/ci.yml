@@ -19,7 +19,7 @@ jobs:
         db-version: ['mysql80']
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Start container
       run: |
         docker compose -f .ci/docker-compose-ci.yml up -d
