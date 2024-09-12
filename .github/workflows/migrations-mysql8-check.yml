@@ -14,15 +14,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-latest ]
         python-version: [ '3.11', '3.12' ]
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -36,7 +36,7 @@ jobs:
         echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
     - name: Cache pip dependencies
       id: cache-dependencies
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ${{ steps.pip-cache-dir.outputs.dir }}
         key: ${{ runner.os }}-pip-${{ hashFiles('requirements/pip-tools.txt') }}
