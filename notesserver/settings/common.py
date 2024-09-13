@@ -10,7 +10,7 @@ AUTH_USER_MODEL = 'auth.User'
 
 # This value needs to be overriden in production.
 SECRET_KEY = 'CHANGEME'
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['*']
 
 # ID and Secret used for authenticating JWT Auth Tokens
 # should match those configured for `edx-notes` Client in EdX's /admin/oauth2/client/
@@ -57,12 +57,12 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
-    'drf_yasg',
     'rest_framework',
     'corsheaders',
     'notesapi.v1',
     # additional release utilities to ease automation
     'release_util',
+    'drf_spectacular',
 ]
 if not ES_DISABLED:
     INSTALLED_APPS.extend(ES_APPS)
@@ -84,6 +84,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['notesapi.v1.permissions.HasAccessToken'],
     'DEFAULT_PAGINATION_CLASS': 'notesapi.v1.paginators.NotesPaginator',
     'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # CORS is configured to allow all origins because requests to the

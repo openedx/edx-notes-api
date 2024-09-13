@@ -13,6 +13,11 @@ astroid==1.6.6
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
     #   pylint
+attrs==24.2.0
+    # via
+    #   -r requirements/base.txt
+    #   jsonschema
+    #   referencing
 certifi==2024.8.30
     # via
     #   -r requirements/base.txt
@@ -60,7 +65,7 @@ distlib==0.3.8
     #   django-waffle
     #   djangorestframework
     #   drf-jwt
-    #   drf-yasg
+    #   drf-spectacular
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
@@ -93,7 +98,7 @@ djangorestframework==3.15.2
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl-drf
     #   drf-jwt
-    #   drf-yasg
+    #   drf-spectacular
     #   edx-drf-extensions
 dnspython==2.6.1
     # via
@@ -103,7 +108,7 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-drf-yasg==1.21.7
+drf-spectacular==0.27.2
     # via -r requirements/base.txt
 edx-django-release-util==1.4.0
     # via -r requirements/base.txt
@@ -147,13 +152,21 @@ idna==2.10
 inflection==0.5.1
     # via
     #   -r requirements/base.txt
-    #   drf-yasg
+    #   drf-spectacular
 iniconfig==2.0.0
     # via pytest
 jinja2==3.1.4
     # via
     #   code-annotations
     #   diff-cover
+jsonschema==4.23.0
+    # via
+    #   -r requirements/base.txt
+    #   drf-spectacular
+jsonschema-specifications==2023.12.1
+    # via
+    #   -r requirements/base.txt
+    #   jsonschema
 lazy-object-proxy==1.10.0
     # via astroid
 markupsafe==2.1.5
@@ -172,7 +185,6 @@ packaging==24.1
     # via
     #   -r requirements/base.txt
     #   django-nine
-    #   drf-yasg
     #   gunicorn
     #   pytest
     #   tox
@@ -222,7 +234,7 @@ pynacl==1.5.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pytest==8.3.2
+pytest==8.3.3
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -239,21 +251,27 @@ python-dateutil==2.4.0
     #   faker
 python-slugify==8.0.4
     # via code-annotations
-pytz==2024.1
-    # via
-    #   -r requirements/base.txt
-    #   drf-yasg
 pyyaml==6.0.2
     # via
     #   -r requirements/base.txt
     #   code-annotations
-    #   drf-yasg
+    #   drf-spectacular
     #   edx-django-release-util
+referencing==0.35.1
+    # via
+    #   -r requirements/base.txt
+    #   jsonschema
+    #   jsonschema-specifications
 requests==2.25.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   edx-drf-extensions
+rpds-py==0.20.0
+    # via
+    #   -r requirements/base.txt
+    #   jsonschema
+    #   referencing
 semantic-version==2.10.0
     # via
     #   -r requirements/base.txt
@@ -291,7 +309,7 @@ typing-extensions==4.12.2
 uritemplate==4.1.1
     # via
     #   -r requirements/base.txt
-    #   drf-yasg
+    #   drf-spectacular
 urllib3==1.26.20
     # via
     #   -r requirements/base.txt

@@ -4,7 +4,7 @@
 Django
 requests
 djangorestframework
-drf-yasg
+drf-spectacular
 elasticsearch
 elasticsearch-dsl
 django-elasticsearch-dsl

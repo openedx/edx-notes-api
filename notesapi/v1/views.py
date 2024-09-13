@@ -122,7 +122,7 @@ class AnnotationSearchView(ListAPIView):
             * updated: DateTime. When was the last time annotation was updated.
     """
 
-    action = None
+    action = ''
     params = {}
     query_params = {}
     search_with_usage_id = False
