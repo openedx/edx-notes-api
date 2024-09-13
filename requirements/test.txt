@@ -251,6 +251,8 @@ python-dateutil==2.4.0
     #   faker
 python-slugify==8.0.4
     # via code-annotations
+pytz==2024.2
+    # via -r requirements/base.txt
 pyyaml==6.0.2
     # via
     #   -r requirements/base.txt
