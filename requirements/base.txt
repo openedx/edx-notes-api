@@ -130,7 +130,7 @@ python-dateutil==2.4.0
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   elasticsearch-dsl
-pytz==2024.1
+pytz==2024.2
     # via drf-yasg
 pyyaml==6.0.2
     # via
