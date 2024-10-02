@@ -72,7 +72,7 @@ drf-spectacular==0.27.2
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==5.15.0
+edx-django-utils==5.16.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -128,7 +128,7 @@ pyjwt[crypto]==2.9.0
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.9.1
+pymongo==4.10.1
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -138,7 +138,7 @@ python-dateutil==2.4.0
     #   -r requirements/base.in
     #   elasticsearch-dsl
 pytz==2024.2
-    # via drf-yasg
+    # via -r requirements/base.in
 pyyaml==6.0.2
     # via
     #   drf-spectacular

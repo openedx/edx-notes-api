@@ -87,6 +87,14 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'edx-notes-api',
+    'DESCRIPTION': 'API documentation for edx-notes-api',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': '/api/'
+}
+
 # CORS is configured to allow all origins because requests to the
 # Notes API do not rely on ambient authority; instead, they are
 # authorized explicitly via an X-Annotator-Auth-Token header. (The
