@@ -88,8 +88,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'edx-notes-api',
-    'DESCRIPTION': 'API documentation for edx-notes-api',
+    'TITLE': 'Edx Notes API',
+    'DESCRIPTION': 'Edx Notes API docs',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'SCHEMA_PATH_PREFIX': '/api/'
