@@ -3,3 +3,6 @@
 -r base.txt
 
 code-annotations
+pycodestyle
+pylint
+edx_lint
