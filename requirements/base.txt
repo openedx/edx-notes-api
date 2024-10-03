@@ -6,6 +6,10 @@
 #
 asgiref==3.8.1
     # via django
+attrs==24.2.0
+    # via
+    #   jsonschema
+    #   referencing
 certifi==2024.8.30
     # via
     #   elasticsearch
@@ -30,7 +34,7 @@ django==4.2.16
     #   django-waffle
     #   djangorestframework
     #   drf-jwt
-    #   drf-yasg
+    #   drf-spectacular
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
@@ -58,17 +62,17 @@ djangorestframework==3.15.2
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
     #   drf-jwt
-    #   drf-yasg
+    #   drf-spectacular
     #   edx-drf-extensions
 dnspython==2.6.1
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-yasg==1.21.7
+drf-spectacular==0.27.2
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==5.15.0
+edx-django-utils==5.16.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -94,7 +98,11 @@ gunicorn==23.0.0
 idna==2.10
     # via requests
 inflection==0.5.1
-    # via drf-yasg
+    # via drf-spectacular
+jsonschema==4.23.0
+    # via drf-spectacular
+jsonschema-specifications==2023.12.1
+    # via jsonschema
 mysqlclient==2.2.4
     # via -r requirements/base.in
 newrelic==10.0.0
@@ -104,7 +112,6 @@ newrelic==10.0.0
 packaging==24.1
     # via
     #   django-nine
-    #   drf-yasg
     #   gunicorn
 path-py==9.1
     # via
@@ -121,7 +128,7 @@ pyjwt[crypto]==2.9.0
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.9.1
+pymongo==4.10.1
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -131,16 +138,24 @@ python-dateutil==2.4.0
     #   -r requirements/base.in
     #   elasticsearch-dsl
 pytz==2024.2
-    # via drf-yasg
+    # via -r requirements/base.in
 pyyaml==6.0.2
     # via
-    #   drf-yasg
+    #   drf-spectacular
     #   edx-django-release-util
+referencing==0.35.1
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
 requests==2.25.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   edx-drf-extensions
+rpds-py==0.20.0
+    # via
+    #   jsonschema
+    #   referencing
 semantic-version==2.10.0
     # via edx-drf-extensions
 six==1.16.0
@@ -159,7 +174,7 @@ stevedore==5.3.0
 typing-extensions==4.12.2
     # via edx-opaque-keys
 uritemplate==4.1.1
-    # via drf-yasg
+    # via drf-spectacular
 urllib3==1.26.20
     # via
     #   elasticsearch

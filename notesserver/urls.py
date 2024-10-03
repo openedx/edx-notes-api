@@ -1,19 +1,7 @@
 from django.urls import include, path, re_path
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-from rest_framework import permissions
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 import notesserver.views
-
-schema_view = get_schema_view(
-   openapi.Info(
-      title="Edx Notes API",
-      default_version='v1',
-      description="Edx Notes API docs",
-   ),
-   public=False,
-   permission_classes=[permissions.AllowAny],
-)
 
 urlpatterns = [
     path('heartbeat/', notesserver.views.heartbeat, name='heartbeat'),
@@ -21,5 +9,7 @@ urlpatterns = [
     re_path(r'^robots.txt$', notesserver.views.robots, name='robots'),
     path('', notesserver.views.root, name='root'),
     path('api/', include('notesapi.urls', namespace='api')),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]

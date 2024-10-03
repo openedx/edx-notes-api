@@ -4,7 +4,7 @@
 Django
 requests
 djangorestframework
-drf-yasg
+drf-spectacular
 elasticsearch
 elasticsearch-dsl
 django-elasticsearch-dsl
@@ -19,3 +19,4 @@ newrelic
 edx-django-release-util
 edx-django-utils
 edx-drf-extensions
+pytz

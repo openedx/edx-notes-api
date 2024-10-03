@@ -2,9 +2,9 @@ from os import environ
 
 import yaml
 from django.core.exceptions import ImproperlyConfigured
+from path import path
 
 from notesserver.settings.logger import build_logging_config
-from path import path
 
 from .common import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
