@@ -9,7 +9,7 @@ asgiref==3.8.1
     #   -r requirements/base.txt
     #   django
     #   django-cors-headers
-astroid==3.3.4
+astroid==3.3.5
     # via
     #   pylint
     #   pylint-celery
@@ -93,7 +93,7 @@ djangorestframework==3.15.2
     #   drf-jwt
     #   drf-spectacular
     #   edx-drf-extensions
-dnspython==2.6.1
+dnspython==2.7.0
     # via
     #   -r requirements/base.txt
     #   pymongo
