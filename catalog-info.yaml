@@ -16,4 +16,3 @@ spec:
 
   # (Required) Acceptable Lifecycle Values: experimental, production, deprecated
   lifecycle: 'production'
-  
