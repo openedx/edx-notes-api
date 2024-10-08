@@ -9,6 +9,17 @@ bind = "0.0.0.0:8120"
 
 workers = 2
 
+# Set the log level for Gunicorn
+loglevel = 'info'
+
+# Set access and error logs to std
+accesslog = '-'  # Access logs to stdout
+errorlog = '-'   # Error logs to stdout
+
+# Define the custom access log format to match the Datadog pipeline format
+access_log_format = '%(t)s %(l)s [%(r)s] [%(p)s] [dd.trace_id=%(o)s dd.span_id=%(O)s] "%(m)s %(U)s %(H)s" %(s)s %(b)s "%(f)s" "%(a)s"'
+
+
 def pre_request(worker, req):
     worker.log.info("%s %s" % (req.method, req.path))
 
