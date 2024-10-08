@@ -59,9 +59,9 @@ def build_logging_config():
             },
         },
         'loggers': {
-            'django': {'handlers': handlers, 'propagate': True, 'level': 'INFO'},
-            "elasticsearch.trace": {'handlers': handlers, 'level': 'WARNING', 'propagate': False},
-            '': {'handlers': handlers, 'level': 'DEBUG', 'propagate': False},
+            'django': {'handlers': handlers, 'propagate': True, 'level': 'INFO', 'formatter': 'standard'},
+            "elasticsearch.trace": {'handlers': handlers, 'level': 'WARNING', 'propagate': False, 'formatter': 'standard'},
+            '': {'handlers': handlers, 'level': 'DEBUG', 'propagate': False, 'formatter': 'standard'},
         },
     }
 
