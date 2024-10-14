@@ -28,7 +28,7 @@ cffi==1.17.1
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
-charset-normalizer==3.3.2
+charset-normalizer==3.4.0
     # via
     #   -r requirements/base.txt
     #   requests
@@ -65,7 +65,7 @@ django==4.2.16
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
-django-cors-headers==4.4.0
+django-cors-headers==4.5.0
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
@@ -105,7 +105,7 @@ drf-spectacular==0.27.2
     # via -r requirements/base.txt
 edx-django-release-util==1.4.0
     # via -r requirements/base.txt
-edx-django-utils==5.16.0
+edx-django-utils==6.0.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -146,17 +146,17 @@ jsonschema==4.23.0
     # via
     #   -r requirements/base.txt
     #   drf-spectacular
-jsonschema-specifications==2023.12.1
+jsonschema-specifications==2024.10.1
     # via
     #   -r requirements/base.txt
     #   jsonschema
-markupsafe==2.1.5
+markupsafe==3.0.1
     # via jinja2
 mccabe==0.7.0
     # via pylint
 mysqlclient==2.2.4
     # via -r requirements/base.txt
-newrelic==10.0.0
+newrelic==10.1.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -201,7 +201,7 @@ pylint==3.3.1
     #   pylint-plugin-utils
 pylint-celery==0.3
     # via edx-lint
-pylint-django==2.5.5
+pylint-django==2.6.1
     # via edx-lint
 pylint-plugin-utils==0.8.2
     # via
