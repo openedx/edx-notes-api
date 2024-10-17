@@ -10,6 +10,7 @@ elasticsearch-dsl
 django-elasticsearch-dsl
 django-elasticsearch-dsl-drf
 django-cors-headers
+meilisearch
 mysqlclient
 PyJWT
 gunicorn     # MIT

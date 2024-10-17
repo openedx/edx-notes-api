@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 
 from notesapi.v1.views import (AnnotationDetailView, AnnotationListView,
-                               AnnotationRetireView, get_views_module)
+                               AnnotationRetireView, get_annotation_search_view_class)
 app_name = "notesapi.v1"
 urlpatterns = [
     path('annotations/', AnnotationListView.as_view(), name='annotations'),
@@ -13,7 +13,7 @@ urlpatterns = [
     ),
     path(
         'search/',
-        get_views_module().AnnotationSearchView.as_view(),
+        get_annotation_search_view_class().as_view(),
         name='annotations_search'
     ),
 ]

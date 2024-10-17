@@ -64,10 +64,14 @@ class AnnotationSearchView(BaseAnnotationSearchView):
     }
 
     def __init__(self, *args, **kwargs):
-        self.client = connections.get_connection(NoteDocument._get_using())  # pylint: disable=protected-access
+        self.client = connections.get_connection(
+            NoteDocument._get_using()
+        )  # pylint: disable=protected-access
         self.index = NoteDocument._index._name  # pylint: disable=protected-access
-        self.mapping = NoteDocument._doc_type.mapping.properties.name # pylint: disable=protected-access
-            # pylint: disable=protected-access
+        self.mapping = (
+            NoteDocument._doc_type.mapping.properties.name
+        )  # pylint: disable=protected-access
+        # pylint: disable=protected-access
         self.search = Search(
             using=self.client, index=self.index, doc_type=NoteDocument._doc_type.name
         )
@@ -121,17 +125,17 @@ class AnnotationSearchView(BaseAnnotationSearchView):
         if "user" in self.params:
             self.query_params["user"] = self.query_params.pop("user_id")
 
+    @classmethod
+    def heartbeat(cls):
+        if not get_es().ping():
+            raise SearchViewRuntimeError("es")
 
-def heartbeat():
-    if not get_es().ping():
-        raise SearchViewRuntimeError("es")
-
-
-def selftest():
-    try:
-        return {"es": get_es().info()}
-    except TransportError as e:
-        raise SearchViewRuntimeError({"es_error": traceback.format_exc()}) from e
+    @classmethod
+    def selftest(cls):
+        try:
+            return {"es": get_es().info()}
+        except TransportError as e:
+            raise SearchViewRuntimeError({"es_error": traceback.format_exc()}) from e
 
 
 def get_es():

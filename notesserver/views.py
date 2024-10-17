@@ -14,7 +14,7 @@ try:
 except ImportError:  # pragma: no cover
     newrelic = None  # pylint: disable=invalid-name
 
-from notesapi.v1.views import get_views_module
+from notesapi.v1.views import get_annotation_search_view_class
 from notesapi.v1.views import SearchViewRuntimeError
 
 
@@ -53,7 +53,7 @@ def heartbeat(request):
         return JsonResponse({"OK": False, "check": "db"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     try:
-        get_views_module().heartbeat()
+        get_annotation_search_view_class().heartbeat()
     except SearchViewRuntimeError as e:
         return JsonResponse({"OK": False, "check": e.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -70,7 +70,7 @@ def selftest(request):
 
     response = {}
     try:
-        response.update(get_views_module().selftest())
+        response.update(get_annotation_search_view_class().selftest())
     except SearchViewRuntimeError as e:
         return Response(
             e.args[0],
