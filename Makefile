@@ -74,19 +74,21 @@ $(COMMON_CONSTRAINTS_TXT):
 	wget -O "$(@)" https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt || touch "$(@)"
 	echo "$(COMMON_CONSTRAINTS_TEMP_COMMENT)" | cat - $(@) > temp && mv temp $(@)
 
-upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
-upgrade: piptools $(COMMON_CONSTRAINTS_TXT) ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
+compile-requirements: export CUSTOM_COMPILE_COMMAND=make upgrade
+compile-requirements: piptools ## Re-compile *.in requirements to *.txt (without upgrading)
 	# Make sure to compile files after any other files they include!
 	sed -i.'' 's/Django<4.0//g' requirements/common_constraints.txt
-	pip-compile --upgrade --rebuild --allow-unsafe -o requirements/pip.txt requirements/pip.in
-	pip-compile --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
+	pip-compile ${COMPILE_OPTS} --rebuild --allow-unsafe -o requirements/pip.txt requirements/pip.in
+	pip-compile ${COMPILE_OPTS} -o requirements/pip-tools.txt requirements/pip-tools.in
 	pip install -qr requirements/pip.txt
 	pip install -qr requirements/pip-tools.txt
-	pip-compile --upgrade -o requirements/base.txt requirements/base.in
-	pip-compile --upgrade -o requirements/test.txt requirements/test.in
-	pip-compile --upgrade -o requirements/ci.txt requirements/ci.in
+	pip-compile ${COMPILE_OPTS} -o requirements/base.txt requirements/base.in
+	pip-compile ${COMPILE_OPTS} -o requirements/test.txt requirements/test.in
+	pip-compile ${COMPILE_OPTS} -o requirements/ci.txt requirements/ci.in
 	# Let tox control the Django version for tests
 	grep -e "^django==" requirements/base.txt > requirements/django.txt
 	sed '/^[dD]jango==/d' requirements/test.txt > requirements/test.tmp
 	mv requirements/test.tmp requirements/test.txt
 
+upgrade: $(COMMON_CONSTRAINTS_TXT) ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
+	$(MAKE) compile-requirements COMPILE_OPTS="--upgrade"

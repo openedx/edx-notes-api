@@ -1,0 +1,2 @@
+class SearchViewRuntimeError(RuntimeError):
+    pass

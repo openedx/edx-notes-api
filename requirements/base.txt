@@ -4,12 +4,16 @@
 #
 #    make upgrade
 #
+annotated-types==0.7.0
+    # via pydantic
 asgiref==3.8.1
     # via django
 attrs==24.2.0
     # via
     #   jsonschema
     #   referencing
+camel-converter[pydantic]==4.0.1
+    # via meilisearch
 certifi==2024.8.30
     # via
     #   elasticsearch
@@ -103,6 +107,8 @@ jsonschema==4.23.0
     # via drf-spectacular
 jsonschema-specifications==2023.12.1
     # via jsonschema
+meilisearch==0.31.5
+    # via -r requirements/base.in
 mysqlclient==2.2.4
     # via -r requirements/base.in
 newrelic==10.0.0
@@ -123,6 +129,10 @@ psutil==6.0.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
+pydantic==2.9.2
+    # via camel-converter
+pydantic-core==2.23.4
+    # via pydantic
 pyjwt[crypto]==2.9.0
     # via
     #   -r requirements/base.in
@@ -152,6 +162,7 @@ requests==2.25.0
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   edx-drf-extensions
+    #   meilisearch
 rpds-py==0.20.0
     # via
     #   jsonschema
@@ -172,7 +183,10 @@ stevedore==5.3.0
     #   edx-django-utils
     #   edx-opaque-keys
 typing-extensions==4.12.2
-    # via edx-opaque-keys
+    # via
+    #   edx-opaque-keys
+    #   pydantic
+    #   pydantic-core
 uritemplate==4.1.1
     # via drf-spectacular
 urllib3==1.26.20

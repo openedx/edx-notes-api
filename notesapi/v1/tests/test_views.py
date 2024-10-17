@@ -1,4 +1,3 @@
-import sys
 import unittest
 from calendar import timegm
 from datetime import datetime, timedelta
@@ -176,7 +175,6 @@ class BaseAnnotationViewTests(APITestCase):
         """
         Verify pagination information for AnnotationListView
         """
-        total_annotations = total_annotations
         for i in range(total_annotations):
             self._create_annotation(text=f'annotation {i}')
 
@@ -207,7 +205,6 @@ class BaseAnnotationViewTests(APITestCase):
         """
         Verify pagination information for AnnotationSearchView
         """
-        total_annotations = total_annotations
         for i in range(total_annotations):
             self._create_annotation(text=f'annotation {i}')
 
@@ -370,7 +367,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         # if user tries to create note in a different course it should succeed
         kwargs = {'course_id': 'test-course-id-2'}
         response = self._create_annotation(**kwargs)
-        self.assertTrue('id' in response)
+        self.assertIn('id', response)
 
         # if another user to tries to create note in first course it should succeed
         token = get_id_token(TEST_OTHER_USER)
@@ -378,7 +375,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         self.headers = {'user': TEST_OTHER_USER}
         kwargs = {'user': TEST_OTHER_USER}
         response = self._create_annotation(**kwargs)
-        self.assertTrue('id' in response)
+        self.assertIn('id', response)
 
     def test_read_all_no_annotations(self):
         """
