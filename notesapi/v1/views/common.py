@@ -13,21 +13,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from notesapi.v1.models import Note
-from notesapi.v1.search_indexes.documents import NoteDocument
 from notesapi.v1.serializers import NoteSerializer
 
-if not settings.ES_DISABLED:
-    from elasticsearch_dsl import Search
-    from elasticsearch_dsl.connections import connections
-    from django_elasticsearch_dsl_drf.filter_backends import DefaultOrderingFilterBackend, HighlightBackend
-    from django_elasticsearch_dsl_drf.constants import (
-        LOOKUP_FILTER_TERM,
-        LOOKUP_QUERY_IN,
-        SEPARATOR_LOOKUP_COMPLEX_VALUE,
-    )
-    from notesapi.v1.search_indexes.paginators import NotesPagination as ESNotesPagination
-    from notesapi.v1.search_indexes.backends import CompoundSearchFilterBackend, FilteringFilterBackend
-    from notesapi.v1.search_indexes.serializers import NoteDocumentSerializer as NotesElasticSearchSerializer
 
 log = logging.getLogger(__name__)
 
@@ -127,104 +114,43 @@ class AnnotationSearchView(ListAPIView):
     params = {}
     query_params = {}
     search_with_usage_id = False
-    document = NoteDocument
     search_fields = ('text', 'tags')
-    filter_fields = {
-        'course_id': 'course_id',
-        'user': 'user',
-        'usage_id': {
-            'field': 'usage_id',
-            'lookups': [
-                LOOKUP_QUERY_IN,
-                LOOKUP_FILTER_TERM,
-            ],
-        },
-
-    }
-    highlight_fields = {
-        'text': {
-            'enabled': True,
-            'options': {
-                'pre_tags': ['{elasticsearch_highlight_start}'],
-                'post_tags': ['{elasticsearch_highlight_end}'],
-                'number_of_fragments': 0,
-            },
-        },
-        'tags': {
-            'enabled': True,
-            'options': {
-                'pre_tags': ['{elasticsearch_highlight_start}'],
-                'post_tags': ['{elasticsearch_highlight_end}'],
-                'number_of_fragments': 0,
-            },
-        },
-    }
     ordering = ('-updated',)
 
-    def __init__(self, *args, **kwargs):
-        self.initiate_es_specific_state_if_is_enabled()
-        super().__init__(*args, **kwargs)
-
-    def initiate_es_specific_state_if_is_enabled(self):
-        """
-        Initiates elasticsearch specific state if elasticsearch is enabled.
-
-        Should be called in the class `__init__` method.
-        """
-        if not settings.ES_DISABLED:
-            self.client = connections.get_connection(self.document._get_using())  # pylint: disable=protected-access
-            self.index = self.document._index._name  # pylint: disable=protected-access
-            self.mapping = self.document._doc_type.mapping.properties.name  # pylint: disable=protected-access
-            # pylint: disable=protected-access
-            self.search = Search(using=self.client, index=self.index, doc_type=self.document._doc_type.name)
 
     @property
-    def is_es_disabled(self):
+    def is_text_search(self):
         """
-        Predicate instance method.
-
-        Search in DB when ES is not available or there is no need to bother it
+        We identify text search by the presence of a "text" parameter. Subclasses may
+        want to have a different behaviour in such cases.
         """
-
-        return settings.ES_DISABLED or 'text' not in self.params
+        return "text" in self.params
 
     def get_queryset(self):
-        if self.is_es_disabled:
-            queryset = Note.objects.filter(**self.query_params).order_by('-updated')
-            if 'text' in self.params:
-                queryset = queryset.filter(
-                    Q(text__icontains=self.params['text']) | Q(tags__icontains=self.params['text'])
-                )
-        else:
-            queryset = self.search.query()
-            queryset.model = self.document.Django.model
-
+        queryset = Note.objects.filter(**self.query_params).order_by("-updated")
+        if "text" in self.params:
+            queryset = queryset.filter(
+                Q(text__icontains=self.params["text"])
+                | Q(tags__icontains=self.params["text"])
+            )
         return queryset
 
     def get_serializer_class(self):
         """
         Return the class to use for the serializer.
 
-        Defaults to using `NoteSerializer` if elasticsearch is disabled
-        or `NotesElasticSearchSerializer` if elasticsearch is enabled
+        Defaults to `NoteSerializer`.
         """
-
-        return NoteSerializer if self.is_es_disabled else NotesElasticSearchSerializer
+        return NoteSerializer
 
     @property
     def paginator(self):
         """
         The paginator instance associated with the view and used data source, or `None`.
         """
-        if not hasattr(self, '_paginator'):
-            if self.pagination_class is None:
-                self._paginator = None  # pylint: disable=attribute-defined-outside-init
-            else:
-                self._paginator = (  # pylint: disable=attribute-defined-outside-init
-                    self.pagination_class()
-                    if self.is_es_disabled
-                    else ESNotesPagination()
-                )
+        if not hasattr(self, "_paginator"):
+              # pylint: disable=attribute-defined-outside-init
+            self._paginator = self.pagination_class() if self.pagination_class else None
 
         return self._paginator
 
@@ -235,19 +161,16 @@ class AnnotationSearchView(ListAPIView):
         Do not filter additionally if mysql db used or use `CompoundSearchFilterBackend`
         and `HighlightBackend` if elasticsearch is the data source.
         """
-        filter_backends = []
-        if not self.is_es_disabled:
-            filter_backends = [
-                FilteringFilterBackend,
-                CompoundSearchFilterBackend,
-                DefaultOrderingFilterBackend,
-            ]
-            if self.params.get('highlight'):
-                filter_backends.append(HighlightBackend)
-
+        filter_backends = self.get_filter_backends()
         for backend in filter_backends:
             queryset = backend().filter_queryset(self.request, queryset, view=self)
         return queryset
+
+    def get_filter_backends(self):
+        """
+        List of filter backends, each with a `filter_queryset` method.
+        """
+        return []
 
     def list(self, *args, **kwargs):
         """
@@ -268,22 +191,16 @@ class AnnotationSearchView(ListAPIView):
         """
         self.query_params = {}
         self.params = self.request.query_params.dict()
-        usage_ids = self.request.query_params.getlist('usage_id')
+        usage_ids = self.request.query_params.getlist("usage_id")
         if usage_ids:
             self.search_with_usage_id = True
-            if not self.is_es_disabled:
-                usage_ids = SEPARATOR_LOOKUP_COMPLEX_VALUE.join(usage_ids)
+            self.query_params["usage_id__in"] = usage_ids
 
-            self.query_params['usage_id__in'] = usage_ids
+        if "course_id" in self.params:
+            self.query_params["course_id"] = self.params["course_id"]
 
-        if 'course_id' in self.params:
-            self.query_params['course_id'] = self.params['course_id']
-
-        if 'user' in self.params:
-            if self.is_es_disabled:
-                self.query_params['user_id'] = self.params['user']
-            else:
-                self.query_params['user'] = self.params['user']
+        if "user" in self.params:
+            self.query_params["user_id"] = self.params["user"]
 
     def get(self, *args, **kwargs):
         """
@@ -305,10 +222,10 @@ class AnnotationRetireView(GenericAPIView):
         Delete all annotations for a user.
         """
         params = self.request.data
-        if 'user' not in params:
+        if "user" not in params:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        Note.objects.filter(user_id=params['user']).delete()
+        Note.objects.filter(user_id=params["user"]).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -608,3 +525,15 @@ class AnnotationDetailView(APIView):
 
         # Annotation deleted successfully.
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+def selftest():
+    """
+    No-op.
+    """
+    return {}
+
+def heartbeat():
+    """
+    No-op
+    """
+    return
