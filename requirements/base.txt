@@ -24,7 +24,7 @@ charset-normalizer==3.4.0
     # via requests
 click==8.1.7
     # via edx-django-utils
-cryptography==43.0.1
+cryptography==43.0.3
     # via pyjwt
 django==4.2.16
     # via
@@ -71,7 +71,7 @@ drf-spectacular==0.27.2
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==6.0.0
+edx-django-utils==7.0.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -100,9 +100,9 @@ jsonschema==4.23.0
     # via drf-spectacular
 jsonschema-specifications==2024.10.1
     # via jsonschema
-mysqlclient==2.2.4
+mysqlclient==2.2.5
     # via -r requirements/base.in
-newrelic==10.1.0
+newrelic==10.2.0
     # via
     #   -r requirements/base.in
     #   edx-django-utils
@@ -116,7 +116,7 @@ path-py==12.5.0
     # via -r requirements/base.in
 pbr==6.1.0
     # via stevedore
-psutil==6.0.0
+psutil==6.1.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
@@ -178,5 +178,5 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==75.1.0
+setuptools==75.2.0
     # via -r requirements/base.in

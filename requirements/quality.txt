@@ -45,7 +45,7 @@ code-annotations==1.8.0
     # via
     #   -r requirements/quality.in
     #   edx-lint
-cryptography==43.0.1
+cryptography==43.0.3
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -105,7 +105,7 @@ drf-spectacular==0.27.2
     # via -r requirements/base.txt
 edx-django-release-util==1.4.0
     # via -r requirements/base.txt
-edx-django-utils==6.0.0
+edx-django-utils==7.0.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -150,13 +150,13 @@ jsonschema-specifications==2024.10.1
     # via
     #   -r requirements/base.txt
     #   jsonschema
-markupsafe==3.0.1
+markupsafe==3.0.2
     # via jinja2
 mccabe==0.7.0
     # via pylint
-mysqlclient==2.2.4
+mysqlclient==2.2.5
     # via -r requirements/base.txt
-newrelic==10.1.0
+newrelic==10.2.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -177,7 +177,7 @@ pbr==6.1.0
     #   stevedore
 platformdirs==4.3.6
     # via pylint
-psutil==6.0.0
+psutil==6.1.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -285,5 +285,5 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==75.1.0
+setuptools==75.2.0
     # via -r requirements/base.txt
