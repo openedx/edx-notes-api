@@ -6,6 +6,8 @@ kind: "Component"
 metadata:
   name: 'edx-notes-api'
   description: "A backend store for edX Student Notes"
+  annotations:
+    openedx.org/release: "master"
 spec:
 
   # (Required) This can be a group(`group:<group_name>` or a user(`user:<github_username>`)
