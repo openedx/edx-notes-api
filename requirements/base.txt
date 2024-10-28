@@ -22,11 +22,11 @@ chardet==3.0.4
     # via requests
 click==8.1.7
     # via edx-django-utils
-cryptography==43.0.1
+cryptography==43.0.3
     # via pyjwt
 django==4.2.16
     # via
-    #   -c requirements/common_constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/common_constraints.txt
     #   -r requirements/base.in
     #   django-cors-headers
     #   django-crum
@@ -40,13 +40,13 @@ django==4.2.16
     #   edx-drf-extensions
 django-cors-headers==3.14.0
     # via
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/base.in
 django-crum==0.7.9
     # via edx-django-utils
 django-elasticsearch-dsl==7.4
     # via
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
 django-elasticsearch-dsl-drf==0.22.5
@@ -64,7 +64,7 @@ djangorestframework==3.15.2
     #   drf-jwt
     #   drf-spectacular
     #   edx-drf-extensions
-dnspython==2.6.1
+dnspython==2.7.0
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
@@ -72,24 +72,24 @@ drf-spectacular==0.27.2
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==5.16.0
+edx-django-utils==7.0.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
-edx-drf-extensions==10.4.0
+edx-drf-extensions==10.5.0
     # via -r requirements/base.in
 edx-opaque-keys==2.11.0
     # via edx-drf-extensions
 elasticsearch==7.13.4
     # via
-    #   -c requirements/common_constraints.txt
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/common_constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
     #   elasticsearch-dsl
 elasticsearch-dsl==7.4.1
     # via
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/base.in
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
@@ -101,11 +101,11 @@ inflection==0.5.1
     # via drf-spectacular
 jsonschema==4.23.0
     # via drf-spectacular
-jsonschema-specifications==2023.12.1
+jsonschema-specifications==2024.10.1
     # via jsonschema
-mysqlclient==2.2.4
+mysqlclient==2.2.5
     # via -r requirements/base.in
-newrelic==10.0.0
+newrelic==10.2.0
     # via
     #   -r requirements/base.in
     #   edx-django-utils
@@ -115,11 +115,11 @@ packaging==24.1
     #   gunicorn
 path-py==9.1
     # via
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/base.in
 pbr==6.1.0
     # via stevedore
-psutil==6.0.0
+psutil==6.1.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
@@ -134,7 +134,7 @@ pynacl==1.5.0
     # via edx-django-utils
 python-dateutil==2.4.0
     # via
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/base.in
     #   elasticsearch-dsl
 pytz==2024.2
@@ -149,7 +149,7 @@ referencing==0.35.1
     #   jsonschema-specifications
 requests==2.25.0
     # via
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/base.in
     #   edx-drf-extensions
 rpds-py==0.20.0

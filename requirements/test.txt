@@ -6,59 +6,59 @@
 #
 asgiref==3.8.1
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   django
 astroid==1.6.6
     # via
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/test.in
     #   pylint
 attrs==24.2.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   jsonschema
     #   referencing
 certifi==2024.8.30
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   elasticsearch
     #   requests
 cffi==1.17.1
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   cryptography
     #   pynacl
 chardet==3.0.4
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   diff-cover
     #   requests
 click==8.1.7
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   code-annotations
     #   edx-django-utils
 code-annotations==1.8.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via pylint
-coverage[toml]==7.6.1
+coverage[toml]==7.6.4
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==43.0.1
+cryptography==43.0.3
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.in
 diff-cover==9.2.0
     # via -r requirements/test.in
-distlib==0.3.8
+distlib==0.3.9
     # via virtualenv
     # via
-    #   -c requirements/common_constraints.txt
-    #   -r requirements/base.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/common_constraints.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   django-cors-headers
     #   django-crum
     #   django-nine
@@ -71,87 +71,87 @@ distlib==0.3.8
     #   edx-drf-extensions
 django-cors-headers==3.14.0
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
 django-crum==0.7.9
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-django-utils
 django-elasticsearch-dsl==7.4
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   django-elasticsearch-dsl-drf
 django-elasticsearch-dsl-drf==0.22.5
-    # via -r requirements/base.txt
+    # via -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
 django-nine==0.2.7
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   django-elasticsearch-dsl-drf
 django-waffle==4.1.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-django-utils
     #   edx-drf-extensions
 djangorestframework==3.15.2
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   django-elasticsearch-dsl-drf
     #   drf-jwt
     #   drf-spectacular
     #   edx-drf-extensions
-dnspython==2.6.1
+dnspython==2.7.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   pymongo
 drf-jwt==1.19.2
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-drf-extensions
 drf-spectacular==0.27.2
-    # via -r requirements/base.txt
+    # via -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
 edx-django-release-util==1.4.0
-    # via -r requirements/base.txt
-edx-django-utils==5.16.0
+    # via -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
+edx-django-utils==7.0.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-drf-extensions
-edx-drf-extensions==10.4.0
-    # via -r requirements/base.txt
+edx-drf-extensions==10.5.0
+    # via -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
 edx-opaque-keys==2.11.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-drf-extensions
 elasticsearch==7.13.4
     # via
-    #   -c requirements/common_constraints.txt
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/common_constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   django-elasticsearch-dsl-drf
     #   elasticsearch-dsl
 elasticsearch-dsl==7.4.1
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.1
     # via -r requirements/test.in
-faker==30.1.0
+faker==30.8.1
     # via factory-boy
 filelock==3.16.1
     # via
     #   tox
     #   virtualenv
 gunicorn==23.0.0
-    # via -r requirements/base.txt
+    # via -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
 idna==2.10
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   requests
 inflection==0.5.1
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   drf-spectacular
 iniconfig==2.0.0
     # via pytest
@@ -161,40 +161,40 @@ jinja2==3.1.4
     #   diff-cover
 jsonschema==4.23.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   drf-spectacular
-jsonschema-specifications==2023.12.1
+jsonschema-specifications==2024.10.1
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   jsonschema
 lazy-object-proxy==1.10.0
     # via astroid
-markupsafe==2.1.5
+markupsafe==3.0.2
     # via jinja2
 more-itertools==5.0.0
     # via
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/test.in
-mysqlclient==2.2.4
-    # via -r requirements/base.txt
-newrelic==10.0.0
+mysqlclient==2.2.5
+    # via -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
+newrelic==10.2.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-django-utils
 packaging==24.1
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   django-nine
     #   gunicorn
     #   pytest
     #   tox
 path-py==9.1
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
 pbr==6.1.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   stevedore
 pep8==1.7.1
     # via -r requirements/test.in
@@ -205,34 +205,34 @@ pluggy==1.5.0
     #   diff-cover
     #   pytest
     #   tox
-psutil==6.0.0
+psutil==6.1.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-django-utils
 py==1.11.0
     # via tox
 pycparser==2.22
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   cffi
 pygments==2.18.0
     # via diff-cover
 pyjwt[crypto]==2.9.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   drf-jwt
     #   edx-drf-extensions
 pylint==1.5.0
     # via
-    #   -c requirements/constraints.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
     #   -r requirements/test.in
 pymongo==4.10.1
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-opaque-keys
 pynacl==1.5.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-django-utils
 pytest==8.3.3
     # via
@@ -245,42 +245,42 @@ pytest-django==4.9.0
     # via -r requirements/test.in
 python-dateutil==2.4.0
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   elasticsearch-dsl
     #   faker
 python-slugify==8.0.4
     # via code-annotations
 pytz==2024.2
-    # via -r requirements/base.txt
+    # via -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
 pyyaml==6.0.2
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   code-annotations
     #   drf-spectacular
     #   edx-django-release-util
 referencing==0.35.1
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   jsonschema
     #   jsonschema-specifications
 requests==2.25.0
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.txt
+    #   -c /home/runner/work/edx-notes-api/edx-notes-api/requirements/constraints.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-drf-extensions
 rpds-py==0.20.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   jsonschema
     #   referencing
 semantic-version==2.10.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-drf-extensions
 six==1.16.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   astroid
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
@@ -292,11 +292,11 @@ six==1.16.0
     #   tox
 sqlparse==0.5.1
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   django
 stevedore==5.3.0
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   code-annotations
     #   edx-django-utils
     #   edx-opaque-keys
@@ -306,19 +306,19 @@ tox==3.28.0
     # via -r requirements/test.in
 typing-extensions==4.12.2
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   edx-opaque-keys
     #   faker
 uritemplate==4.1.1
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   drf-spectacular
 urllib3==1.26.20
     # via
-    #   -r requirements/base.txt
+    #   -r /home/runner/work/edx-notes-api/edx-notes-api/requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.26.6
+virtualenv==20.27.0
     # via tox
 wrapt==1.16.0
     # via astroid
