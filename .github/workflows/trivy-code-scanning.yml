@@ -17,9 +17,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build an image from Dockerfile
+      - name: Pull image from Docker Hub
         run: |
-          docker build -t "openedx/edx-notes-api:latest" .
+          docker pull edxops/edx-notes-api:latest
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
