@@ -1,16 +1,10 @@
 PACKAGES = notesserver notesapi
 .PHONY: requirements check_keywords
 
-ifdef TOXENV
-TOX := tox -- #to isolate each tox environment if TOXENV is defined
-endif
-
-include .ci/docker.mk
-
 validate: test.requirements test
 
 test: clean
-	$(TOX)python -Wd -m pytest
+	python -Wd -m pytest
 
 pii_check: test.requirements pii_clean
 	code_annotations django_find_annotations --config_file .pii_annotations.yml \
@@ -33,7 +27,7 @@ pii_clean:
 	mkdir -p pii_report
 
 quality:
-	pep8 --config=.pep8 $(PACKAGES)
+	pycodestyle --config=.pycodestyle  $(PACKAGES)
 	pylint $(PACKAGES)
 
 diff-coverage:
@@ -65,28 +59,18 @@ develop: requirements test.requirements
 piptools: ## install pinned version of pip-compile and pip-sync
 	pip install -r requirements/pip-tools.txt
 
-define COMMON_CONSTRAINTS_TEMP_COMMENT
-# This is a temporary solution to override the real common_constraints.txt\n# In edx-lint, until the pyjwt constraint in edx-lint has been removed.\n# See BOM-2721 for more details.\n# Below is the copied and edited version of common_constraints\n
-endef
-COMMON_CONSTRAINTS_TXT=requirements/common_constraints.txt
-.PHONY: $(COMMON_CONSTRAINTS_TXT)
-$(COMMON_CONSTRAINTS_TXT):
-	wget -O "$(@)" https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt || touch "$(@)"
-	echo "$(COMMON_CONSTRAINTS_TEMP_COMMENT)" | cat - $(@) > temp && mv temp $(@)
-
 upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
-upgrade: piptools $(COMMON_CONSTRAINTS_TXT) ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
+upgrade: piptools ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
 	# Make sure to compile files after any other files they include!
-	sed -i.'' 's/Django<4.0//g' requirements/common_constraints.txt
 	pip-compile --upgrade --rebuild --allow-unsafe -o requirements/pip.txt requirements/pip.in
 	pip-compile --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
 	pip install -qr requirements/pip.txt
 	pip install -qr requirements/pip-tools.txt
-	pip-compile --upgrade -o requirements/base.txt requirements/base.in
-	pip-compile --upgrade -o requirements/test.txt requirements/test.in
-	pip-compile --upgrade -o requirements/ci.txt requirements/ci.in
+	pip-compile --upgrade --allow-unsafe -o requirements/base.txt requirements/base.in
+	pip-compile --upgrade --allow-unsafe -o requirements/test.txt requirements/test.in
+	pip-compile --upgrade --allow-unsafe -o requirements/ci.txt requirements/ci.in
+	pip-compile --upgrade --allow-unsafe -o requirements/quality.txt requirements/quality.in
 	# Let tox control the Django version for tests
 	grep -e "^django==" requirements/base.txt > requirements/django.txt
 	sed '/^[dD]jango==/d' requirements/test.txt > requirements/test.tmp
 	mv requirements/test.tmp requirements/test.txt
-

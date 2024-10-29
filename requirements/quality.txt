@@ -11,15 +11,13 @@ asgiref==3.8.1
     #   django-cors-headers
 astroid==3.3.5
     # via
-    #   -r requirements/test.in
     #   pylint
+    #   pylint-celery
 attrs==24.2.0
     # via
     #   -r requirements/base.txt
     #   jsonschema
     #   referencing
-cachetools==5.5.0
-    # via tox
 certifi==2024.8.30
     # via
     #   -r requirements/base.txt
@@ -30,10 +28,6 @@ cffi==1.17.1
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
-chardet==5.2.0
-    # via
-    #   diff-cover
-    #   tox
 charset-normalizer==3.4.0
     # via
     #   -r requirements/base.txt
@@ -41,28 +35,23 @@ charset-normalizer==3.4.0
 click==8.1.7
     # via
     #   -r requirements/base.txt
+    #   click-log
     #   code-annotations
     #   edx-django-utils
+    #   edx-lint
+click-log==0.4.0
+    # via edx-lint
 code-annotations==1.8.0
-    # via -r requirements/test.in
-colorama==0.4.6
-    # via tox
-coverage[toml]==7.6.4
     # via
-    #   -r requirements/test.in
-    #   pytest-cov
+    #   -r requirements/quality.in
+    #   edx-lint
 cryptography==43.0.3
     # via
     #   -r requirements/base.txt
     #   pyjwt
-ddt==1.7.2
-    # via -r requirements/test.in
-diff-cover==9.2.0
-    # via -r requirements/test.in
 dill==0.3.9
     # via pylint
-distlib==0.3.9
-    # via virtualenv
+django==4.2.16
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
@@ -122,6 +111,8 @@ edx-django-utils==7.0.0
     #   edx-drf-extensions
 edx-drf-extensions==10.5.0
     # via -r requirements/base.txt
+edx-lint==5.4.1
+    # via -r requirements/quality.in
 edx-opaque-keys==2.11.0
     # via
     #   -r requirements/base.txt
@@ -137,14 +128,6 @@ elasticsearch-dsl==7.4.1
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
-factory-boy==3.3.1
-    # via -r requirements/test.in
-faker==30.8.1
-    # via factory-boy
-filelock==3.16.1
-    # via
-    #   tox
-    #   virtualenv
 gunicorn==23.0.0
     # via -r requirements/base.txt
 idna==3.10
@@ -155,14 +138,10 @@ inflection==0.5.1
     # via
     #   -r requirements/base.txt
     #   drf-spectacular
-iniconfig==2.0.0
-    # via pytest
 isort==5.13.2
     # via pylint
 jinja2==3.1.4
-    # via
-    #   code-annotations
-    #   diff-cover
+    # via code-annotations
 jsonschema==4.23.0
     # via
     #   -r requirements/base.txt
@@ -175,8 +154,6 @@ markupsafe==3.0.2
     # via jinja2
 mccabe==0.7.0
     # via pylint
-more-itertools==10.5.0
-    # via -r requirements/test.in
 mysqlclient==2.2.5
     # via -r requirements/base.txt
 newrelic==10.2.0
@@ -188,9 +165,6 @@ packaging==24.1
     #   -r requirements/base.txt
     #   django-nine
     #   gunicorn
-    #   pyproject-api
-    #   pytest
-    #   tox
 path==17.0.0
     # via
     #   -r requirements/base.txt
@@ -201,35 +175,38 @@ pbr==6.1.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-pep8==1.7.1
-    # via -r requirements/test.in
 platformdirs==4.3.6
-    # via
-    #   pylint
-    #   tox
-    #   virtualenv
-pluggy==1.5.0
-    # via
-    #   diff-cover
-    #   pytest
-    #   tox
+    # via pylint
 psutil==6.1.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
+pycodestyle==2.12.1
+    # via -r requirements/quality.in
 pycparser==2.22
     # via
     #   -r requirements/base.txt
     #   cffi
-pygments==2.18.0
-    # via diff-cover
 pyjwt[crypto]==2.9.0
     # via
     #   -r requirements/base.txt
     #   drf-jwt
     #   edx-drf-extensions
 pylint==3.3.1
-    # via -r requirements/test.in
+    # via
+    #   -r requirements/quality.in
+    #   edx-lint
+    #   pylint-celery
+    #   pylint-django
+    #   pylint-plugin-utils
+pylint-celery==0.3
+    # via edx-lint
+pylint-django==2.6.1
+    # via edx-lint
+pylint-plugin-utils==0.8.2
+    # via
+    #   pylint-celery
+    #   pylint-django
 pymongo==4.10.1
     # via
     #   -r requirements/base.txt
@@ -238,22 +215,10 @@ pynacl==1.5.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pyproject-api==1.8.0
-    # via tox
-pytest==8.3.3
-    # via
-    #   -r requirements/test.in
-    #   pytest-cov
-    #   pytest-django
-pytest-cov==5.0.0
-    # via -r requirements/test.in
-pytest-django==4.9.0
-    # via -r requirements/test.in
 python-dateutil==2.9.0.post0
     # via
     #   -r requirements/base.txt
     #   elasticsearch-dsl
-    #   faker
 python-slugify==8.0.4
     # via code-annotations
 pytz==2024.2
@@ -288,6 +253,7 @@ six==1.16.0
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
     #   edx-django-release-util
+    #   edx-lint
     #   elasticsearch-dsl
     #   python-dateutil
 sqlparse==0.5.1
@@ -304,13 +270,10 @@ text-unidecode==1.3
     # via python-slugify
 tomlkit==0.13.2
     # via pylint
-tox==4.23.2
-    # via -r requirements/test.in
 typing-extensions==4.12.2
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
-    #   faker
 uritemplate==4.1.1
     # via
     #   -r requirements/base.txt
@@ -320,8 +283,6 @@ urllib3==1.26.20
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.27.1
-    # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==75.2.0
