@@ -1,17 +1,15 @@
-import sys
 import unittest
 from calendar import timegm
 from datetime import datetime, timedelta
+from unittest.mock import patch
 from urllib import parse
 
+import ddt
+import jwt
 from django.conf import settings
 from django.core.management import call_command
 from django.test.utils import override_settings
 from django.urls import reverse
-from unittest.mock import patch
-
-import ddt
-import jwt
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -21,9 +19,9 @@ TEST_USER = "test_user_id"
 TEST_OTHER_USER = "test_other_user_id"
 
 if not settings.ES_DISABLED:
-    from notesapi.v1.search_indexes.documents import NoteDocument
+    from notesapi.v1.search_indexes.documents import NoteDocument  # pylint: disable=unused-import
 else:
-    def call_command(*args, **kwargs):
+    def call_command(*args, **kwargs):  # pylint: disable=function-redefined
         pass
 
 
@@ -111,7 +109,7 @@ class BaseAnnotationViewTests(APITestCase):
         self.assertEqual(expected_status, response.status_code)
         return response.data
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-positional-arguments
     def verify_pagination_info(
             self, response,
             total_annotations,
@@ -161,7 +159,7 @@ class BaseAnnotationViewTests(APITestCase):
         self.assertEqual(get_page_value(response['next'], response['current_page']), next_page)
         self.assertEqual(response['start'], start)
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-positional-arguments
     def verify_list_view_pagination(
             self,
             query_parameters,
@@ -176,7 +174,6 @@ class BaseAnnotationViewTests(APITestCase):
         """
         Verify pagination information for AnnotationListView
         """
-        total_annotations = total_annotations
         for i in range(total_annotations):
             self._create_annotation(text=f'annotation {i}')
 
@@ -192,7 +189,7 @@ class BaseAnnotationViewTests(APITestCase):
             start=start
         )
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-positional-arguments
     def verify_search_view_pagination(
             self,
             query_parameters,
@@ -207,7 +204,6 @@ class BaseAnnotationViewTests(APITestCase):
         """
         Verify pagination information for AnnotationSearchView
         """
-        total_annotations = total_annotations
         for i in range(total_annotations):
             self._create_annotation(text=f'annotation {i}')
 
@@ -370,7 +366,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         # if user tries to create note in a different course it should succeed
         kwargs = {'course_id': 'test-course-id-2'}
         response = self._create_annotation(**kwargs)
-        self.assertTrue('id' in response)
+        self.assertIn('id', response)
 
         # if another user to tries to create note in first course it should succeed
         token = get_id_token(TEST_OTHER_USER)
@@ -378,7 +374,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         self.headers = {'user': TEST_OTHER_USER}
         kwargs = {'user': TEST_OTHER_USER}
         response = self._create_annotation(**kwargs)
-        self.assertTrue('id' in response)
+        self.assertIn('id', response)
 
     def test_read_all_no_annotations(self):
         """
@@ -437,7 +433,7 @@ class AnnotationListViewTests(BaseAnnotationViewTests):
         {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3, 'start': 10},
         {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None, 'start': 20}
     )
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-positional-arguments
     def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page, start):
         """
         Verify that pagination info is correct when we have data spanned on multiple pages.
@@ -1081,7 +1077,7 @@ class AnnotationSearchViewTests(BaseAnnotationViewTests):
         {'page': 2, 'annotations_per_page': 10, 'previous_page': 1, 'next_page': 3, 'start': 10},
         {'page': 3, 'annotations_per_page': 3, 'previous_page': 2, 'next_page': None, 'start': 20}
     )
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-positional-arguments
     def test_pagination_multiple_pages(self, page, annotations_per_page, previous_page, next_page, start):
         """
         Verify that pagination info is correct when we have data spanned on multiple pages.
@@ -1221,7 +1217,7 @@ class TokenTests(BaseAnnotationViewTests):
         """
         403 when no token is provided
         """
-        self.client._credentials = {}
+        self.client._credentials = {}  # pylint: disable=protected-access
         response = self.client.get(self.url, self.headers)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 

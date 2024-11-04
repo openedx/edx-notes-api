@@ -54,6 +54,6 @@ class NoteDocumentSerializer(DocumentSerializer):
         Return note tags.
         """
         if hasattr(note.meta, 'highlight') and hasattr(note.meta.highlight, 'tags'):
-            return [i for i in note.meta.highlight.tags]
+            return list(note.meta.highlight.tags)
 
-        return [i for i in note.tags] if note.tags else []
+        return list(note.tags) if note.tags else []

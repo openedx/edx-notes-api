@@ -33,13 +33,13 @@ class Note(models.Model):
         if len(note_dict) == 0:
             raise ValidationError('Note must have a body.')
 
-        ranges = note_dict.get('ranges', list())
+        ranges = note_dict.get('ranges', [])
 
         if len(ranges) < 1:
             raise ValidationError('Note must contain at least one range.')
 
         note_dict['ranges'] = json.dumps(ranges)
         note_dict['user_id'] = note_dict.pop('user', None)
-        note_dict['tags'] = json.dumps(note_dict.get('tags', list()), ensure_ascii=False)
+        note_dict['tags'] = json.dumps(note_dict.get('tags', []), ensure_ascii=False)
 
         return cls(**note_dict)

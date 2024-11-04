@@ -1,10 +1,10 @@
 from unittest import skipIf
 
+import factory
 from django.conf import settings
 from django.core.management import call_command
-from django.urls import reverse
 from django.db.models import signals
-import factory
+from django.urls import reverse
 
 from .test_views import BaseAnnotationViewTests
 
@@ -51,7 +51,7 @@ class UpdateIndexTest(BaseAnnotationViewTests):
 
         # Delete first note.
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': first_note['id']})
-        response = self.client.delete(url, self.headers)
+        response = self.client.delete(url, self.headers)  # pylint: disable=unused-variable
 
         # Delete second note.
         url = reverse('api:v1:annotations_detail', kwargs={'annotation_id': second_note['id']})

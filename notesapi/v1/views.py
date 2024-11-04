@@ -1,3 +1,4 @@
+#  pylint:disable=possibly-used-before-assignment
 import json
 import logging
 import newrelic.agent
@@ -171,9 +172,10 @@ class AnnotationSearchView(ListAPIView):
         Should be called in the class `__init__` method.
         """
         if not settings.ES_DISABLED:
-            self.client = connections.get_connection(self.document._get_using())
-            self.index = self.document._index._name
-            self.mapping = self.document._doc_type.mapping.properties.name
+            self.client = connections.get_connection(self.document._get_using())  # pylint: disable=protected-access
+            self.index = self.document._index._name  # pylint: disable=protected-access
+            self.mapping = self.document._doc_type.mapping.properties.name  # pylint: disable=protected-access
+            # pylint: disable=protected-access
             self.search = Search(using=self.client, index=self.index, doc_type=self.document._doc_type.name)
 
     @property
@@ -216,9 +218,13 @@ class AnnotationSearchView(ListAPIView):
         """
         if not hasattr(self, '_paginator'):
             if self.pagination_class is None:
-                self._paginator = None
+                self._paginator = None  # pylint: disable=attribute-defined-outside-init
             else:
-                self._paginator = self.pagination_class() if self.is_es_disabled else ESNotesPagination()
+                self._paginator = (  # pylint: disable=attribute-defined-outside-init
+                    self.pagination_class()
+                    if self.is_es_disabled
+                    else ESNotesPagination()
+                )
 
         return self._paginator
 
@@ -279,7 +285,7 @@ class AnnotationSearchView(ListAPIView):
             else:
                 self.query_params['user'] = self.params['user']
 
-    def get(self, *args, **kwargs):  # pylint: disable=unused-argument
+    def get(self, *args, **kwargs):
         """
         Search annotations in most appropriate storage
         """
@@ -294,7 +300,7 @@ class AnnotationRetireView(GenericAPIView):
     Administrative functions for the notes service.
     """
 
-    def post(self, *args, **kwargs):  # pylint: disable=unused-argument
+    def post(self, *args, **kwargs):
         """
         Delete all annotations for a user.
         """
@@ -422,7 +428,7 @@ class AnnotationListView(GenericAPIView):
 
     serializer_class = NoteSerializer
 
-    def get(self, *args, **kwargs):  # pylint: disable=unused-argument
+    def get(self, *args, **kwargs):
         """
         Get paginated list of all annotations.
         """
@@ -440,7 +446,7 @@ class AnnotationListView(GenericAPIView):
         response = self.get_paginated_response(serializer.data)
         return response
 
-    def post(self, *args, **kwargs):  # pylint: disable=unused-argument
+    def post(self, *args, **kwargs):
         """
         Create a new annotation.
 
@@ -549,7 +555,7 @@ class AnnotationDetailView(APIView):
             * HTTP_204_NO_CONTENT is returned
     """
 
-    def get(self, *args, **kwargs):  # pylint: disable=unused-argument
+    def get(self, *args, **kwargs):
         """
         Get an existing annotation.
         """
@@ -563,7 +569,7 @@ class AnnotationDetailView(APIView):
         serializer = NoteSerializer(note)
         return Response(serializer.data)
 
-    def put(self, *args, **kwargs):  # pylint: disable=unused-argument
+    def put(self, *args, **kwargs):
         """
         Update an existing annotation.
         """
@@ -587,7 +593,7 @@ class AnnotationDetailView(APIView):
         serializer = NoteSerializer(note)
         return Response(serializer.data)
 
-    def delete(self, *args, **kwargs):  # pylint: disable=unused-argument
+    def delete(self, *args, **kwargs):
         """
         Delete an annotation.
         """
