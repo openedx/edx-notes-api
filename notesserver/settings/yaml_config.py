@@ -2,7 +2,7 @@ from os import environ
 
 import yaml
 from django.core.exceptions import ImproperlyConfigured
-from path import path
+from path import Path
 
 from notesserver.settings.logger import build_logging_config
 
@@ -21,7 +21,7 @@ EDXNOTES_CONFIG_ROOT = os.environ.get('EDXNOTES_CONFIG_ROOT')
 if not EDXNOTES_CONFIG_ROOT:
     raise ImproperlyConfigured("EDXNOTES_CONFIG_ROOT must be defined in the environment.")
 
-CONFIG_ROOT = path(EDXNOTES_CONFIG_ROOT)
+CONFIG_ROOT = Path(EDXNOTES_CONFIG_ROOT)
 
 with open(CONFIG_ROOT / "edx_notes_api.yml") as yaml_file:
     config_from_yaml = yaml.safe_load(yaml_file)
