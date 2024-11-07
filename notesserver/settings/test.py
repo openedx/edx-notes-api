@@ -1,4 +1,7 @@
-from .common import *
+import os
+import sys
+
+from .common import *  # pylint: disable=wildcard-import
 
 DATABASES = {
     'default': {

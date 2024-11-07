@@ -18,14 +18,13 @@ except ImportError:  # pragma: no cover
 if not settings.ES_DISABLED:
     from elasticsearch_dsl.connections import connections
 
-
     def get_es():
         return connections.get_connection()
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def root(request):  # pylint: disable=unused-argument
+def root(request):
     """
     Root view.
     """
@@ -34,9 +33,10 @@ def root(request):  # pylint: disable=unused-argument
         "version": "1"
     })
 
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def robots(request):  # pylint: disable=unused-argument
+def robots(request):
     """
     robots.txt
     """
@@ -45,7 +45,7 @@ def robots(request):  # pylint: disable=unused-argument
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def heartbeat(request):  # pylint: disable=unused-argument
+def heartbeat(request):
     """
     ElasticSearch and database are reachable and ready to handle requests.
     """
@@ -53,7 +53,7 @@ def heartbeat(request):  # pylint: disable=unused-argument
         newrelic.agent.ignore_transaction()
     try:
         db_status()
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         return JsonResponse({"OK": False, "check": "db"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     if not settings.ES_DISABLED and not get_es().ping():
@@ -64,7 +64,7 @@ def heartbeat(request):  # pylint: disable=unused-argument
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def selftest(request):  # pylint: disable=unused-argument
+def selftest(request):
     """
     Manual test endpoint.
     """
@@ -82,7 +82,7 @@ def selftest(request):  # pylint: disable=unused-argument
     try:
         db_status()
         database = "OK"
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         return Response(
             {"db_error": traceback.format_exc()},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR

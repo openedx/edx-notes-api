@@ -1,13 +1,12 @@
 import datetime
 import json
 from unittest import skipIf
+from unittest.mock import Mock, patch
 
 from django.conf import settings
 from django.urls import reverse
 from elasticsearch.exceptions import TransportError
 from rest_framework.test import APITestCase
-
-from unittest.mock import Mock, patch
 
 
 class OperationalEndpointsTest(APITestCase):
