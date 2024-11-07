@@ -17,6 +17,7 @@ venv/
 
 .idea/
 
-
 # Helm dependencies
 /helmcharts/**/*.tgz
+
+reports/

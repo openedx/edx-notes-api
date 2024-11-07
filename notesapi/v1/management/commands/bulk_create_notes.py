@@ -3,45 +3,47 @@ import json
 import os
 import random
 import uuid
-from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
-from django.db import transaction
 
 from notesapi.v1.models import Note
 
 
-def extract_comma_separated_list(option, opt_str, value, parser):
+def extract_comma_separated_list(option, value, parser):
     """Parse an option string as a comma separated list"""
     setattr(parser.values, option.dest, [course_id.strip() for course_id in value.split(',')])
 
 
 class Command(BaseCommand):
     args = '<total_notes>'
+
     def add_arguments(self, parser):
         parser.add_argument(
-        '--per_user',
+            '--per_user',
             action='store',
-            type='int',
+            type=int,
             default=50,
             help='number of notes that should be attributed to each user (default 50)'
-        ),
+        )
+
         parser.add_argument(
             '--course_ids',
             action='callback',
             callback=extract_comma_separated_list,
-            type='string',
+            type=str,
             default=['edX/DemoX/Demo_Course'],
             help='comma-separated list of course_ids for which notes should be randomly attributed'
-        ),
+        )
+
         parser.add_argument(
             '--batch_size',
             action='store',
-            type='int',
+            type=int,
             default=1000,
             help='number of notes that should be bulk inserted at a time - useful for getting around the maximum SQL '
                  'query size'
         )
+
     help = 'Add N random notes to the database'
 
     def handle(self, *args, **options):
@@ -57,6 +59,7 @@ class Command(BaseCommand):
         # such that we don't exceed this limit.
         for notes_chunk in grouper_it(note_iter(total_notes, notes_per_user, course_ids), batch_size):
             Note.objects.bulk_create(notes_chunk)
+
 
 def note_iter(total_notes, notes_per_user, course_ids):
     """
@@ -85,7 +88,9 @@ def note_iter(total_notes, notes_per_user, course_ids):
             random.choice([word_count for word_count, weight in weighted_num_words for i in range(weight)])
         )
 
-    get_new_user_id = lambda: uuid.uuid4().hex
+    def get_new_user_id():
+        return uuid.uuid4().hex
+
     user_id = get_new_user_id()
 
     for note_count in range(total_notes):
@@ -108,7 +113,6 @@ def grouper_it(iterable, batch_size):
     Return an iterator of iterators.  Each child iterator yields the
     next `batch_size`-many elements from `iterable`.
     """
-    iterator = iter(iterable)
     while True:
         chunk_it = itertools.islice(iterable, batch_size)
         try:

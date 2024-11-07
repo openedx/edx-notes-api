@@ -9,6 +9,7 @@ from notesapi.v1.utils import Request
 __all__ = ('CompoundSearchFilterBackend', 'FilteringFilterBackend')
 
 
+# pylint: disable=abstract-method
 class CompoundSearchFilterBackend(CompoundSearchFilterBackendOrigin):
     """
     Extends compound search backend.
