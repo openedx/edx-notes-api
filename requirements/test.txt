@@ -183,7 +183,7 @@ newrelic==10.2.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-packaging==24.1
+packaging==24.2
     # via
     #   -r requirements/base.txt
     #   django-nine
@@ -273,7 +273,7 @@ requests==2.32.3
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-rpds-py==0.20.1
+rpds-py==0.21.0
     # via
     #   -r requirements/base.txt
     #   jsonschema
