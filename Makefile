@@ -3,8 +3,16 @@ PACKAGES = notesserver notesapi
 
 validate: test.requirements test
 
+pytest: test-start-services test test-stop-services
+
 test: clean
 	python -Wd -m pytest
+
+test-start-services:
+	docker compose -f notesserver/docker-compose.test.yml --project-name=edxnotesapi_test up -d --remove-orphans
+
+test-stop-services:
+	docker compose -f notesserver/docker-compose.test.yml --project-name=edxnotesapi_test stop
 
 pii_check: test.requirements pii_clean
 	DJANGO_SETTINGS_MODULE=notesserver.settings.test code_annotations django_find_annotations --config_file .pii_annotations.yml \
