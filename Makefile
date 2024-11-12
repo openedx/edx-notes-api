@@ -7,11 +7,11 @@ test: clean
 	python -Wd -m pytest
 
 pii_check: test.requirements pii_clean
-	code_annotations django_find_annotations --config_file .pii_annotations.yml \
+	DJANGO_SETTINGS_MODULE=notesserver.settings.test code_annotations django_find_annotations --config_file .pii_annotations.yml \
 		--lint --report --coverage
 
 check_keywords: ## Scan the Django models in all installed apps in this project for restricted field names
-	python manage.py check_reserved_keywords --override_file db_keyword_overrides.yml
+	DJANGO_SETTINGS_MODULE=notesserver.settings.test python manage.py check_reserved_keywords --override_file db_keyword_overrides.yml
 
 run:
 	./manage.py runserver 0.0.0.0:8120
@@ -26,9 +26,13 @@ pii_clean:
 	rm -rf pii_report
 	mkdir -p pii_report
 
-quality:
-	pycodestyle --config=.pycodestyle  $(PACKAGES)
-	pylint $(PACKAGES)
+quality: pycodestyle pylint
+
+pycodestyle:
+	pycodestyle --config=.pycodestyle $(PACKAGES)
+
+pylint:
+	DJANGO_SETTINGS_MODULE=notesserver.settings.test pylint $(PACKAGES)
 
 diff-coverage:
 	diff-cover build/coverage/coverage.xml --html-report build/coverage/diff_cover.html
