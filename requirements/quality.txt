@@ -4,6 +4,11 @@
 #
 #    make upgrade
 #
+annotated-types==0.7.0
+    # via
+    #   -r requirements/base.txt
+    #   -r requirements/test.txt
+    #   pydantic
 asgiref==3.8.1
     # via
     #   -r requirements/base.txt
@@ -25,6 +30,11 @@ cachetools==5.5.0
     # via
     #   -r requirements/test.txt
     #   tox
+camel-converter[pydantic]==4.0.1
+    # via
+    #   -r requirements/base.txt
+    #   -r requirements/test.txt
+    #   meilisearch
 certifi==2024.8.30
     # via
     #   -r requirements/base.txt
@@ -242,6 +252,10 @@ mccabe==0.7.0
     # via
     #   -r requirements/test.txt
     #   pylint
+meilisearch==0.31.5
+    # via
+    #   -r requirements/base.txt
+    #   -r requirements/test.txt
 more-itertools==10.5.0
     # via -r requirements/test.txt
 mysqlclient==2.2.5
@@ -302,6 +316,16 @@ pycparser==2.22
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   cffi
+pydantic==2.9.2
+    # via
+    #   -r requirements/base.txt
+    #   -r requirements/test.txt
+    #   camel-converter
+pydantic-core==2.23.4
+    # via
+    #   -r requirements/base.txt
+    #   -r requirements/test.txt
+    #   pydantic
 pygments==2.18.0
     # via
     #   -r requirements/test.txt
@@ -383,6 +407,7 @@ requests==2.32.3
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
+    #   meilisearch
 rpds-py==0.21.0
     # via
     #   -r requirements/base.txt
@@ -432,6 +457,8 @@ typing-extensions==4.12.2
     #   -r requirements/test.txt
     #   edx-opaque-keys
     #   faker
+    #   pydantic
+    #   pydantic-core
 uritemplate==4.1.1
     # via
     #   -r requirements/base.txt

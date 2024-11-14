@@ -22,7 +22,7 @@ class OperationalEndpointsTest(APITestCase):
         self.assertEqual(json.loads(bytes.decode(response.content, 'utf-8')), {"OK": True})
 
     @skipIf(settings.ES_DISABLED, "Do not test if Elasticsearch service is disabled.")
-    @patch('notesserver.views.get_es')
+    @patch("notesapi.v1.views.elasticsearch.get_es")
     def test_heartbeat_failure_es(self, mocked_get_es):
         """
         Elasticsearch is not reachable.
@@ -65,7 +65,7 @@ class OperationalEndpointsTest(APITestCase):
 
     @skipIf(settings.ES_DISABLED, "Do not test if Elasticsearch service is disabled.")
     @patch('notesserver.views.datetime', datetime=Mock(wraps=datetime.datetime))
-    @patch('notesserver.views.get_es')
+    @patch("notesapi.v1.views.elasticsearch.get_es")
     def test_selftest_data(self, mocked_get_es, mocked_datetime):
         """
         Test returned data on success.
@@ -101,7 +101,7 @@ class OperationalEndpointsTest(APITestCase):
         )
 
     @skipIf(settings.ES_DISABLED, "Do not test if Elasticsearch service is disabled.")
-    @patch('notesserver.views.get_es')
+    @patch("notesapi.v1.views.elasticsearch.get_es")
     def test_selftest_failure_es(self, mocked_get_es):
         """
         Elasticsearch is not reachable on selftest.
