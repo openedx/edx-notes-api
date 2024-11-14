@@ -1,6 +1,8 @@
+import os
+
 from notesserver.settings.logger import build_logging_config
 
-from .common import *
+from .common import *  # pylint: disable=wildcard-import
 
 DEBUG = True
 LOG_SETTINGS_DEBUG = True

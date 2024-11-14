@@ -1,11 +1,9 @@
 import datetime
 import traceback
 
-from django.conf import settings
 from django.db import connection
 from django.http import JsonResponse
 from django.http import HttpResponse
-from elasticsearch.exceptions import TransportError
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -15,17 +13,14 @@ try:
     import newrelic.agent
 except ImportError:  # pragma: no cover
     newrelic = None  # pylint: disable=invalid-name
-if not settings.ES_DISABLED:
-    from elasticsearch_dsl.connections import connections
 
-
-    def get_es():
-        return connections.get_connection()
+from notesapi.v1.views import get_annotation_search_view_class
+from notesapi.v1.views import SearchViewRuntimeError
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def root(request):  # pylint: disable=unused-argument
+def root(request):
     """
     Root view.
     """
@@ -34,9 +29,10 @@ def root(request):  # pylint: disable=unused-argument
         "version": "1"
     })
 
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def robots(request):  # pylint: disable=unused-argument
+def robots(request):
     """
     robots.txt
     """
@@ -45,7 +41,7 @@ def robots(request):  # pylint: disable=unused-argument
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def heartbeat(request):  # pylint: disable=unused-argument
+def heartbeat(request):
     """
     ElasticSearch and database are reachable and ready to handle requests.
     """
@@ -53,36 +49,38 @@ def heartbeat(request):  # pylint: disable=unused-argument
         newrelic.agent.ignore_transaction()
     try:
         db_status()
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         return JsonResponse({"OK": False, "check": "db"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    if not settings.ES_DISABLED and not get_es().ping():
-        return JsonResponse({"OK": False, "check": "es"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    try:
+        get_annotation_search_view_class().heartbeat()
+    except SearchViewRuntimeError as e:
+        return JsonResponse({"OK": False, "check": e.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return JsonResponse({"OK": True}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def selftest(request):  # pylint: disable=unused-argument
+def selftest(request):
     """
     Manual test endpoint.
     """
     start = datetime.datetime.now()
 
-    if not settings.ES_DISABLED:
-        try:
-            es_status = get_es().info()
-        except TransportError:
-            return Response(
-                {"es_error": traceback.format_exc()},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+    response = {}
+    try:
+        response.update(get_annotation_search_view_class().selftest())
+    except SearchViewRuntimeError as e:
+        return Response(
+            e.args[0],
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
     try:
         db_status()
-        database = "OK"
-    except Exception:
+        response["db"] = "OK"
+    except Exception:  # pylint: disable=broad-exception-caught
         return Response(
             {"db_error": traceback.format_exc()},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -90,14 +88,7 @@ def selftest(request):  # pylint: disable=unused-argument
 
     end = datetime.datetime.now()
     delta = end - start
-
-    response = {
-        "db": database,
-        "time_elapsed": int(delta.total_seconds() * 1000)  # In milliseconds.
-    }
-
-    if not settings.ES_DISABLED:
-        response['es'] = es_status
+    response["time_elapsed"] = int(delta.total_seconds() * 1000)  # In milliseconds.
 
     return Response(response)
 

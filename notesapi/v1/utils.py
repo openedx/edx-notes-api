@@ -42,7 +42,7 @@ def dict_to_querydict(dict_):
             query_dict.setlist(name, value)
         else:
             query_dict.appendlist(name, value)
-    query_dict._mutable = False
+    query_dict._mutable = False  # pylint: disable=protected-access
     return query_dict
 
 

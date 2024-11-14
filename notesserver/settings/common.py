@@ -1,12 +1,12 @@
 import os
-import sys
+from django.conf import settings
 
 DEBUG = False
 TEMPLATE_DEBUG = False
 DISABLE_TOKEN_CHECK = False
 USE_TZ = True
 TIME_ZONE = 'UTC'
-AUTH_USER_MODEL = 'auth.User'
+AUTH_USER_MODEL = settings.AUTH_USER_MODEL
 
 # This value needs to be overriden in production.
 SECRET_KEY = 'CHANGEME'
@@ -127,7 +127,7 @@ TEMPLATES = [
 
 DEFAULT_NOTES_PAGE_SIZE = 25
 
-### Maximum number of allowed notes for each student per course ###
+# Maximum number of allowed notes for each student per course
 MAX_NOTES_PER_COURSE = 500
 
 ELASTICSEARCH_URL = 'localhost:9200'

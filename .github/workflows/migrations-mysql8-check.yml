@@ -1,4 +1,4 @@
-name: Migrations check on mysql8
+name: Migrations check on MySQL 8
 
 on:
   workflow_dispatch:
@@ -9,74 +9,53 @@ on:
 
 jobs:
   check_migrations:
-    name: check migrations
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        python-version: [ '3.11', '3.12' ]
+        python-version: ["3.11", "3.12"]
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }} with cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+          cache-dependency-path: "**/pip-tools.txt"
 
-    - name: Install system Packages
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libxmlsec1-dev
-    - name: Get pip cache dir
-      id: pip-cache-dir
-      run: |
-        echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-    - name: Cache pip dependencies
-      id: cache-dependencies
-      uses: actions/cache@v4
-      with:
-        path: ${{ steps.pip-cache-dir.outputs.dir }}
-        key: ${{ runner.os }}-pip-${{ hashFiles('requirements/pip-tools.txt') }}
-        restore-keys: ${{ runner.os }}-pip-
+      - name: Install system packages
+        run: sudo apt-get update && sudo apt-get install -y libxmlsec1-dev
 
-    - name: Ubuntu and sql Versions
-      run: |
-        lsb_release -a
-        mysql -V
+      # pinning xmlsec to version 1.3.13 to avoid the CI error, migration checks are failing due to an issue in the latest release of python-xmlsec
+      # https://github.com/xmlsec/python-xmlsec/issues/314
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements/pip-tools.txt
+          pip install -r requirements/test.txt
+          pip install -r requirements/base.txt
+          pip uninstall -y mysqlclient
+          pip install --no-binary mysqlclient mysqlclient
+          pip uninstall -y xmlsec
+          pip install --no-binary xmlsec xmlsec==1.3.13
 
-    # pinning xmlsec to version 1.3.13 to avoid the CI error, migration checks are failing due to an issue in the latest release of python-xmlsec
-    # https://github.com/xmlsec/python-xmlsec/issues/314
-    - name: Install Python dependencies
-      run: |
-        pip install -r requirements/pip-tools.txt
-        pip install -r requirements/test.txt
-        pip install -r requirements/base.txt
-        pip uninstall -y mysqlclient
-        pip install --no-binary mysqlclient mysqlclient
-        pip uninstall -y xmlsec
-        pip install --no-binary xmlsec xmlsec==1.3.13
+      - name: Start MySQL service
+        run: sudo service mysql start
 
-    - name: Initiate Services
-      run: |
-        sudo /etc/init.d/mysql start
-    - name: Reset mysql password
-      run: |
-        cat <<EOF | mysql -h 127.0.0.1 -u root --password=root
-          UPDATE mysql.user SET authentication_string = null WHERE user = 'root';
-          FLUSH PRIVILEGES;
-        EOF
-    - name: Run Tests
-      env:
-        DB_ENGINE: django.db.backends.mysql
-        DB_NAME: edx_notes_api
-        DB_USER: root
-        DB_PASSWORD:
-        DB_HOST: localhost
-        DB_PORT: 3306
-      run: |
-        echo "CREATE DATABASE IF NOT EXISTS edx_notes_api;" | sudo mysql -u root
-        echo "Running the migrations."
-        python manage.py migrate --settings=notesserver.settings.test
+      - name: Reset MySQL root password
+        run: |
+          mysql -h 127.0.0.1 -u root -proot -e "UPDATE mysql.user SET authentication_string = null WHERE user = 'root'; FLUSH PRIVILEGES;"
+
+      - name: Run migrations
+        env:
+          DB_ENGINE: django.db.backends.mysql
+          DB_NAME: edx_notes_api
+          DB_USER: root
+          DB_PASSWORD:
+          DB_HOST: localhost
+          DB_PORT: 3306
+        run: |
+          echo "CREATE DATABASE IF NOT EXISTS edx_notes_api;" | sudo mysql -u root
+          python manage.py migrate --settings=notesserver.settings.test

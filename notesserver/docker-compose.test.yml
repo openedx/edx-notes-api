@@ -1,0 +1,18 @@
+services:
+    mysql:
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD:
+            MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+            MYSQL_DATABASE: "edx_notes_api"
+        ports:
+            - 127.0.0.1:3306:3306
+
+    elasticsearch:
+        image: elasticsearch:7.13.4
+        environment:
+            discovery.type: single-node
+            bootstrap.memory_lock: "true"
+            ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+        ports:
+            - 127.0.0.1:9200:9200

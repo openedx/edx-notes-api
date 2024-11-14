@@ -10,6 +10,7 @@ elasticsearch-dsl
 django-elasticsearch-dsl
 django-elasticsearch-dsl-drf
 django-cors-headers
+meilisearch
 mysqlclient
 PyJWT
 gunicorn     # MIT
@@ -20,3 +21,4 @@ edx-django-release-util
 edx-django-utils
 edx-drf-extensions
 pytz
+setuptools

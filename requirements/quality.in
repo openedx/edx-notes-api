@@ -1,5 +1,9 @@
 -c constraints.txt
 
 -r base.txt
+-r test.txt
 
 code-annotations
+pycodestyle
+pylint
+edx_lint

@@ -11,7 +11,7 @@ The edX Notes API is designed to be compatible with the `Annotator <http://annot
 Getting Started
 ***************
 
-1. Install `ElasticSearch 7.8.0 <https://www.elastic.co/blog/elasticsearch-7-8-0-released>`__.
+1. Install `ElasticSearch 7.13.4 <https://www.elastic.co/downloads/past-releases/elasticsearch-7-13-4>`__.
 
 2. Install the requirements:
 
@@ -47,8 +47,21 @@ Configuration
 Running Tests
 *************
 
-Run ``make validate`` install the requirements, run the tests, and run
-lint.
+Install requirements::
+
+   make test.requirements
+
+Start mysql/elasticsearch services::
+
+   make test-start-services
+
+Run unit tests::
+
+   make test
+
+Run quality checks::
+
+   make quality
 
 How To Resync The Index
 ***********************
@@ -71,7 +84,7 @@ How To Contribute
 
 Contributions are very welcome.
 
-Please read `How To Contribute <https://github.com/openedx/.github/blob/master/CONTRIBUTING.md>`_ for details.
+Please read `How To Contribute <https://openedx.atlassian.net/wiki/spaces/COMM/pages/941457737/How+to+Start+Contributing+Code>`_ for details.
 
 Reporting Security Issues
 *************************
@@ -84,7 +97,7 @@ Mailing List and IRC Channel
 You can discuss this code on the `edx-code Google Group`__ or in the
 ``edx-code`` IRC channel on Freenode.
 
-__ https://groups.google.com/forum/#!forum/edx-code
+__ https://groups.google.com/g/edx-code
 
 .. |build-status| image:: https://github.com/openedx/edx-notes-api/actions/workflows/ci.yml/badge.svg
    :target: https://github.com/openedx/edx-notes-api/actions/workflows/ci.yml
