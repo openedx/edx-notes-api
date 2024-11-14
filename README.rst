@@ -47,8 +47,21 @@ Configuration
 Running Tests
 *************
 
-Run ``make validate`` install the requirements, run the tests, and run
-lint.
+Install requirements::
+
+   make test.requirements
+
+Start mysql/elasticsearch services::
+
+   make test-start-services
+
+Run unit tests::
+
+   make test
+
+Run quality checks::
+
+   make quality
 
 How To Resync The Index
 ***********************
