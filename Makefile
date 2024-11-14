@@ -3,15 +3,23 @@ PACKAGES = notesserver notesapi
 
 validate: test.requirements test
 
+pytest: test-start-services test test-stop-services
+
 test: clean
 	python -Wd -m pytest
 
+test-start-services:
+	docker compose -f notesserver/docker-compose.test.yml --project-name=edxnotesapi_test up -d --remove-orphans
+
+test-stop-services:
+	docker compose -f notesserver/docker-compose.test.yml --project-name=edxnotesapi_test stop
+
 pii_check: test.requirements pii_clean
-	code_annotations django_find_annotations --config_file .pii_annotations.yml \
+	DJANGO_SETTINGS_MODULE=notesserver.settings.test code_annotations django_find_annotations --config_file .pii_annotations.yml \
 		--lint --report --coverage
 
 check_keywords: ## Scan the Django models in all installed apps in this project for restricted field names
-	python manage.py check_reserved_keywords --override_file db_keyword_overrides.yml
+	DJANGO_SETTINGS_MODULE=notesserver.settings.test python manage.py check_reserved_keywords --override_file db_keyword_overrides.yml
 
 run:
 	./manage.py runserver 0.0.0.0:8120
@@ -26,9 +34,13 @@ pii_clean:
 	rm -rf pii_report
 	mkdir -p pii_report
 
-quality:
-	pycodestyle --config=.pycodestyle  $(PACKAGES)
-	pylint $(PACKAGES)
+quality: pycodestyle pylint
+
+pycodestyle:
+	pycodestyle --config=.pycodestyle $(PACKAGES)
+
+pylint:
+	DJANGO_SETTINGS_MODULE=notesserver.settings.test pylint $(PACKAGES)
 
 diff-coverage:
 	diff-cover build/coverage/coverage.xml --html-report build/coverage/diff_cover.html
@@ -59,18 +71,21 @@ develop: requirements test.requirements
 piptools: ## install pinned version of pip-compile and pip-sync
 	pip install -r requirements/pip-tools.txt
 
-upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
-upgrade: piptools ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
+compile-requirements: export CUSTOM_COMPILE_COMMAND=make upgrade
+compile-requirements: piptools ## Re-compile *.in requirements to *.txt (without upgrading)
 	# Make sure to compile files after any other files they include!
-	pip-compile --upgrade --rebuild --allow-unsafe -o requirements/pip.txt requirements/pip.in
-	pip-compile --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
+	pip-compile ${COMPILE_OPTS} --rebuild --allow-unsafe -o requirements/pip.txt requirements/pip.in
+	pip-compile ${COMPILE_OPTS} -o requirements/pip-tools.txt requirements/pip-tools.in
 	pip install -qr requirements/pip.txt
 	pip install -qr requirements/pip-tools.txt
-	pip-compile --upgrade --allow-unsafe -o requirements/base.txt requirements/base.in
-	pip-compile --upgrade --allow-unsafe -o requirements/test.txt requirements/test.in
-	pip-compile --upgrade --allow-unsafe -o requirements/ci.txt requirements/ci.in
-	pip-compile --upgrade --allow-unsafe -o requirements/quality.txt requirements/quality.in
+	pip-compile ${COMPILE_OPTS} --allow-unsafe -o requirements/base.txt requirements/base.in
+	pip-compile ${COMPILE_OPTS} --allow-unsafe -o requirements/test.txt requirements/test.in
+	pip-compile ${COMPILE_OPTS} --allow-unsafe -o requirements/ci.txt requirements/ci.in
+	pip-compile ${COMPILE_OPTS} --allow-unsafe -o requirements/quality.txt requirements/quality.in
 	# Let tox control the Django version for tests
 	grep -e "^django==" requirements/base.txt > requirements/django.txt
 	sed '/^[dD]jango==/d' requirements/test.txt > requirements/test.tmp
 	mv requirements/test.tmp requirements/test.txt
+
+upgrade: ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
+	$(MAKE) compile-requirements COMPILE_OPTS="--upgrade"
