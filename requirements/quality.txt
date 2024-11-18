@@ -67,7 +67,7 @@ click==8.1.7
     #   edx-lint
 click-log==0.4.0
     # via edx-lint
-code-annotations==1.8.0
+code-annotations==1.8.1
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
@@ -76,7 +76,7 @@ colorama==0.4.6
     # via
     #   -r requirements/test.txt
     #   tox
-coverage[toml]==7.6.4
+coverage[toml]==7.6.7
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -135,7 +135,7 @@ django-nine==0.2.7
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   django-elasticsearch-dsl-drf
-django-waffle==4.1.0
+django-waffle==4.2.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -198,7 +198,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.1
     # via -r requirements/test.txt
-faker==30.8.2
+faker==33.0.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -252,13 +252,13 @@ mccabe==0.7.0
     # via
     #   -r requirements/test.txt
     #   pylint
-meilisearch==0.31.5
+meilisearch==0.31.6
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
 more-itertools==10.5.0
     # via -r requirements/test.txt
-mysqlclient==2.2.5
+mysqlclient==2.2.6
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -330,7 +330,7 @@ pygments==2.18.0
     # via
     #   -r requirements/test.txt
     #   diff-cover
-pyjwt[crypto]==2.9.0
+pyjwt[crypto]==2.10.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -429,7 +429,7 @@ six==1.16.0
     #   edx-lint
     #   elasticsearch-dsl
     #   python-dateutil
-sqlparse==0.5.1
+sqlparse==0.5.2
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -476,7 +476,7 @@ virtualenv==20.27.1
     #   tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==75.3.0
+setuptools==75.5.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
