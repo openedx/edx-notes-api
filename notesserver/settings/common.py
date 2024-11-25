@@ -1,12 +1,11 @@
 import os
-from django.conf import settings
 
 DEBUG = False
 TEMPLATE_DEBUG = False
 DISABLE_TOKEN_CHECK = False
 USE_TZ = True
 TIME_ZONE = 'UTC'
-AUTH_USER_MODEL = settings.AUTH_USER_MODEL
+AUTH_USER_MODEL = 'auth.User'   # pylint: disable=hard-coded-auth-user
 
 # This value needs to be overriden in production.
 SECRET_KEY = 'CHANGEME'
