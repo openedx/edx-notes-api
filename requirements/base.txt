@@ -75,7 +75,7 @@ drf-spectacular==0.27.2
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==7.0.0
+edx-django-utils==7.0.1
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -108,7 +108,7 @@ meilisearch==0.31.6
     # via -r requirements/base.in
 mysqlclient==2.2.6
     # via -r requirements/base.in
-newrelic==10.2.0
+newrelic==10.3.0
     # via
     #   -r requirements/base.in
     #   edx-django-utils
@@ -126,9 +126,9 @@ psutil==6.1.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
-pydantic==2.9.2
+pydantic==2.10.1
     # via camel-converter
-pydantic-core==2.23.4
+pydantic-core==2.27.1
     # via pydantic
 pyjwt[crypto]==2.10.0
     # via
@@ -173,7 +173,7 @@ six==1.16.0
     #   python-dateutil
 sqlparse==0.5.2
     # via django
-stevedore==5.3.0
+stevedore==5.4.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
@@ -191,5 +191,5 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==75.5.0
+setuptools==75.6.0
     # via -r requirements/base.in
