@@ -51,7 +51,7 @@ click==8.1.7
     #   -r requirements/base.txt
     #   code-annotations
     #   edx-django-utils
-code-annotations==1.8.2
+code-annotations==2.0.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
@@ -59,7 +59,7 @@ coverage[toml]==7.6.8
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==43.0.3
+cryptography==44.0.0
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -120,7 +120,7 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-drf-spectacular==0.27.2
+drf-spectacular==0.28.0
     # via -r requirements/base.txt
 edx-django-release-util==1.4.0
     # via -r requirements/base.txt
@@ -147,7 +147,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.1
     # via -r requirements/test.in
-faker==33.0.0
+faker==33.1.0
     # via factory-boy
 filelock==3.16.1
     # via
@@ -183,13 +183,13 @@ markupsafe==3.0.2
     # via jinja2
 mccabe==0.7.0
     # via pylint
-meilisearch==0.31.6
+meilisearch==0.32.0
     # via -r requirements/base.txt
 more-itertools==10.5.0
     # via -r requirements/test.in
 mysqlclient==2.2.6
     # via -r requirements/base.txt
-newrelic==10.3.0
+newrelic==10.3.1
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -231,7 +231,7 @@ pycparser==2.22
     # via
     #   -r requirements/base.txt
     #   cffi
-pydantic==2.10.1
+pydantic==2.10.2
     # via
     #   -r requirements/base.txt
     #   camel-converter
@@ -241,12 +241,12 @@ pydantic-core==2.27.1
     #   pydantic
 pygments==2.18.0
     # via diff-cover
-pyjwt[crypto]==2.10.0
+pyjwt[crypto]==2.10.1
     # via
     #   -r requirements/base.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==3.3.1
+pylint==3.3.2
     # via -r requirements/test.in
 pymongo==4.10.1
     # via
@@ -258,7 +258,7 @@ pynacl==1.5.0
     #   edx-django-utils
 pyproject-api==1.8.0
     # via tox
-pytest==8.3.3
+pytest==8.3.4
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -341,7 +341,7 @@ urllib3==1.26.20
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.27.1
+virtualenv==20.28.0
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:

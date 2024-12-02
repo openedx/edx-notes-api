@@ -28,7 +28,7 @@ charset-normalizer==3.4.0
     # via requests
 click==8.1.7
     # via edx-django-utils
-cryptography==43.0.3
+cryptography==44.0.0
     # via pyjwt
 django==4.2.16
     # via
@@ -71,7 +71,7 @@ dnspython==2.7.0
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-spectacular==0.27.2
+drf-spectacular==0.28.0
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
@@ -104,11 +104,11 @@ jsonschema==4.23.0
     # via drf-spectacular
 jsonschema-specifications==2024.10.1
     # via jsonschema
-meilisearch==0.31.6
+meilisearch==0.32.0
     # via -r requirements/base.in
 mysqlclient==2.2.6
     # via -r requirements/base.in
-newrelic==10.3.0
+newrelic==10.3.1
     # via
     #   -r requirements/base.in
     #   edx-django-utils
@@ -126,11 +126,11 @@ psutil==6.1.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
-pydantic==2.10.1
+pydantic==2.10.2
     # via camel-converter
 pydantic-core==2.27.1
     # via pydantic
-pyjwt[crypto]==2.10.0
+pyjwt[crypto]==2.10.1
     # via
     #   -r requirements/base.in
     #   drf-jwt
