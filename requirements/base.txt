@@ -30,7 +30,7 @@ click==8.1.7
     # via edx-django-utils
 cryptography==44.0.0
     # via pyjwt
-django==4.2.16
+django==4.2.17
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -75,7 +75,7 @@ drf-spectacular==0.28.0
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==7.0.1
+edx-django-utils==7.1.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -104,7 +104,7 @@ jsonschema==4.23.0
     # via drf-spectacular
 jsonschema-specifications==2024.10.1
     # via jsonschema
-meilisearch==0.32.0
+meilisearch==0.33.0
     # via -r requirements/base.in
 mysqlclient==2.2.6
     # via -r requirements/base.in
@@ -126,7 +126,7 @@ psutil==6.1.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
-pydantic==2.10.2
+pydantic==2.10.3
     # via camel-converter
 pydantic-core==2.27.1
     # via pydantic
@@ -158,13 +158,13 @@ requests==2.32.3
     #   -r requirements/base.in
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==0.21.0
+rpds-py==0.22.3
     # via
     #   jsonschema
     #   referencing
 semantic-version==2.10.0
     # via edx-drf-extensions
-six==1.16.0
+six==1.17.0
     # via
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
