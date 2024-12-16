@@ -16,7 +16,7 @@ attrs==24.2.0
     #   referencing
 camel-converter[pydantic]==4.0.1
     # via meilisearch
-certifi==2024.8.30
+certifi==2024.12.14
     # via
     #   elasticsearch
     #   requests
@@ -108,7 +108,7 @@ meilisearch==0.33.0
     # via -r requirements/base.in
 mysqlclient==2.2.6
     # via -r requirements/base.in
-newrelic==10.3.1
+newrelic==10.4.0
     # via
     #   -r requirements/base.in
     #   edx-django-utils
@@ -171,7 +171,7 @@ six==1.17.0
     #   edx-django-release-util
     #   elasticsearch-dsl
     #   python-dateutil
-sqlparse==0.5.2
+sqlparse==0.5.3
     # via django
 stevedore==5.4.0
     # via
