@@ -10,7 +10,7 @@ asgiref==3.8.1
     # via
     #   django
     #   django-cors-headers
-attrs==24.2.0
+attrs==24.3.0
     # via
     #   jsonschema
     #   referencing
@@ -26,7 +26,7 @@ cffi==1.17.1
     #   pynacl
 charset-normalizer==3.4.0
     # via requests
-click==8.1.7
+click==8.1.8
     # via edx-django-utils
 cryptography==44.0.0
     # via pyjwt
@@ -122,13 +122,13 @@ path-py==12.5.0
     # via -r requirements/base.in
 pbr==6.1.0
     # via stevedore
-psutil==6.1.0
+psutil==6.1.1
     # via edx-django-utils
 pycparser==2.22
     # via cffi
-pydantic==2.10.3
+pydantic==2.10.4
     # via camel-converter
-pydantic-core==2.27.1
+pydantic-core==2.27.2
     # via pydantic
 pyjwt[crypto]==2.10.1
     # via
