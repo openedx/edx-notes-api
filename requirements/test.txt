@@ -13,11 +13,11 @@ asgiref==3.8.1
     #   -r requirements/base.txt
     #   django
     #   django-cors-headers
-astroid==3.3.6
+astroid==3.3.7
     # via
     #   -r requirements/test.in
     #   pylint
-attrs==24.2.0
+attrs==24.3.0
     # via
     #   -r requirements/base.txt
     #   jsonschema
@@ -46,7 +46,7 @@ charset-normalizer==3.4.0
     # via
     #   -r requirements/base.txt
     #   requests
-click==8.1.7
+click==8.1.8
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -167,7 +167,7 @@ iniconfig==2.0.0
     # via pytest
 isort==5.13.2
     # via pylint
-jinja2==3.1.4
+jinja2==3.1.5
     # via
     #   code-annotations
     #   diff-cover
@@ -223,7 +223,7 @@ pluggy==1.5.0
     #   diff-cover
     #   pytest
     #   tox
-psutil==6.1.0
+psutil==6.1.1
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -231,11 +231,11 @@ pycparser==2.22
     # via
     #   -r requirements/base.txt
     #   cffi
-pydantic==2.10.3
+pydantic==2.10.4
     # via
     #   -r requirements/base.txt
     #   camel-converter
-pydantic-core==2.27.1
+pydantic-core==2.27.2
     # via
     #   -r requirements/base.txt
     #   pydantic
