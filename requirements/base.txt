@@ -24,7 +24,7 @@ cffi==1.17.1
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==3.4.0
+charset-normalizer==3.4.1
     # via requests
 click==8.1.8
     # via edx-django-utils
@@ -116,7 +116,7 @@ packaging==24.2
     # via
     #   django-nine
     #   gunicorn
-path==17.0.0
+path==17.1.0
     # via path-py
 path-py==12.5.0
     # via -r requirements/base.in

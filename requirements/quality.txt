@@ -15,7 +15,7 @@ asgiref==3.8.1
     #   -r requirements/test.txt
     #   django
     #   django-cors-headers
-astroid==3.3.7
+astroid==3.3.8
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -52,7 +52,7 @@ chardet==5.2.0
     #   -r requirements/test.txt
     #   diff-cover
     #   tox
-charset-normalizer==3.4.0
+charset-normalizer==3.4.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -76,7 +76,7 @@ colorama==0.4.6
     # via
     #   -r requirements/test.txt
     #   tox
-coverage[toml]==7.6.9
+coverage[toml]==7.6.10
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -276,7 +276,7 @@ packaging==24.2
     #   pyproject-api
     #   pytest
     #   tox
-path==17.0.0
+path==17.1.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -336,7 +336,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/test.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==3.3.2
+pylint==3.3.3
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
