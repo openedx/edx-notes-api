@@ -147,7 +147,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.1
     # via -r requirements/test.in
-faker==33.3.0
+faker==33.3.1
     # via factory-boy
 filelock==3.16.1
     # via
@@ -183,11 +183,11 @@ markupsafe==3.0.2
     # via jinja2
 mccabe==0.7.0
     # via pylint
-meilisearch==0.33.0
+meilisearch==0.33.1
     # via -r requirements/base.txt
 more-itertools==10.5.0
     # via -r requirements/test.in
-mysqlclient==2.2.6
+mysqlclient==2.2.7
     # via -r requirements/base.txt
 newrelic==10.4.0
     # via
@@ -231,7 +231,7 @@ pycparser==2.22
     # via
     #   -r requirements/base.txt
     #   cffi
-pydantic==2.10.4
+pydantic==2.10.5
     # via
     #   -r requirements/base.txt
     #   camel-converter
@@ -239,7 +239,7 @@ pydantic-core==2.27.2
     # via
     #   -r requirements/base.txt
     #   pydantic
-pygments==2.19.0
+pygments==2.19.1
     # via diff-cover
 pyjwt[crypto]==2.10.1
     # via
@@ -338,6 +338,7 @@ uritemplate==4.1.1
     #   drf-spectacular
 urllib3==1.26.20
     # via
+    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
@@ -345,5 +346,5 @@ virtualenv==20.28.1
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==75.7.0
+setuptools==75.8.0
     # via -r requirements/base.txt

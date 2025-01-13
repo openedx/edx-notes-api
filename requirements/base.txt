@@ -104,9 +104,9 @@ jsonschema==4.23.0
     # via drf-spectacular
 jsonschema-specifications==2024.10.1
     # via jsonschema
-meilisearch==0.33.0
+meilisearch==0.33.1
     # via -r requirements/base.in
-mysqlclient==2.2.6
+mysqlclient==2.2.7
     # via -r requirements/base.in
 newrelic==10.4.0
     # via
@@ -126,7 +126,7 @@ psutil==6.1.1
     # via edx-django-utils
 pycparser==2.22
     # via cffi
-pydantic==2.10.4
+pydantic==2.10.5
     # via camel-converter
 pydantic-core==2.27.2
     # via pydantic
@@ -187,9 +187,10 @@ uritemplate==4.1.1
     # via drf-spectacular
 urllib3==1.26.20
     # via
+    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   elasticsearch
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==75.7.0
+setuptools==75.8.0
     # via -r requirements/base.in
