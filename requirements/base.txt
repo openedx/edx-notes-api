@@ -10,7 +10,7 @@ asgiref==3.8.1
     # via
     #   django
     #   django-cors-headers
-attrs==24.3.0
+attrs==25.1.0
     # via
     #   jsonschema
     #   referencing
@@ -126,7 +126,7 @@ psutil==6.1.1
     # via edx-django-utils
 pycparser==2.22
     # via cffi
-pydantic==2.10.5
+pydantic==2.10.6
     # via camel-converter
 pydantic-core==2.27.2
     # via pydantic
@@ -149,7 +149,7 @@ pyyaml==6.0.2
     # via
     #   drf-spectacular
     #   edx-django-release-util
-referencing==0.36.1
+referencing==0.36.2
     # via
     #   jsonschema
     #   jsonschema-specifications
