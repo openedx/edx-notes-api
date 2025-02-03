@@ -16,7 +16,7 @@ attrs==25.1.0
     #   referencing
 camel-converter[pydantic]==4.0.1
     # via meilisearch
-certifi==2024.12.14
+certifi==2025.1.31
     # via
     #   elasticsearch
     #   requests
@@ -108,7 +108,7 @@ meilisearch==0.33.1
     # via -r requirements/base.in
 mysqlclient==2.2.7
     # via -r requirements/base.in
-newrelic==10.4.0
+newrelic==10.5.0
     # via
     #   -r requirements/base.in
     #   edx-django-utils
@@ -135,7 +135,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.10.1
+pymongo==4.11
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -143,7 +143,7 @@ python-dateutil==2.9.0.post0
     # via
     #   -r requirements/base.in
     #   elasticsearch-dsl
-pytz==2024.2
+pytz==2025.1
     # via -r requirements/base.in
 pyyaml==6.0.2
     # via

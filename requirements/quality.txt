@@ -35,7 +35,7 @@ camel-converter[pydantic]==4.0.1
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   meilisearch
-certifi==2024.12.14
+certifi==2025.1.31
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -87,7 +87,7 @@ cryptography==44.0.0
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.txt
-diff-cover==9.2.1
+diff-cover==9.2.2
     # via -r requirements/test.txt
 dill==0.3.9
     # via
@@ -198,7 +198,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.1
     # via -r requirements/test.txt
-faker==35.0.0
+faker==35.2.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -225,7 +225,7 @@ iniconfig==2.0.0
     # via
     #   -r requirements/test.txt
     #   pytest
-isort==5.13.2
+isort==6.0.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -262,7 +262,7 @@ mysqlclient==2.2.7
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
-newrelic==10.4.0
+newrelic==10.5.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -336,7 +336,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/test.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==3.3.3
+pylint==3.3.4
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
@@ -352,7 +352,7 @@ pylint-plugin-utils==0.8.2
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.10.1
+pymongo==4.11
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -385,7 +385,7 @@ python-slugify==8.0.4
     # via
     #   -r requirements/test.txt
     #   code-annotations
-pytz==2024.2
+pytz==2025.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
