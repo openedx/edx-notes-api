@@ -30,7 +30,7 @@ click==8.1.7
     # via edx-django-utils
 cryptography==43.0.3
     # via pyjwt
-django==4.2.17
+django==4.2.19
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
