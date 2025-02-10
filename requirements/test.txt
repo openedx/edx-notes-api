@@ -55,7 +55,7 @@ code-annotations==2.2.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.6.10
+coverage[toml]==7.6.11
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -84,7 +84,7 @@ distlib==0.3.9
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
-django-cors-headers==4.6.0
+django-cors-headers==4.7.0
     # via -r requirements/base.txt
 django-crum==0.7.9
     # via
@@ -145,7 +145,7 @@ elasticsearch-dsl==7.4.1
     #   -r requirements/base.txt
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
-factory-boy==3.3.1
+factory-boy==3.3.3
     # via -r requirements/test.in
 faker==35.2.0
     # via factory-boy
@@ -189,7 +189,7 @@ more-itertools==10.6.0
     # via -r requirements/test.in
 mysqlclient==2.2.7
     # via -r requirements/base.txt
-newrelic==10.5.0
+newrelic==10.6.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -207,7 +207,7 @@ path==17.1.0
     #   path-py
 path-py==12.5.0
     # via -r requirements/base.txt
-pbr==6.1.0
+pbr==6.1.1
     # via
     #   -r requirements/base.txt
     #   stevedore
@@ -348,4 +348,6 @@ virtualenv==20.29.1
 
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==75.8.0
-    # via -r requirements/base.txt
+    # via
+    #   -r requirements/base.txt
+    #   pbr
