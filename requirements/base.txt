@@ -28,7 +28,7 @@ charset-normalizer==3.4.1
     # via requests
 click==8.1.8
     # via edx-django-utils
-cryptography==44.0.0
+cryptography==44.0.1
     # via pyjwt
 django==4.2.19
     # via
@@ -122,7 +122,7 @@ path-py==12.5.0
     # via -r requirements/base.in
 pbr==6.1.1
     # via stevedore
-psutil==6.1.1
+psutil==7.0.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
@@ -135,7 +135,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.11
+pymongo==4.11.1
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
