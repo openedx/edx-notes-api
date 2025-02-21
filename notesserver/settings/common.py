@@ -46,7 +46,7 @@ MIDDLEWARE = (
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'edx_rest_framework_extensions.middleware.RequestMetricsMiddleware',
+    'edx_rest_framework_extensions.middleware.RequestCustomAttributesMiddleware',
     'edx_rest_framework_extensions.auth.jwt.middleware.EnsureJWTAuthSettingsMiddleware',
 )
 
