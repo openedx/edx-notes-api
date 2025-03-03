@@ -59,7 +59,7 @@ coverage[toml]==7.6.12
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==44.0.1
+cryptography==44.0.2
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -124,7 +124,7 @@ drf-spectacular==0.28.0
     # via -r requirements/base.txt
 edx-django-release-util==1.4.0
     # via -r requirements/base.txt
-edx-django-utils==7.1.0
+edx-django-utils==7.2.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -165,7 +165,7 @@ inflection==0.5.1
     #   drf-spectacular
 iniconfig==2.0.0
     # via pytest
-isort==6.0.0
+isort==6.0.1
     # via pylint
 jinja2==3.1.5
     # via
@@ -258,7 +258,7 @@ pynacl==1.5.0
     #   edx-django-utils
 pyproject-api==1.9.0
     # via tox
-pytest==8.3.4
+pytest==8.3.5
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -347,7 +347,7 @@ virtualenv==20.29.2
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==75.8.0
+setuptools==75.8.2
     # via
     #   -r requirements/base.txt
     #   pbr
