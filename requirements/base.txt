@@ -109,9 +109,7 @@ meilisearch==0.34.0
 mysqlclient==2.2.7
     # via -r requirements/base.in
 newrelic==10.6.0
-    # via
-    #   -r requirements/base.in
-    #   edx-django-utils
+    # via edx-django-utils
 packaging==24.2
     # via
     #   django-nine
@@ -180,7 +178,6 @@ stevedore==5.4.1
 typing-extensions==4.12.2
     # via
     #   edx-opaque-keys
-    #   elasticsearch-dsl
     #   pydantic
     #   pydantic-core
     #   referencing
