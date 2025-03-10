@@ -30,7 +30,7 @@ click==8.1.8
     # via edx-django-utils
 cryptography==44.0.2
     # via pyjwt
-django==4.2.19
+django==4.2.20
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -108,7 +108,7 @@ meilisearch==0.34.0
     # via -r requirements/base.in
 mysqlclient==2.2.7
     # via -r requirements/base.in
-newrelic==10.6.0
+newrelic==10.7.0
     # via
     #   -r requirements/base.in
     #   edx-django-utils
@@ -135,7 +135,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.11.1
+pymongo==4.11.2
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -193,7 +193,7 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==75.8.2
+setuptools==76.0.0
     # via
     #   -r requirements/base.in
     #   pbr
