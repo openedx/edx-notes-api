@@ -4,15 +4,11 @@ import traceback
 from django.db import connection
 from django.http import JsonResponse
 from django.http import HttpResponse
+from edx_django_utils.monitoring import ignore_transaction
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-
-try:
-    import newrelic.agent
-except ImportError:  # pragma: no cover
-    newrelic = None  # pylint: disable=invalid-name
 
 from notesapi.v1.views import get_annotation_search_view_class
 from notesapi.v1.views import SearchViewRuntimeError
@@ -45,8 +41,7 @@ def heartbeat(request):
     """
     ElasticSearch and database are reachable and ready to handle requests.
     """
-    if newrelic:  # pragma: no cover
-        newrelic.agent.ignore_transaction()
+    ignore_transaction()  # no need to record telemetry for heartbeats
     try:
         db_status()
     except Exception:  # pylint: disable=broad-exception-caught

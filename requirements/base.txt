@@ -109,9 +109,7 @@ meilisearch==0.34.0
 mysqlclient==2.2.7
     # via -r requirements/base.in
 newrelic==10.7.0
-    # via
-    #   -r requirements/base.in
-    #   edx-django-utils
+    # via edx-django-utils
 packaging==24.2
     # via
     #   django-nine
