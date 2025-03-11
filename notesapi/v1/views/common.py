@@ -1,12 +1,13 @@
 #  pylint:disable=possibly-used-before-assignment
 import json
 import logging
-import newrelic.agent
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from edx_django_utils.monitoring import set_custom_attribute
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
@@ -398,8 +399,7 @@ class AnnotationListView(GenericAPIView):
             note = Note.create(self.request.data)
             note.full_clean()
 
-            # Gather metrics for New Relic so we can slice data in New Relic Insights
-            newrelic.agent.add_custom_parameter("notes.count", total_notes)
+            set_custom_attribute("notes.count", total_notes)
         except ValidationError as error:
             log.debug(error, exc_info=True)
             return Response(status=status.HTTP_400_BAD_REQUEST)

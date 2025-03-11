@@ -16,7 +16,6 @@ PyJWT
 gunicorn     # MIT
 path.py
 python-dateutil
-newrelic
 edx-django-release-util
 edx-django-utils
 edx-drf-extensions
