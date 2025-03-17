@@ -17,7 +17,7 @@ astroid==3.3.9
     # via
     #   -r requirements/test.in
     #   pylint
-attrs==25.1.0
+attrs==25.3.0
     # via
     #   -r requirements/base.txt
     #   jsonschema
@@ -55,7 +55,7 @@ code-annotations==2.2.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.6.12
+coverage[toml]==7.7.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -149,7 +149,7 @@ factory-boy==3.3.3
     # via -r requirements/test.in
 faker==37.0.0
     # via factory-boy
-filelock==3.17.0
+filelock==3.18.0
     # via
     #   tox
     #   virtualenv

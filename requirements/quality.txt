@@ -20,7 +20,7 @@ astroid==3.3.9
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==25.1.0
+attrs==25.3.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -76,7 +76,7 @@ colorama==0.4.6
     # via
     #   -r requirements/test.txt
     #   tox
-coverage[toml]==7.6.12
+coverage[toml]==7.7.0
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -202,7 +202,7 @@ faker==37.0.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.17.0
+filelock==3.18.0
     # via
     #   -r requirements/test.txt
     #   tox
