@@ -34,7 +34,7 @@ class AnnotationSearchView(BaseAnnotationSearchView):
 
     # https://django-elasticsearch-dsl-drf.readthedocs.io/en/latest/advanced_usage_examples.html
     filter_fields = {
-        "course_id": "course_id",
+        "course_id": "course_id.keyword",
         "user": "user",
         "usage_id": {
             "field": "usage_id",
