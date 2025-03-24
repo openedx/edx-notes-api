@@ -55,7 +55,7 @@ code-annotations==2.2.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.7.0
+coverage[toml]==7.7.1
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -130,7 +130,7 @@ edx-django-utils==7.2.0
     #   edx-drf-extensions
 edx-drf-extensions==10.5.0
     # via -r requirements/base.txt
-edx-opaque-keys==2.11.0
+edx-opaque-keys==2.12.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -147,7 +147,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.in
-faker==37.0.0
+faker==37.0.2
     # via factory-boy
 filelock==3.18.0
     # via
@@ -163,7 +163,7 @@ inflection==0.5.1
     # via
     #   -r requirements/base.txt
     #   drf-spectacular
-iniconfig==2.0.0
+iniconfig==2.1.0
     # via pytest
 isort==6.0.1
     # via pylint
@@ -213,7 +213,7 @@ pbr==6.1.1
     #   stevedore
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==4.3.6
+platformdirs==4.3.7
     # via
     #   pylint
     #   tox
@@ -246,9 +246,9 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/base.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==3.3.5
+pylint==3.3.6
     # via -r requirements/test.in
-pymongo==4.11.2
+pymongo==4.11.3
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -331,7 +331,7 @@ typing-extensions==4.12.2
     #   pydantic
     #   pydantic-core
     #   referencing
-tzdata==2025.1
+tzdata==2025.2
     # via faker
 uritemplate==4.1.1
     # via
@@ -347,7 +347,7 @@ virtualenv==20.29.3
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==76.0.0
+setuptools==77.0.3
     # via
     #   -r requirements/base.txt
     #   pbr
