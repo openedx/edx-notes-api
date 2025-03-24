@@ -81,7 +81,7 @@ edx-django-utils==7.2.0
     #   edx-drf-extensions
 edx-drf-extensions==10.5.0
     # via -r requirements/base.in
-edx-opaque-keys==2.11.0
+edx-opaque-keys==2.12.0
     # via edx-drf-extensions
 elasticsearch==7.13.4
     # via
@@ -133,7 +133,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.11.2
+pymongo==4.11.3
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -191,7 +191,7 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==76.0.0
+setuptools==77.0.3
     # via
     #   -r requirements/base.in
     #   pbr
