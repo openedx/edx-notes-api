@@ -128,7 +128,7 @@ edx-django-utils==7.2.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-edx-drf-extensions==10.5.0
+edx-drf-extensions==10.6.0
     # via -r requirements/base.txt
 edx-opaque-keys==2.12.0
     # via
@@ -183,13 +183,13 @@ markupsafe==3.0.2
     # via jinja2
 mccabe==0.7.0
     # via pylint
-meilisearch==0.34.0
+meilisearch==0.34.1
     # via -r requirements/base.txt
 more-itertools==10.6.0
     # via -r requirements/test.in
 mysqlclient==2.2.7
     # via -r requirements/base.txt
-newrelic==10.8.0
+newrelic==10.8.1
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -231,11 +231,11 @@ pycparser==2.22
     # via
     #   -r requirements/base.txt
     #   cffi
-pydantic==2.11.1
+pydantic==2.11.2
     # via
     #   -r requirements/base.txt
     #   camel-converter
-pydantic-core==2.33.0
+pydantic-core==2.33.1
     # via
     #   -r requirements/base.txt
     #   pydantic
@@ -263,9 +263,9 @@ pytest==8.3.5
     #   -r requirements/test.in
     #   pytest-cov
     #   pytest-django
-pytest-cov==6.0.0
+pytest-cov==6.1.1
     # via -r requirements/test.in
-pytest-django==4.10.0
+pytest-django==4.11.1
     # via -r requirements/test.in
 python-dateutil==2.9.0.post0
     # via
@@ -324,7 +324,7 @@ tomlkit==0.13.2
     # via pylint
 tox==4.25.0
     # via -r requirements/test.in
-typing-extensions==4.13.0
+typing-extensions==4.13.1
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -348,7 +348,7 @@ urllib3==1.26.20
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.29.3
+virtualenv==20.30.0
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
