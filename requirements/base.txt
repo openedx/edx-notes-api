@@ -75,7 +75,7 @@ drf-spectacular==0.28.0
     # via -r requirements/base.in
 edx-django-release-util==1.4.0
     # via -r requirements/base.in
-edx-django-utils==7.2.0
+edx-django-utils==7.4.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -108,7 +108,7 @@ meilisearch==0.34.1
     # via -r requirements/base.in
 mysqlclient==2.2.7
     # via -r requirements/base.in
-newrelic==10.8.1
+newrelic==10.9.0
     # via edx-django-utils
 packaging==24.2
     # via
@@ -124,7 +124,7 @@ psutil==7.0.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
-pydantic==2.11.2
+pydantic==2.11.3
     # via camel-converter
 pydantic-core==2.33.1
     # via pydantic
@@ -133,7 +133,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.11.3
+pymongo==4.12.0
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -175,7 +175,7 @@ stevedore==5.4.1
     # via
     #   edx-django-utils
     #   edx-opaque-keys
-typing-extensions==4.13.1
+typing-extensions==4.13.2
     # via
     #   edx-opaque-keys
     #   elasticsearch-dsl
