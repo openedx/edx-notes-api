@@ -110,7 +110,7 @@ mysqlclient==2.2.7
     # via -r requirements/base.in
 newrelic==10.9.0
     # via edx-django-utils
-packaging==24.2
+packaging==25.0
     # via
     #   django-nine
     #   gunicorn
@@ -194,7 +194,7 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==78.1.0
+setuptools==79.0.0
     # via
     #   -r requirements/base.in
     #   pbr

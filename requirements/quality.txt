@@ -89,7 +89,7 @@ ddt==1.7.2
     # via -r requirements/test.txt
 diff-cover==9.2.4
     # via -r requirements/test.txt
-dill==0.3.9
+dill==0.4.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -267,7 +267,7 @@ newrelic==10.9.0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   edx-django-utils
-packaging==24.2
+packaging==25.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -486,7 +486,7 @@ virtualenv==20.30.0
     #   tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==78.1.0
+setuptools==79.0.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
