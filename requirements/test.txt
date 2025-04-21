@@ -67,7 +67,7 @@ ddt==1.7.2
     # via -r requirements/test.in
 diff-cover==9.2.4
     # via -r requirements/test.in
-dill==0.3.9
+dill==0.4.0
     # via pylint
 distlib==0.3.9
     # via virtualenv
@@ -193,7 +193,7 @@ newrelic==10.9.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-packaging==24.2
+packaging==25.0
     # via
     #   -r requirements/base.txt
     #   django-nine
@@ -352,7 +352,7 @@ virtualenv==20.30.0
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==78.1.0
+setuptools==79.0.0
     # via
     #   -r requirements/base.txt
     #   pbr
