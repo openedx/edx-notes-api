@@ -15,7 +15,7 @@ asgiref==3.8.1
     #   -r requirements/test.txt
     #   django
     #   django-cors-headers
-astroid==3.3.9
+astroid==3.3.10
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -57,7 +57,7 @@ charset-normalizer==3.4.2
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   requests
-click==8.1.8
+click==8.2.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -97,7 +97,7 @@ distlib==0.3.9
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==4.2.20
+django==4.2.21
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
@@ -292,7 +292,7 @@ pbr==6.1.1
     #   stevedore
 pep8==1.7.1
     # via -r requirements/test.txt
-platformdirs==4.3.7
+platformdirs==4.3.8
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -480,13 +480,13 @@ urllib3==1.26.20
     #   -r requirements/test.txt
     #   elasticsearch
     #   requests
-virtualenv==20.30.0
+virtualenv==20.31.2
     # via
     #   -r requirements/test.txt
     #   tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==80.3.1
+setuptools==80.4.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
