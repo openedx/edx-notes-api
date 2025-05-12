@@ -26,11 +26,11 @@ cffi==1.17.1
     #   pynacl
 charset-normalizer==3.4.2
     # via requests
-click==8.1.8
+click==8.2.0
     # via edx-django-utils
 cryptography==44.0.3
     # via pyjwt
-django==4.2.20
+django==4.2.21
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -194,7 +194,7 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==80.3.1
+setuptools==80.4.0
     # via
     #   -r requirements/base.in
     #   pbr
