@@ -22,7 +22,7 @@ attrs==25.3.0
     #   -r requirements/base.txt
     #   jsonschema
     #   referencing
-cachetools==5.5.2
+cachetools==6.0.0
     # via tox
 camel-converter[pydantic]==4.0.1
     # via
@@ -46,7 +46,7 @@ charset-normalizer==3.4.2
     # via
     #   -r requirements/base.txt
     #   requests
-click==8.2.0
+click==8.2.1
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -55,17 +55,17 @@ code-annotations==2.3.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.8.0
+coverage[toml]==7.8.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==45.0.2
+cryptography==45.0.3
     # via
     #   -r requirements/base.txt
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.in
-diff-cover==9.2.4
+diff-cover==9.3.1
     # via -r requirements/test.in
 dill==0.4.0
     # via pylint
@@ -124,7 +124,7 @@ drf-spectacular==0.28.0
     # via -r requirements/base.txt
 edx-django-release-util==1.5.0
     # via -r requirements/base.txt
-edx-django-utils==7.4.0
+edx-django-utils==8.0.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -189,10 +189,6 @@ more-itertools==10.7.0
     # via -r requirements/test.in
 mysqlclient==2.2.7
     # via -r requirements/base.txt
-newrelic==10.12.0
-    # via
-    #   -r requirements/base.txt
-    #   edx-django-utils
 packaging==25.0
     # via
     #   -r requirements/base.txt
@@ -231,7 +227,7 @@ pycparser==2.22
     # via
     #   -r requirements/base.txt
     #   cffi
-pydantic==2.11.4
+pydantic==2.11.5
     # via
     #   -r requirements/base.txt
     #   camel-converter
@@ -291,7 +287,7 @@ requests==2.32.3
     #   -r requirements/base.txt
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==0.25.0
+rpds-py==0.25.1
     # via
     #   -r requirements/base.txt
     #   jsonschema
@@ -332,7 +328,7 @@ typing-extensions==4.13.2
     #   pydantic-core
     #   referencing
     #   typing-inspection
-typing-inspection==0.4.0
+typing-inspection==0.4.1
     # via
     #   -r requirements/base.txt
     #   pydantic
@@ -352,7 +348,7 @@ virtualenv==20.31.2
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==80.7.1
+setuptools==80.8.0
     # via
     #   -r requirements/base.txt
     #   pbr
