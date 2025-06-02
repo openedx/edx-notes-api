@@ -65,7 +65,7 @@ cryptography==45.0.3
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.in
-diff-cover==9.3.1
+diff-cover==9.3.2
     # via -r requirements/test.in
 dill==0.4.0
     # via pylint
@@ -171,7 +171,7 @@ jinja2==3.1.6
     # via
     #   code-annotations
     #   diff-cover
-jsonschema==4.23.0
+jsonschema==4.24.0
     # via
     #   -r requirements/base.txt
     #   drf-spectacular
@@ -348,7 +348,7 @@ virtualenv==20.31.2
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==80.8.0
+setuptools==80.9.0
     # via
     #   -r requirements/base.txt
     #   pbr

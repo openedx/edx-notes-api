@@ -100,7 +100,7 @@ idna==3.10
     # via requests
 inflection==0.5.1
     # via drf-spectacular
-jsonschema==4.23.0
+jsonschema==4.24.0
     # via drf-spectacular
 jsonschema-specifications==2025.4.1
     # via jsonschema
@@ -192,7 +192,7 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==80.8.0
+setuptools==80.9.0
     # via
     #   -r requirements/base.in
     #   pbr
