@@ -55,11 +55,11 @@ code-annotations==2.3.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.8.2
+coverage[toml]==7.9.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==45.0.3
+cryptography==45.0.4
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -147,7 +147,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.in
-faker==37.3.0
+faker==37.4.0
     # via factory-boy
 filelock==3.18.0
     # via
@@ -246,7 +246,7 @@ pyjwt[crypto]==2.10.1
     #   edx-drf-extensions
 pylint==3.3.7
     # via -r requirements/test.in
-pymongo==4.13.0
+pymongo==4.13.1
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -261,7 +261,7 @@ pytest==8.4.0
     #   -r requirements/test.in
     #   pytest-cov
     #   pytest-django
-pytest-cov==6.1.1
+pytest-cov==6.2.0
     # via -r requirements/test.in
 pytest-django==4.11.1
     # via -r requirements/test.in
@@ -271,8 +271,6 @@ python-dateutil==2.9.0.post0
     #   elasticsearch-dsl
 python-slugify==8.0.4
     # via code-annotations
-pytz==2025.2
-    # via -r requirements/base.txt
 pyyaml==6.0.2
     # via
     #   -r requirements/base.txt
@@ -284,7 +282,7 @@ referencing==0.36.2
     #   -r requirements/base.txt
     #   jsonschema
     #   jsonschema-specifications
-requests==2.32.3
+requests==2.32.4
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions

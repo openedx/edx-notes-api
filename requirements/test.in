@@ -5,12 +5,12 @@
 astroid
 code-annotations
 coverage
+ddt
+diff-cover
+factory_boy
 more-itertools
 pep8
 pylint
-diff-cover
-factory_boy
-ddt
 pytest
 pytest-cov
 pytest-django

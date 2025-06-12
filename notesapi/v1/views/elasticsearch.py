@@ -66,12 +66,11 @@ class AnnotationSearchView(BaseAnnotationSearchView):
     def __init__(self, *args, **kwargs):
         self.client = connections.get_connection(
             NoteDocument._get_using()
-        )  # pylint: disable=protected-access
-        self.index = NoteDocument._index._name  # pylint: disable=protected-access
+        )
+        self.index = NoteDocument._index._name
         self.mapping = (
             NoteDocument._doc_type.mapping.properties.name
-        )  # pylint: disable=protected-access
-        # pylint: disable=protected-access
+        )
         self.search = Search(
             using=self.client, index=self.index, doc_type=NoteDocument._doc_type.name
         )
