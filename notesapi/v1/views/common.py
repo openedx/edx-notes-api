@@ -1,4 +1,3 @@
-#  pylint:disable=possibly-used-before-assignment
 import json
 import logging
 

@@ -4,6 +4,6 @@
 -r test.txt
 
 code-annotations
+edx_lint
 pycodestyle
 pylint
-edx_lint

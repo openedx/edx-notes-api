@@ -1,6 +1,6 @@
 import unittest
 from calendar import timegm
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from unittest.mock import patch
 from urllib import parse
 
@@ -1193,8 +1193,8 @@ class TokenTests(BaseAnnotationViewTests):
     token_data = {
         'aud': settings.CLIENT_ID,
         'sub': TEST_USER,
-        'iat': timegm(datetime.utcnow().utctimetuple()),
-        'exp': timegm((datetime.utcnow() + timedelta(seconds=300)).utctimetuple()),
+        'iat': timegm(datetime.now(UTC).utctimetuple()),
+        'exp': timegm((datetime.now(UTC) + timedelta(seconds=300)).utctimetuple()),
     }
 
     def _assert_403(self, token):

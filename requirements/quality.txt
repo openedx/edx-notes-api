@@ -76,11 +76,11 @@ colorama==0.4.6
     # via
     #   -r requirements/test.txt
     #   tox
-coverage[toml]==7.8.2
+coverage[toml]==7.9.0
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==45.0.3
+cryptography==45.0.4
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -97,7 +97,7 @@ distlib==0.3.9
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==4.2.22
+django==4.2.23
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
@@ -198,7 +198,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.txt
-faker==37.3.0
+faker==37.4.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -348,7 +348,7 @@ pylint-plugin-utils==0.8.2
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.13.0
+pymongo==4.13.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -367,7 +367,7 @@ pytest==8.4.0
     #   -r requirements/test.txt
     #   pytest-cov
     #   pytest-django
-pytest-cov==6.1.1
+pytest-cov==6.2.0
     # via -r requirements/test.txt
 pytest-django==4.11.1
     # via -r requirements/test.txt
@@ -380,10 +380,6 @@ python-slugify==8.0.4
     # via
     #   -r requirements/test.txt
     #   code-annotations
-pytz==2025.2
-    # via
-    #   -r requirements/base.txt
-    #   -r requirements/test.txt
 pyyaml==6.0.2
     # via
     #   -r requirements/base.txt
@@ -397,7 +393,7 @@ referencing==0.36.2
     #   -r requirements/test.txt
     #   jsonschema
     #   jsonschema-specifications
-requests==2.32.3
+requests==2.32.4
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt

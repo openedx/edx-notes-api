@@ -2,22 +2,21 @@
 -c constraints.txt
 
 Django
-requests
-djangorestframework
-drf-spectacular
-elasticsearch
-elasticsearch-dsl
+django-cors-headers
 django-elasticsearch-dsl
 django-elasticsearch-dsl-drf
-django-cors-headers
-meilisearch
-mysqlclient
-PyJWT
-gunicorn     # MIT
-path.py
-python-dateutil
+djangorestframework
+drf-spectacular
 edx-django-release-util
 edx-django-utils
 edx-drf-extensions
-pytz
+elasticsearch
+elasticsearch-dsl
+gunicorn     # MIT
+meilisearch
+mysqlclient
+path.py
+PyJWT
+python-dateutil
+requests
 setuptools
