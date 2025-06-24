@@ -35,7 +35,7 @@ camel-converter[pydantic]==4.0.1
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   meilisearch
-certifi==2025.4.26
+certifi==2025.6.15
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -76,7 +76,7 @@ colorama==0.4.6
     # via
     #   -r requirements/test.txt
     #   tox
-coverage[toml]==7.9.0
+coverage[toml]==7.9.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -135,7 +135,7 @@ django-nine==0.2.7
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   django-elasticsearch-dsl-drf
-django-waffle==4.2.0
+django-waffle==5.0.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -298,6 +298,7 @@ pluggy==1.6.0
     #   -r requirements/test.txt
     #   diff-cover
     #   pytest
+    #   pytest-cov
     #   tox
 psutil==7.0.0
     # via
@@ -311,7 +312,7 @@ pycparser==2.22
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   cffi
-pydantic==2.11.5
+pydantic==2.11.7
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -367,7 +368,7 @@ pytest==8.4.0
     #   -r requirements/test.txt
     #   pytest-cov
     #   pytest-django
-pytest-cov==6.2.0
+pytest-cov==6.2.1
     # via -r requirements/test.txt
 pytest-django==4.11.1
     # via -r requirements/test.txt
