@@ -139,8 +139,6 @@ python-dateutil==2.9.0.post0
     # via
     #   -r requirements/base.in
     #   elasticsearch-dsl
-pytz==2025.2
-    # via -r requirements/base.in
 pyyaml==6.0.2
     # via
     #   drf-spectacular
