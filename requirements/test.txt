@@ -272,8 +272,6 @@ python-dateutil==2.9.0.post0
     #   elasticsearch-dsl
 python-slugify==8.0.4
     # via code-annotations
-pytz==2025.2
-    # via -r requirements/base.txt
 pyyaml==6.0.2
     # via
     #   -r requirements/base.txt

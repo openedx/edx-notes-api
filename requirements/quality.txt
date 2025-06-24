@@ -381,10 +381,6 @@ python-slugify==8.0.4
     # via
     #   -r requirements/test.txt
     #   code-annotations
-pytz==2025.2
-    # via
-    #   -r requirements/base.txt
-    #   -r requirements/test.txt
 pyyaml==6.0.2
     # via
     #   -r requirements/base.txt
