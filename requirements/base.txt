@@ -6,7 +6,7 @@
 #
 annotated-types==0.7.0
     # via pydantic
-asgiref==3.8.1
+asgiref==3.9.0
     # via
     #   django
     #   django-cors-headers
@@ -28,7 +28,7 @@ charset-normalizer==3.4.2
     # via requests
 click==8.2.1
     # via edx-django-utils
-cryptography==45.0.4
+cryptography==45.0.5
     # via pyjwt
 django==4.2.23
     # via
@@ -152,7 +152,7 @@ requests==2.32.4
     #   -r requirements/base.in
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==0.25.1
+rpds-py==0.26.0
     # via
     #   jsonschema
     #   referencing
@@ -171,7 +171,7 @@ stevedore==5.4.1
     # via
     #   edx-django-utils
     #   edx-opaque-keys
-typing-extensions==4.14.0
+typing-extensions==4.14.1
     # via
     #   edx-opaque-keys
     #   elasticsearch-dsl
