@@ -6,7 +6,7 @@
 #
 annotated-types==0.7.0
     # via pydantic
-asgiref==3.9.0
+asgiref==3.9.1
     # via
     #   django
     #   django-cors-headers
@@ -16,7 +16,7 @@ attrs==25.3.0
     #   referencing
 camel-converter[pydantic]==4.0.1
     # via meilisearch
-certifi==2025.6.15
+certifi==2025.7.9
     # via
     #   elasticsearch
     #   requests
