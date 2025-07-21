@@ -16,7 +16,7 @@ attrs==25.3.0
     #   referencing
 camel-converter[pydantic]==4.0.1
     # via meilisearch
-certifi==2025.7.9
+certifi==2025.7.14
     # via
     #   elasticsearch
     #   requests
@@ -100,7 +100,7 @@ idna==3.10
     # via requests
 inflection==0.5.1
     # via drf-spectacular
-jsonschema==4.24.0
+jsonschema==4.25.0
     # via drf-spectacular
 jsonschema-specifications==2025.4.1
     # via jsonschema
