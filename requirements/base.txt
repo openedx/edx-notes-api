@@ -16,7 +16,7 @@ attrs==25.3.0
     #   referencing
 camel-converter[pydantic]==4.0.1
     # via meilisearch
-certifi==2025.7.14
+certifi==2025.8.3
     # via
     #   elasticsearch
     #   requests
@@ -32,7 +32,7 @@ cryptography==45.0.5
     # via pyjwt
 django==4.2.23
     # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c https:/raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
     #   django-cors-headers
     #   django-crum
@@ -85,7 +85,7 @@ edx-opaque-keys==3.0.0
     # via edx-drf-extensions
 elasticsearch==7.13.4
     # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c https:/raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
     #   elasticsearch-dsl
@@ -185,7 +185,6 @@ uritemplate==4.2.0
     # via drf-spectacular
 urllib3==1.26.20
     # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   elasticsearch
     #   requests
 
