@@ -116,7 +116,7 @@ path==17.1.1
     # via path-py
 path-py==12.5.0
     # via -r requirements/base.in
-pbr==6.1.1
+pbr==7.0.0
     # via stevedore
 psutil==7.0.0
     # via edx-django-utils
