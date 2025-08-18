@@ -55,7 +55,7 @@ code-annotations==2.3.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.10.3
+coverage[toml]==7.10.4
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -149,7 +149,7 @@ factory-boy==3.3.3
     # via -r requirements/test.in
 faker==37.5.3
     # via factory-boy
-filelock==3.18.0
+filelock==3.19.1
     # via
     #   tox
     #   virtualenv
@@ -203,7 +203,7 @@ path==17.1.1
     #   path-py
 path-py==12.5.0
     # via -r requirements/base.txt
-pbr==6.1.1
+pbr==7.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
@@ -344,7 +344,7 @@ urllib3==1.26.20
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==20.33.1
+virtualenv==20.34.0
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
