@@ -55,7 +55,7 @@ code-annotations==2.3.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.10.4
+coverage[toml]==7.10.5
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -171,7 +171,7 @@ jinja2==3.1.6
     # via
     #   code-annotations
     #   diff-cover
-jsonschema==4.25.0
+jsonschema==4.25.1
     # via
     #   -r requirements/base.txt
     #   drf-spectacular
@@ -183,7 +183,7 @@ markupsafe==3.0.2
     # via jinja2
 mccabe==0.7.0
     # via pylint
-meilisearch==0.36.0
+meilisearch==0.37.0
     # via -r requirements/base.txt
 more-itertools==10.7.0
     # via -r requirements/test.in
@@ -203,7 +203,7 @@ path==17.1.1
     #   path-py
 path-py==12.5.0
     # via -r requirements/base.txt
-pbr==7.0.0
+pbr==7.0.1
     # via
     #   -r requirements/base.txt
     #   stevedore
@@ -247,7 +247,7 @@ pyjwt[crypto]==2.10.1
     #   edx-drf-extensions
 pylint==3.3.8
     # via -r requirements/test.in
-pymongo==4.14.0
+pymongo==4.14.1
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -283,7 +283,7 @@ referencing==0.36.2
     #   -r requirements/base.txt
     #   jsonschema
     #   jsonschema-specifications
-requests==2.32.4
+requests==2.32.5
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions

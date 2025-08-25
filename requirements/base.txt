@@ -100,11 +100,11 @@ idna==3.10
     # via requests
 inflection==0.5.1
     # via drf-spectacular
-jsonschema==4.25.0
+jsonschema==4.25.1
     # via drf-spectacular
 jsonschema-specifications==2025.4.1
     # via jsonschema
-meilisearch==0.36.0
+meilisearch==0.37.0
     # via -r requirements/base.in
 mysqlclient==2.2.7
     # via -r requirements/base.in
@@ -116,7 +116,7 @@ path==17.1.1
     # via path-py
 path-py==12.5.0
     # via -r requirements/base.in
-pbr==7.0.0
+pbr==7.0.1
     # via stevedore
 psutil==7.0.0
     # via edx-django-utils
@@ -131,7 +131,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.14.0
+pymongo==4.14.1
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -147,7 +147,7 @@ referencing==0.36.2
     # via
     #   jsonschema
     #   jsonschema-specifications
-requests==2.32.4
+requests==2.32.5
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
