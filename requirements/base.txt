@@ -116,8 +116,6 @@ path==17.1.1
     # via path-py
 path-py==12.5.0
     # via -r requirements/base.in
-pbr==7.0.1
-    # via stevedore
 psutil==7.0.0
     # via edx-django-utils
 pycparser==2.22
@@ -152,7 +150,7 @@ requests==2.32.5
     #   -r requirements/base.in
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==0.27.0
+rpds-py==0.27.1
     # via
     #   jsonschema
     #   referencing
@@ -167,11 +165,11 @@ six==1.17.0
     #   python-dateutil
 sqlparse==0.5.3
     # via django
-stevedore==5.4.1
+stevedore==5.5.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
-typing-extensions==4.14.1
+typing-extensions==4.15.0
     # via
     #   edx-opaque-keys
     #   elasticsearch-dsl
@@ -190,6 +188,4 @@ urllib3==1.26.20
 
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==80.9.0
-    # via
-    #   -r requirements/base.in
-    #   pbr
+    # via -r requirements/base.in
