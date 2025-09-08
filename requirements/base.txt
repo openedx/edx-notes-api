@@ -28,9 +28,9 @@ charset-normalizer==3.4.3
     # via requests
 click==8.2.1
     # via edx-django-utils
-cryptography==45.0.6
+cryptography==45.0.7
     # via pyjwt
-django==4.2.23
+django==4.2.24
     # via
     #   -c https:/raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.in
@@ -67,7 +67,7 @@ djangorestframework==3.16.1
     #   drf-jwt
     #   drf-spectacular
     #   edx-drf-extensions
-dnspython==2.7.0
+dnspython==2.8.0
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
