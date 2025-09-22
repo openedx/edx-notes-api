@@ -57,7 +57,7 @@ charset-normalizer==3.4.3
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   requests
-click==8.2.1
+click==8.3.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -76,11 +76,11 @@ colorama==0.4.6
     # via
     #   -r requirements/test.txt
     #   tox
-coverage[toml]==7.10.6
+coverage[toml]==7.10.7
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==45.0.7
+cryptography==46.0.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -112,7 +112,7 @@ django==4.2.24
     #   edx-django-release-util
     #   edx-django-utils
     #   edx-drf-extensions
-django-cors-headers==4.8.0
+django-cors-headers==4.9.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -198,7 +198,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.txt
-faker==37.6.0
+faker==37.8.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -295,7 +295,7 @@ pluggy==1.6.0
     #   pytest
     #   pytest-cov
     #   tox
-psutil==7.0.0
+psutil==7.1.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -344,7 +344,7 @@ pylint-plugin-utils==0.9.0
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.15.0
+pymongo==4.15.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
