@@ -6,7 +6,7 @@
 #
 annotated-types==0.7.0
     # via pydantic
-asgiref==3.9.1
+asgiref==3.9.2
     # via
     #   django
     #   django-cors-headers
@@ -137,7 +137,7 @@ python-dateutil==2.9.0.post0
     # via
     #   -r requirements/base.in
     #   elasticsearch-dsl
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via
     #   drf-spectacular
     #   edx-django-release-util
