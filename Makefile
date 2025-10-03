@@ -71,7 +71,12 @@ develop: requirements test.requirements
 piptools: ## install pinned version of pip-compile and pip-sync
 	pip install -r requirements/pip-tools.txt
 
+prepare-common-constraints:
+	curl -s https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt \
+	    | grep -iv '^[dD]jango' > requirements/common_constraints.txt
+
 compile-requirements: export CUSTOM_COMPILE_COMMAND=make upgrade
+compile-requirements: prepare-common-constraints
 compile-requirements: piptools ## Re-compile *.in requirements to *.txt (without upgrading)
 	# Make sure to compile files after any other files they include!
 	pip-compile ${COMPILE_OPTS} --rebuild --allow-unsafe -o requirements/pip.txt requirements/pip.in
