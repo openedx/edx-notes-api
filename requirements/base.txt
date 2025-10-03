@@ -30,9 +30,9 @@ click==8.3.0
     # via edx-django-utils
 cryptography==46.0.3
     # via pyjwt
-django==4.2.25
+django==5.2.7
     # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-cors-headers
     #   django-crum
@@ -85,7 +85,7 @@ edx-opaque-keys==3.0.0
     # via edx-drf-extensions
 elasticsearch==7.13.4
     # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/common_constraints.txt
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
     #   elasticsearch-dsl

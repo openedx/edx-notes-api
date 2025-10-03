@@ -97,9 +97,9 @@ distlib==0.4.0
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==4.2.25
+django==5.2.7
     # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   django-cors-headers
@@ -185,7 +185,7 @@ edx-opaque-keys==3.0.0
     #   edx-drf-extensions
 elasticsearch==7.13.4
     # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/common_constraints.txt
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   django-elasticsearch-dsl-drf
