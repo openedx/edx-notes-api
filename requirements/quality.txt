@@ -9,7 +9,7 @@ annotated-types==0.7.0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   pydantic
-asgiref==3.9.2
+asgiref==3.10.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -35,7 +35,7 @@ camel-converter[pydantic]==4.0.1
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   meilisearch
-certifi==2025.8.3
+certifi==2025.10.5
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -80,7 +80,7 @@ coverage[toml]==7.10.7
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==46.0.1
+cryptography==46.0.2
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -97,9 +97,9 @@ distlib==0.4.0
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==4.2.24
+django==4.2.25
     # via
-    #   -c https:/raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   django-cors-headers
@@ -167,7 +167,7 @@ edx-django-release-util==1.5.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
-edx-django-utils==8.0.0
+edx-django-utils==8.0.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -185,7 +185,7 @@ edx-opaque-keys==3.0.0
     #   edx-drf-extensions
 elasticsearch==7.13.4
     # via
-    #   -c https:/raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   django-elasticsearch-dsl-drf
@@ -225,7 +225,7 @@ iniconfig==2.1.0
     # via
     #   -r requirements/test.txt
     #   pytest
-isort==6.0.1
+isort==6.1.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -307,7 +307,7 @@ pycparser==2.23
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   cffi
-pydantic==2.11.9
+pydantic==2.11.10
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -328,7 +328,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/test.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==3.3.8
+pylint==3.3.9
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
@@ -344,7 +344,7 @@ pylint-plugin-utils==0.9.0
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.15.1
+pymongo==4.15.2
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -436,7 +436,7 @@ tomlkit==0.13.3
     # via
     #   -r requirements/test.txt
     #   pylint
-tox==4.30.2
+tox==4.30.3
     # via -r requirements/test.txt
 typing-extensions==4.15.0
     # via
@@ -447,7 +447,7 @@ typing-extensions==4.15.0
     #   pydantic-core
     #   referencing
     #   typing-inspection
-typing-inspection==0.4.1
+typing-inspection==0.4.2
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
