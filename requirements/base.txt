@@ -10,11 +10,11 @@ asgiref==3.10.0
     # via
     #   django
     #   django-cors-headers
-attrs==25.3.0
+attrs==25.4.0
     # via
     #   jsonschema
     #   referencing
-camel-converter[pydantic]==4.0.1
+camel-converter[pydantic]==5.0.0
     # via meilisearch
 certifi==2025.10.5
     # via
@@ -96,7 +96,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 gunicorn==23.0.0
     # via -r requirements/base.in
-idna==3.10
+idna==3.11
     # via requests
 inflection==0.5.1
     # via drf-spectacular
@@ -120,16 +120,16 @@ psutil==7.1.0
     # via edx-django-utils
 pycparser==2.23
     # via cffi
-pydantic==2.11.10
+pydantic==2.12.0
     # via camel-converter
-pydantic-core==2.33.2
+pydantic-core==2.41.1
     # via pydantic
 pyjwt[crypto]==2.10.1
     # via
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.15.2
+pymongo==4.15.3
     # via edx-opaque-keys
 pynacl==1.6.0
     # via edx-django-utils

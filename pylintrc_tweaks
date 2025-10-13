@@ -1,10 +1,14 @@
 # pylintrc tweaks for use with edx_lint.
 [MASTER]
 ignore+ = .git, .tox, migrations
-load-plugins = edx_lint.pylint,pylint_django
+load-plugins = edx_lint.pylint
+# Temporarily disabling pylint-django as it does not yet support pylint 4.0
+# ,pylint_django
 
 [MESSAGES CONTROL]
 disable+ =
     missing-function-docstring,
     missing-module-docstring,
-    missing-class-docstring
+    missing-class-docstring,
+    unused-argument,
+    no-member

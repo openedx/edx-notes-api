@@ -15,22 +15,22 @@ asgiref==3.10.0
     #   -r requirements/test.txt
     #   django
     #   django-cors-headers
-astroid==3.3.11
+astroid==4.0.1
     # via
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==25.3.0
+attrs==25.4.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   jsonschema
     #   referencing
-cachetools==6.2.0
+cachetools==6.2.1
     # via
     #   -r requirements/test.txt
     #   tox
-camel-converter[pydantic]==4.0.1
+camel-converter[pydantic]==5.0.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -198,11 +198,11 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.txt
-faker==37.8.0
+faker==37.11.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.19.1
+filelock==3.20.0
     # via
     #   -r requirements/test.txt
     #   tox
@@ -211,7 +211,7 @@ gunicorn==23.0.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
-idna==3.10
+idna==3.11
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -225,7 +225,7 @@ iniconfig==2.1.0
     # via
     #   -r requirements/test.txt
     #   pytest
-isort==6.1.0
+isort==7.0.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -282,7 +282,7 @@ path-py==12.5.0
     #   -r requirements/test.txt
 pep8==1.7.1
     # via -r requirements/test.txt
-platformdirs==4.4.0
+platformdirs==4.5.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -307,12 +307,12 @@ pycparser==2.23
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   cffi
-pydantic==2.11.10
+pydantic==2.12.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   camel-converter
-pydantic-core==2.33.2
+pydantic-core==2.41.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -328,7 +328,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/test.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==3.3.9
+pylint==4.0.0
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
@@ -338,13 +338,13 @@ pylint==3.3.9
     #   pylint-plugin-utils
 pylint-celery==0.3
     # via edx-lint
-pylint-django==2.6.1
+pylint-django==2.5.2
     # via edx-lint
 pylint-plugin-utils==0.9.0
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.15.2
+pymongo==4.15.3
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -354,7 +354,7 @@ pynacl==1.6.0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   edx-django-utils
-pyproject-api==1.9.1
+pyproject-api==1.10.0
     # via
     #   -r requirements/test.txt
     #   tox
@@ -436,7 +436,7 @@ tomlkit==0.13.3
     # via
     #   -r requirements/test.txt
     #   pylint
-tox==4.30.3
+tox==4.31.0
     # via -r requirements/test.txt
 typing-extensions==4.15.0
     # via
@@ -467,7 +467,7 @@ urllib3==1.26.20
     #   -r requirements/test.txt
     #   elasticsearch
     #   requests
-virtualenv==20.34.0
+virtualenv==20.35.3
     # via
     #   -r requirements/test.txt
     #   tox
