@@ -70,6 +70,7 @@ develop: requirements test.requirements
 
 piptools: ## install pinned version of pip-compile and pip-sync
 	pip install -r requirements/pip-tools.txt
+	pip install -qr requirements/pip.txt
 
 prepare-common-constraints:
 	curl -s https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt \
