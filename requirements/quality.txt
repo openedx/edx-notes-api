@@ -26,7 +26,7 @@ attrs==25.4.0
     #   -r requirements/test.txt
     #   jsonschema
     #   referencing
-cachetools==6.2.1
+cachetools==6.2.2
     # via
     #   -r requirements/test.txt
     #   tox
@@ -35,7 +35,7 @@ camel-converter[pydantic]==5.0.0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   meilisearch
-certifi==2025.10.5
+certifi==2025.11.12
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -57,7 +57,7 @@ charset-normalizer==3.4.4
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   requests
-click==8.3.0
+click==8.3.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -87,7 +87,7 @@ cryptography==46.0.3
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.txt
-diff-cover==9.7.1
+diff-cover==9.7.2
     # via -r requirements/test.txt
 dill==0.4.0
     # via
@@ -198,7 +198,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.txt
-faker==37.12.0
+faker==38.0.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
@@ -252,7 +252,7 @@ mccabe==0.7.0
     # via
     #   -r requirements/test.txt
     #   pylint
-meilisearch==0.37.1
+meilisearch==0.38.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -328,7 +328,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/test.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==4.0.2
+pylint==4.0.3
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
@@ -344,12 +344,12 @@ pylint-plugin-utils==0.9.0
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.15.3
+pymongo==4.15.4
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   edx-opaque-keys
-pynacl==1.6.0
+pynacl==1.6.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -358,7 +358,7 @@ pyproject-api==1.10.0
     # via
     #   -r requirements/test.txt
     #   tox
-pytest==9.0.0
+pytest==9.0.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -395,7 +395,7 @@ requests==2.32.5
     #   -r requirements/test.txt
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==0.28.0
+rpds-py==0.29.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
