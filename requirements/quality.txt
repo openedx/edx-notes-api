@@ -307,7 +307,7 @@ pycparser==2.23
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   cffi
-pydantic==2.12.4
+pydantic==2.12.5
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -328,7 +328,7 @@ pyjwt[crypto]==2.10.1
     #   -r requirements/test.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==4.0.3
+pylint==4.0.4
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
@@ -395,7 +395,7 @@ requests==2.32.5
     #   -r requirements/test.txt
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==0.29.0
+rpds-py==0.30.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -416,7 +416,7 @@ six==1.17.0
     #   edx-lint
     #   elasticsearch-dsl
     #   python-dateutil
-sqlparse==0.5.3
+sqlparse==0.5.4
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
