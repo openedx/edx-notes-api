@@ -205,7 +205,7 @@ path-py==12.5.0
     # via -r requirements/base.txt
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==4.5.0
+platformdirs==4.5.1
     # via
     #   pylint
     #   tox
@@ -243,7 +243,7 @@ pyjwt[crypto]==2.10.1
     #   edx-drf-extensions
 pylint==4.0.4
     # via -r requirements/test.in
-pymongo==4.15.4
+pymongo==4.15.5
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -253,7 +253,7 @@ pynacl==1.6.1
     #   edx-django-utils
 pyproject-api==1.10.0
     # via tox
-pytest==9.0.1
+pytest==9.0.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
