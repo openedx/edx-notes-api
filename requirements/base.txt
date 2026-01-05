@@ -16,7 +16,7 @@ attrs==25.4.0
     #   referencing
 camel-converter[pydantic]==5.0.0
     # via meilisearch
-certifi==2025.11.12
+certifi==2026.1.4
     # via
     #   elasticsearch
     #   requests
@@ -116,7 +116,7 @@ path==17.1.1
     # via path-py
 path-py==12.5.0
     # via -r requirements/base.in
-psutil==7.2.0
+psutil==7.2.1
     # via edx-django-utils
 pycparser==2.23
     # via cffi
@@ -131,7 +131,7 @@ pyjwt[crypto]==2.10.1
     #   edx-drf-extensions
 pymongo==4.15.5
     # via edx-opaque-keys
-pynacl==1.6.1
+pynacl==1.6.2
     # via edx-django-utils
 python-dateutil==2.9.0.post0
     # via
