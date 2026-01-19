@@ -104,7 +104,7 @@ jsonschema==4.26.0
     # via drf-spectacular
 jsonschema-specifications==2025.9.1
     # via jsonschema
-meilisearch==0.38.0
+meilisearch==0.40.0
     # via -r requirements/base.in
 mysqlclient==2.2.7
     # via -r requirements/base.in
