@@ -94,7 +94,7 @@ elasticsearch-dsl==7.4.1
     #   -r requirements/base.in
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
-gunicorn==23.0.0
+gunicorn==24.1.1
     # via -r requirements/base.in
 idna==3.11
     # via requests
@@ -108,7 +108,7 @@ meilisearch==0.40.0
     # via -r requirements/base.in
 mysqlclient==2.2.7
     # via -r requirements/base.in
-packaging==25.0
+packaging==26.0
     # via
     #   django-nine
     #   gunicorn
@@ -118,7 +118,7 @@ path-py==12.5.0
     # via -r requirements/base.in
 psutil==7.2.1
     # via edx-django-utils
-pycparser==2.23
+pycparser==3.0
     # via cffi
 pydantic==2.12.5
     # via camel-converter
@@ -187,5 +187,5 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==80.9.0
+setuptools==80.10.2
     # via -r requirements/base.in
