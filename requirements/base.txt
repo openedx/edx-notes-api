@@ -6,7 +6,7 @@
 #
 annotated-types==0.7.0
     # via pydantic
-asgiref==3.11.0
+asgiref==3.11.1
     # via
     #   django
     #   django-cors-headers
@@ -28,9 +28,9 @@ charset-normalizer==3.4.4
     # via requests
 click==8.3.1
     # via edx-django-utils
-cryptography==46.0.3
+cryptography==46.0.4
     # via pyjwt
-django==5.2.10
+django==5.2.11
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
@@ -94,7 +94,7 @@ elasticsearch-dsl==7.4.1
     #   -r requirements/base.in
     #   django-elasticsearch-dsl
     #   django-elasticsearch-dsl-drf
-gunicorn==24.1.1
+gunicorn==25.0.1
     # via -r requirements/base.in
 idna==3.11
     # via requests
@@ -116,7 +116,7 @@ path==17.1.1
     # via path-py
 path-py==12.5.0
     # via -r requirements/base.in
-psutil==7.2.1
+psutil==7.2.2
     # via edx-django-utils
 pycparser==3.0
     # via cffi
@@ -124,7 +124,7 @@ pydantic==2.12.5
     # via camel-converter
 pydantic-core==2.41.5
     # via pydantic
-pyjwt[crypto]==2.10.1
+pyjwt[crypto]==2.11.0
     # via
     #   -r requirements/base.in
     #   drf-jwt
