@@ -13,7 +13,7 @@ asgiref==3.11.1
     #   -r requirements/base.txt
     #   django
     #   django-cors-headers
-astroid==4.0.3
+astroid==4.0.4
     # via
     #   -r requirements/test.in
     #   pylint
@@ -147,13 +147,13 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.in
-faker==40.1.2
+faker==40.4.0
     # via factory-boy
 filelock==3.20.3
     # via
     #   tox
     #   virtualenv
-gunicorn==25.0.1
+gunicorn==25.0.3
     # via -r requirements/base.txt
 idna==3.11
     # via
@@ -342,5 +342,5 @@ virtualenv==20.36.1
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==80.10.2
+setuptools==82.0.0
     # via -r requirements/base.txt
