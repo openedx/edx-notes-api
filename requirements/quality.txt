@@ -26,7 +26,7 @@ attrs==25.4.0
     #   -r requirements/test.txt
     #   jsonschema
     #   referencing
-cachetools==7.0.0
+cachetools==7.0.1
     # via
     #   -r requirements/test.txt
     #   tox
@@ -76,11 +76,11 @@ colorama==0.4.6
     # via
     #   -r requirements/test.txt
     #   tox
-coverage[toml]==7.13.3
+coverage[toml]==7.13.4
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==46.0.4
+cryptography==46.0.5
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -202,12 +202,12 @@ faker==40.4.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.20.3
+filelock==3.24.1
     # via
     #   -r requirements/test.txt
     #   tox
     #   virtualenv
-gunicorn==25.0.3
+gunicorn==25.1.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -258,7 +258,7 @@ meilisearch==0.40.0
     #   -r requirements/test.txt
 more-itertools==10.8.0
     # via -r requirements/test.txt
-mysqlclient==2.2.7
+mysqlclient==2.2.8
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -282,7 +282,7 @@ path-py==12.5.0
     #   -r requirements/test.txt
 pep8==1.7.1
     # via -r requirements/test.txt
-platformdirs==4.5.1
+platformdirs==4.9.1
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -365,7 +365,7 @@ pytest==9.0.2
     #   pytest-django
 pytest-cov==7.0.0
     # via -r requirements/test.txt
-pytest-django==4.11.1
+pytest-django==4.12.0
     # via -r requirements/test.txt
 python-dateutil==2.9.0.post0
     # via
@@ -436,7 +436,7 @@ tomlkit==0.14.0
     # via
     #   -r requirements/test.txt
     #   pylint
-tox==4.34.1
+tox==4.36.0
     # via -r requirements/test.txt
 typing-extensions==4.15.0
     # via
