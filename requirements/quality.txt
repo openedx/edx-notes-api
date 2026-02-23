@@ -47,7 +47,7 @@ cffi==2.0.0
     #   -r requirements/test.txt
     #   cryptography
     #   pynacl
-chardet==5.2.0
+chardet==6.0.0.post1
     # via
     #   -r requirements/test.txt
     #   diff-cover
@@ -202,7 +202,7 @@ faker==40.4.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.24.1
+filelock==3.24.3
     # via
     #   -r requirements/test.txt
     #   tox
@@ -225,7 +225,7 @@ iniconfig==2.3.0
     # via
     #   -r requirements/test.txt
     #   pytest
-isort==7.0.0
+isort==8.0.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -282,7 +282,7 @@ path-py==12.5.0
     #   -r requirements/test.txt
 pep8==1.7.1
     # via -r requirements/test.txt
-platformdirs==4.9.1
+platformdirs==4.9.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -328,7 +328,7 @@ pyjwt[crypto]==2.11.0
     #   -r requirements/test.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==4.0.4
+pylint==4.0.5
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
@@ -421,7 +421,7 @@ sqlparse==0.5.5
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   django
-stevedore==5.6.0
+stevedore==5.7.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -436,7 +436,7 @@ tomlkit==0.14.0
     # via
     #   -r requirements/test.txt
     #   pylint
-tox==4.36.0
+tox==4.44.0
     # via -r requirements/test.txt
 typing-extensions==4.15.0
     # via
@@ -463,7 +463,7 @@ urllib3==1.26.20
     #   -r requirements/test.txt
     #   elasticsearch
     #   requests
-virtualenv==20.36.1
+virtualenv==20.38.0
     # via
     #   -r requirements/test.txt
     #   tox
