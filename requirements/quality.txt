@@ -35,7 +35,7 @@ camel-converter[pydantic]==5.0.0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   meilisearch
-certifi==2026.1.4
+certifi==2026.2.25
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -51,7 +51,6 @@ chardet==6.0.0.post1
     # via
     #   -r requirements/test.txt
     #   diff-cover
-    #   tox
 charset-normalizer==3.4.4
     # via
     #   -r requirements/base.txt
@@ -178,7 +177,7 @@ edx-drf-extensions==10.6.0
     #   -r requirements/test.txt
 edx-lint==5.6.0
     # via -r requirements/quality.in
-edx-opaque-keys==3.0.0
+edx-opaque-keys==3.1.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -198,13 +197,14 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.txt
-faker==40.4.0
+faker==40.5.1
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.24.3
+filelock==3.25.0
     # via
     #   -r requirements/test.txt
+    #   python-discovery
     #   tox
     #   virtualenv
 gunicorn==25.1.0
@@ -225,7 +225,7 @@ iniconfig==2.3.0
     # via
     #   -r requirements/test.txt
     #   pytest
-isort==8.0.0
+isort==8.0.1
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -286,6 +286,7 @@ platformdirs==4.9.2
     # via
     #   -r requirements/test.txt
     #   pylint
+    #   python-discovery
     #   tox
     #   virtualenv
 pluggy==1.6.0
@@ -372,6 +373,10 @@ python-dateutil==2.9.0.post0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   elasticsearch-dsl
+python-discovery==1.1.0
+    # via
+    #   -r requirements/test.txt
+    #   virtualenv
 python-slugify==8.0.4
     # via
     #   -r requirements/test.txt
@@ -436,7 +441,7 @@ tomlkit==0.14.0
     # via
     #   -r requirements/test.txt
     #   pylint
-tox==4.44.0
+tox==4.47.0
     # via -r requirements/test.txt
 typing-extensions==4.15.0
     # via
@@ -463,7 +468,7 @@ urllib3==1.26.20
     #   -r requirements/test.txt
     #   elasticsearch
     #   requests
-virtualenv==20.38.0
+virtualenv==21.1.0
     # via
     #   -r requirements/test.txt
     #   tox

@@ -16,7 +16,7 @@ attrs==25.4.0
     #   referencing
 camel-converter[pydantic]==5.0.0
     # via meilisearch
-certifi==2026.1.4
+certifi==2026.2.25
     # via
     #   elasticsearch
     #   requests
@@ -81,7 +81,7 @@ edx-django-utils==8.0.1
     #   edx-drf-extensions
 edx-drf-extensions==10.6.0
     # via -r requirements/base.in
-edx-opaque-keys==3.0.0
+edx-opaque-keys==3.1.0
     # via edx-drf-extensions
 elasticsearch==7.13.4
     # via
