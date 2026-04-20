@@ -38,7 +38,7 @@ cffi==2.0.0
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
-chardet==7.4.1
+chardet==7.4.3
     # via diff-cover
 charset-normalizer==3.4.7
     # via
@@ -145,9 +145,9 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.in
-faker==40.13.0
+faker==40.15.0
     # via factory-boy
-filelock==3.25.2
+filelock==3.29.0
     # via
     #   python-discovery
     #   tox
@@ -188,7 +188,7 @@ more-itertools==11.0.2
     # via -r requirements/test.in
 mysqlclient==2.2.8
     # via -r requirements/base.txt
-packaging==26.0
+packaging==26.1
     # via
     #   -r requirements/base.txt
     #   django-nine
@@ -224,11 +224,11 @@ pycparser==3.0
     # via
     #   -r requirements/base.txt
     #   cffi
-pydantic==2.12.5
+pydantic==2.13.2
     # via
     #   -r requirements/base.txt
     #   camel-converter
-pydantic-core==2.41.5
+pydantic-core==2.46.2
     # via
     #   -r requirements/base.txt
     #   pydantic
@@ -321,7 +321,7 @@ tomli-w==1.2.0
     # via tox
 tomlkit==0.14.0
     # via pylint
-tox==4.52.1
+tox==4.53.0
     # via -r requirements/test.in
 typing-extensions==4.15.0
     # via
@@ -344,7 +344,7 @@ urllib3==1.26.20
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==21.2.1
+virtualenv==21.2.4
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:

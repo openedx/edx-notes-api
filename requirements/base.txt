@@ -108,7 +108,7 @@ meilisearch==0.40.0
     # via -r requirements/base.in
 mysqlclient==2.2.8
     # via -r requirements/base.in
-packaging==26.0
+packaging==26.1
     # via
     #   django-nine
     #   gunicorn
@@ -120,9 +120,9 @@ psutil==7.2.2
     # via edx-django-utils
 pycparser==3.0
     # via cffi
-pydantic==2.12.5
+pydantic==2.13.2
     # via camel-converter
-pydantic-core==2.41.5
+pydantic-core==2.46.2
     # via pydantic
 pyjwt[crypto]==2.12.1
     # via
