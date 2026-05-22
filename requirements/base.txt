@@ -26,7 +26,7 @@ cffi==2.0.0
     #   pynacl
 charset-normalizer==3.4.7
     # via requests
-click==8.3.3
+click==8.4.0
     # via edx-django-utils
 cryptography==48.0.0
     # via pyjwt
@@ -96,7 +96,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 gunicorn==26.0.0
     # via -r requirements/base.in
-idna==3.14
+idna==3.15
     # via requests
 inflection==0.5.1
     # via drf-spectacular
@@ -145,7 +145,7 @@ referencing==0.37.0
     # via
     #   jsonschema
     #   jsonschema-specifications
-requests==2.33.1
+requests==2.34.2
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
