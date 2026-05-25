@@ -22,13 +22,13 @@ attrs==26.1.0
     #   -r requirements/base.txt
     #   jsonschema
     #   referencing
-cachetools==7.1.2
+cachetools==7.1.4
     # via tox
 camel-converter[pydantic]==5.1.0
     # via
     #   -r requirements/base.txt
     #   meilisearch
-certifi==2026.4.22
+certifi==2026.5.20
     # via
     #   -r requirements/base.txt
     #   elasticsearch
@@ -44,7 +44,7 @@ charset-normalizer==3.4.7
     # via
     #   -r requirements/base.txt
     #   requests
-click==8.4.0
+click==8.4.1
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -63,7 +63,7 @@ cryptography==48.0.0
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.in
-diff-cover==10.2.0
+diff-cover==10.2.1
     # via -r requirements/test.in
 dill==0.4.1
     # via pylint
@@ -145,7 +145,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.in
-faker==40.18.0
+faker==40.19.1
     # via factory-boy
 filelock==3.29.0
     # via
@@ -154,7 +154,7 @@ filelock==3.29.0
     #   virtualenv
 gunicorn==26.0.0
     # via -r requirements/base.txt
-idna==3.15
+idna==3.16
     # via
     #   -r requirements/base.txt
     #   requests
@@ -184,7 +184,7 @@ mccabe==0.7.0
     # via pylint
 meilisearch==0.41.0
     # via -r requirements/base.txt
-more-itertools==11.0.2
+more-itertools==11.1.0
     # via -r requirements/test.in
 mysqlclient==2.2.8
     # via -r requirements/base.txt
@@ -236,7 +236,7 @@ pygments==2.20.0
     # via
     #   diff-cover
     #   pytest
-pyjwt[crypto]==2.12.1
+pyjwt[crypto]==2.13.0
     # via
     #   -r requirements/base.txt
     #   drf-jwt
@@ -309,7 +309,7 @@ sqlparse==0.5.5
     # via
     #   -r requirements/base.txt
     #   django
-stevedore==5.7.0
+stevedore==5.8.0
     # via
     #   -r requirements/base.txt
     #   code-annotations

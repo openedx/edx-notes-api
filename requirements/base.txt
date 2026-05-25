@@ -16,7 +16,7 @@ attrs==26.1.0
     #   referencing
 camel-converter[pydantic]==5.1.0
     # via meilisearch
-certifi==2026.4.22
+certifi==2026.5.20
     # via
     #   elasticsearch
     #   requests
@@ -26,7 +26,7 @@ cffi==2.0.0
     #   pynacl
 charset-normalizer==3.4.7
     # via requests
-click==8.4.0
+click==8.4.1
     # via edx-django-utils
 cryptography==48.0.0
     # via pyjwt
@@ -96,7 +96,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 gunicorn==26.0.0
     # via -r requirements/base.in
-idna==3.15
+idna==3.16
     # via requests
 inflection==0.5.1
     # via drf-spectacular
@@ -124,7 +124,7 @@ pydantic==2.13.4
     # via camel-converter
 pydantic-core==2.46.4
     # via pydantic
-pyjwt[crypto]==2.12.1
+pyjwt[crypto]==2.13.0
     # via
     #   -r requirements/base.in
     #   drf-jwt
@@ -165,7 +165,7 @@ six==1.17.0
     #   python-dateutil
 sqlparse==0.5.5
     # via django
-stevedore==5.7.0
+stevedore==5.8.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
