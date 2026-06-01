@@ -96,7 +96,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 gunicorn==26.0.0
     # via -r requirements/base.in
-idna==3.16
+idna==3.17
     # via requests
 inflection==0.5.1
     # via drf-spectacular
@@ -150,7 +150,7 @@ requests==2.34.2
     #   -r requirements/base.in
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==0.30.0
+rpds-py==2026.5.1
     # via
     #   jsonschema
     #   referencing
