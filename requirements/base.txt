@@ -30,7 +30,7 @@ click==8.4.1
     # via edx-django-utils
 cryptography==48.0.0
     # via pyjwt
-django==5.2.14
+django==5.2.15
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
@@ -96,7 +96,7 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 gunicorn==26.0.0
     # via -r requirements/base.in
-idna==3.17
+idna==3.18
     # via requests
 inflection==0.5.1
     # via drf-spectacular
