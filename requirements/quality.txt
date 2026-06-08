@@ -92,11 +92,11 @@ dill==0.4.1
     # via
     #   -r requirements/test.txt
     #   pylint
-distlib==0.4.0
+distlib==0.4.1
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==5.2.14
+django==5.2.15
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
@@ -197,11 +197,11 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.txt
-faker==40.19.1
+faker==40.21.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.29.0
+filelock==3.29.1
     # via
     #   -r requirements/test.txt
     #   python-discovery
@@ -211,7 +211,7 @@ gunicorn==26.0.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
-idna==3.17
+idna==3.18
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -447,7 +447,7 @@ tomlkit==0.15.0
     #   -r requirements/test.txt
     #   edx-lint
     #   pylint
-tox==4.55.0
+tox==4.55.1
     # via -r requirements/test.txt
 typing-extensions==4.15.0
     # via
