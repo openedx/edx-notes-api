@@ -53,7 +53,7 @@ code-annotations==3.0.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.14.3
+coverage[toml]==7.15.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -145,9 +145,9 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.in
-faker==40.23.0
+faker==40.28.1
     # via factory-boy
-filelock==3.29.4
+filelock==3.29.5
     # via
     #   python-discovery
     #   tox
@@ -182,7 +182,7 @@ markupsafe==3.0.3
     # via jinja2
 mccabe==0.7.0
     # via pylint
-meilisearch==0.41.1
+meilisearch==0.42.0
     # via -r requirements/base.txt
 more-itertools==11.1.0
     # via -r requirements/test.in
@@ -266,7 +266,7 @@ python-dateutil==2.9.0.post0
     # via
     #   -r requirements/base.txt
     #   elasticsearch-dsl
-python-discovery==1.4.2
+python-discovery==1.4.3
     # via
     #   tox
     #   virtualenv
@@ -288,7 +288,7 @@ requests==2.34.2
     #   -r requirements/base.txt
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==2026.5.1
+rpds-py==2026.6.3
     # via
     #   -r requirements/base.txt
     #   jsonschema
@@ -309,7 +309,7 @@ sqlparse==0.5.5
     # via
     #   -r requirements/base.txt
     #   django
-stevedore==5.8.0
+stevedore==5.9.0
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -323,7 +323,7 @@ tomlkit==0.15.0
     # via pylint
 tox==4.56.1
     # via -r requirements/test.in
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -348,5 +348,5 @@ virtualenv==21.5.1
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==82.0.1
+setuptools==83.0.0
     # via -r requirements/base.txt
