@@ -41,7 +41,7 @@ certifi==2026.6.17
     #   -r requirements/test.txt
     #   elasticsearch
     #   requests
-cffi==2.0.0
+cffi==2.1.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -51,7 +51,7 @@ chardet==7.4.3
     # via
     #   -r requirements/test.txt
     #   diff-cover
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -75,7 +75,7 @@ colorama==0.4.6
     # via
     #   -r requirements/test.txt
     #   tox
-coverage[toml]==7.15.0
+coverage[toml]==7.15.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -96,7 +96,7 @@ distlib==0.4.3
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==5.2.15
+django==5.2.16
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
@@ -158,7 +158,7 @@ drf-jwt==1.19.2
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
-drf-spectacular==0.29.0
+drf-spectacular==0.30.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -201,7 +201,7 @@ faker==40.28.1
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.29.5
+filelock==3.29.7
     # via
     #   -r requirements/test.txt
     #   python-discovery
@@ -339,7 +339,7 @@ pylint==4.0.6
     #   pylint-plugin-utils
 pylint-celery==0.3
     # via edx-lint
-pylint-django==2.7.0
+pylint-django==2.8.0
     # via edx-lint
 pylint-plugin-utils==0.9.0
     # via
@@ -373,7 +373,7 @@ python-dateutil==2.9.0.post0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   elasticsearch-dsl
-python-discovery==1.4.3
+python-discovery==1.4.4
     # via
     #   -r requirements/test.txt
     #   tox
@@ -447,7 +447,7 @@ tomlkit==0.15.0
     #   -r requirements/test.txt
     #   edx-lint
     #   pylint
-tox==4.56.1
+tox==4.56.4
     # via -r requirements/test.txt
 typing-extensions==4.16.0
     # via
@@ -474,7 +474,7 @@ urllib3==1.26.20
     #   -r requirements/test.txt
     #   elasticsearch
     #   requests
-virtualenv==21.5.1
+virtualenv==21.6.1
     # via
     #   -r requirements/test.txt
     #   tox

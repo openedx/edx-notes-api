@@ -20,17 +20,17 @@ certifi==2026.6.17
     # via
     #   elasticsearch
     #   requests
-cffi==2.0.0
+cffi==2.1.0
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
     # via requests
 click==8.4.2
     # via edx-django-utils
 cryptography==49.0.0
     # via pyjwt
-django==5.2.15
+django==5.2.16
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
@@ -71,7 +71,7 @@ dnspython==2.8.0
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
-drf-spectacular==0.29.0
+drf-spectacular==0.30.0
     # via -r requirements/base.in
 edx-django-release-util==1.5.0
     # via -r requirements/base.in
