@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-annotated-types==0.7.0
+annotated-types==0.8.0
     # via
     #   -r requirements/base.txt
     #   pydantic
@@ -22,13 +22,13 @@ attrs==26.1.0
     #   -r requirements/base.txt
     #   jsonschema
     #   referencing
-cachetools==7.1.4
+cachetools==7.1.6
     # via tox
 camel-converter[pydantic]==5.1.0
     # via
     #   -r requirements/base.txt
     #   meilisearch
-certifi==2026.6.17
+certifi==2026.7.22
     # via
     #   -r requirements/base.txt
     #   elasticsearch
@@ -63,7 +63,7 @@ cryptography==49.0.0
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.in
-diff-cover==10.3.0
+diff-cover==10.4.1
     # via -r requirements/test.in
 dill==0.4.1
     # via pylint
@@ -145,9 +145,9 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.in
-faker==40.31.0
+faker==40.36.0
     # via factory-boy
-filelock==3.31.0
+filelock==3.32.0
     # via
     #   python-discovery
     #   tox
@@ -182,7 +182,7 @@ markupsafe==3.0.3
     # via jinja2
 mccabe==0.7.0
     # via pylint
-meilisearch==0.42.0
+meilisearch==0.43.0
     # via -r requirements/base.txt
 more-itertools==11.1.0
     # via -r requirements/test.in
@@ -204,7 +204,7 @@ path-py==12.5.0
     # via -r requirements/base.txt
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==4.10.1
+platformdirs==4.11.0
     # via
     #   pylint
     #   python-discovery
@@ -251,7 +251,7 @@ pynacl==1.6.2
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pyproject-api==1.10.1
+pyproject-api==1.11.0
     # via tox
 pytest==9.1.1
     # via
@@ -266,7 +266,7 @@ python-dateutil==2.9.0.post0
     # via
     #   -r requirements/base.txt
     #   elasticsearch-dsl
-python-discovery==1.4.4
+python-discovery==1.5.0
     # via
     #   tox
     #   virtualenv
@@ -321,7 +321,7 @@ tomli-w==1.2.0
     # via tox
 tomlkit==0.15.1
     # via pylint
-tox==4.57.0
+tox==4.58.0
     # via -r requirements/test.in
 typing-extensions==4.16.0
     # via
@@ -344,7 +344,7 @@ urllib3==1.26.20
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==21.6.1
+virtualenv==21.7.0
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
