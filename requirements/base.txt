@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-annotated-types==0.7.0
+annotated-types==0.8.0
     # via pydantic
 asgiref==3.12.1
     # via
@@ -16,7 +16,7 @@ attrs==26.1.0
     #   referencing
 camel-converter[pydantic]==5.1.0
     # via meilisearch
-certifi==2026.6.17
+certifi==2026.7.22
     # via
     #   elasticsearch
     #   requests
@@ -104,7 +104,7 @@ jsonschema==4.26.0
     # via drf-spectacular
 jsonschema-specifications==2025.9.1
     # via jsonschema
-meilisearch==0.42.0
+meilisearch==0.43.0
     # via -r requirements/base.in
 mysqlclient==2.2.8
     # via -r requirements/base.in
