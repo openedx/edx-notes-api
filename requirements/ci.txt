@@ -10,7 +10,7 @@ colorama==0.4.6
     # via tox
 distlib==0.4.3
     # via virtualenv
-filelock==3.32.3
+filelock==3.32.4
     # via
     #   python-discovery
     #   tox
