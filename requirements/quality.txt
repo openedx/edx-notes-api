@@ -171,11 +171,11 @@ edx-django-utils==8.0.1
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
-edx-drf-extensions==10.6.0
+edx-drf-extensions==10.7.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
-edx-lint==6.1.0
+edx-lint==6.2.0
     # via -r requirements/quality.in
 edx-opaque-keys==4.0.0
     # via
@@ -197,21 +197,21 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.txt
-faker==40.36.0
+faker==40.37.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==3.32.3
+filelock==3.32.4
     # via
     #   -r requirements/test.txt
     #   python-discovery
     #   tox
     #   virtualenv
-gunicorn==26.0.0
+gunicorn==26.1.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
-idna==3.18
+idna==3.19
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -267,7 +267,6 @@ packaging==26.3
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   django-nine
-    #   gunicorn
     #   pyproject-api
     #   pytest
     #   tox
@@ -317,7 +316,7 @@ pydantic-core==2.46.4
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   pydantic
-pygments==2.20.0
+pygments==2.21.0
     # via
     #   -r requirements/test.txt
     #   diff-cover
@@ -426,7 +425,7 @@ sqlparse==0.6.0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   django
-stevedore==5.9.0
+stevedore==5.9.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
