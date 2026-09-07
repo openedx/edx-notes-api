@@ -79,7 +79,7 @@ edx-django-utils==8.0.2
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
-edx-drf-extensions==10.7.0
+edx-drf-extensions==10.8.0
     # via -r requirements/base.in
 edx-opaque-keys==4.0.0
     # via edx-drf-extensions
@@ -127,7 +127,7 @@ pyjwt[crypto]==2.13.0
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.17.0
+pymongo==4.18.0
     # via edx-opaque-keys
 pynacl==1.6.2
     # via edx-django-utils
