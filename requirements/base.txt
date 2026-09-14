@@ -60,7 +60,7 @@ django-waffle==5.0.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.18.0
+djangorestframework==3.18.1
     # via
     #   -r requirements/base.in
     #   django-elasticsearch-dsl-drf
@@ -122,12 +122,12 @@ pydantic==2.13.5
     # via camel-converter
 pydantic-core==2.46.5
     # via pydantic
-pyjwt[crypto]==2.13.0
+pyjwt[crypto]==2.14.0
     # via
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.18.0
+pymongo==4.18.1
     # via edx-opaque-keys
 pynacl==1.6.2
     # via edx-django-utils
