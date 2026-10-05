@@ -15,7 +15,7 @@ asgiref==3.12.1
     #   -r requirements/test.txt
     #   django
     #   django-cors-headers
-astroid==4.0.4
+astroid==4.3.3
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -51,7 +51,7 @@ chardet==7.6.0
     # via
     #   -r requirements/test.txt
     #   diff-cover
-charset-normalizer==3.5.1
+charset-normalizer==3.5.2
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -79,7 +79,7 @@ coverage[toml]==7.16.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-cryptography==50.0.1
+cryptography==50.0.2
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -166,7 +166,7 @@ edx-django-release-util==1.5.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
-edx-django-utils==8.0.2
+edx-django-utils==8.1.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -177,7 +177,7 @@ edx-drf-extensions==10.9.0
     #   -r requirements/test.txt
 edx-lint==6.2.0
     # via -r requirements/quality.in
-edx-opaque-keys==4.0.0
+edx-opaque-keys==4.0.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -197,11 +197,11 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.txt
-faker==40.39.0
+faker==40.40.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==4.0.4
+filelock==4.0.10
     # via
     #   -r requirements/test.txt
     #   python-discovery
@@ -225,7 +225,7 @@ iniconfig==2.3.0
     # via
     #   -r requirements/test.txt
     #   pytest
-isort==9.0.1
+isort==9.0.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -244,7 +244,7 @@ jsonschema-specifications==2025.9.1
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   jsonschema
-markupsafe==3.0.3
+markupsafe==3.0.4
     # via
     #   -r requirements/test.txt
     #   jinja2
@@ -274,6 +274,7 @@ packaging==26.3
     #   pyproject-api
     #   pytest
     #   tox
+    #   virtualenv
 path==17.1.1
     # via
     #   -r requirements/base.txt
@@ -285,7 +286,7 @@ path-py==12.5.0
     #   -r requirements/test.txt
 pep8==1.7.1
     # via -r requirements/test.txt
-platformdirs==4.12.0
+platformdirs==4.12.3
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -325,13 +326,13 @@ pygments==2.21.0
     #   -r requirements/test.txt
     #   diff-cover
     #   pytest
-pyjwt[crypto]==2.15.0
+pyjwt[crypto]==2.15.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==4.0.9
+pylint==4.1.2
     # via
     #   -r requirements/quality.in
     #   -r requirements/test.txt
@@ -357,7 +358,7 @@ pynacl==1.6.2
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   edx-django-utils
-pyproject-api==1.11.2
+pyproject-api==1.11.3
     # via
     #   -r requirements/test.txt
     #   tox
@@ -403,7 +404,7 @@ requests==2.34.2
     #   -r requirements/test.txt
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==2026.6.3
+rpds-py==2026.9.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -449,7 +450,7 @@ tomlkit==0.15.1
     #   -r requirements/test.txt
     #   edx-lint
     #   pylint
-tox==4.64.4
+tox==4.64.8
     # via -r requirements/test.txt
 typing-extensions==4.16.0
     # via
@@ -477,7 +478,7 @@ urllib3==1.26.20
     #   -r requirements/test.txt
     #   elasticsearch
     #   requests
-virtualenv==21.13.0
+virtualenv==21.14.5
     # via
     #   -r requirements/test.txt
     #   tox

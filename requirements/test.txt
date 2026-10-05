@@ -13,7 +13,7 @@ asgiref==3.12.1
     #   -r requirements/base.txt
     #   django
     #   django-cors-headers
-astroid==4.0.4
+astroid==4.3.3
     # via
     #   -r requirements/test.in
     #   pylint
@@ -40,7 +40,7 @@ cffi==2.1.1
     #   pynacl
 chardet==7.6.0
     # via diff-cover
-charset-normalizer==3.5.1
+charset-normalizer==3.5.2
     # via
     #   -r requirements/base.txt
     #   requests
@@ -57,7 +57,7 @@ coverage[toml]==7.16.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
-cryptography==50.0.1
+cryptography==50.0.2
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -122,13 +122,13 @@ drf-spectacular==0.30.0
     # via -r requirements/base.txt
 edx-django-release-util==1.5.0
     # via -r requirements/base.txt
-edx-django-utils==8.0.2
+edx-django-utils==8.1.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
 edx-drf-extensions==10.9.0
     # via -r requirements/base.txt
-edx-opaque-keys==4.0.0
+edx-opaque-keys==4.0.1
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -145,9 +145,9 @@ elasticsearch-dsl==7.4.1
     #   django-elasticsearch-dsl-drf
 factory-boy==3.3.3
     # via -r requirements/test.in
-faker==40.39.0
+faker==40.40.0
     # via factory-boy
-filelock==4.0.4
+filelock==4.0.10
     # via
     #   python-discovery
     #   tox
@@ -164,7 +164,7 @@ inflection==0.5.1
     #   drf-spectacular
 iniconfig==2.3.0
     # via pytest
-isort==9.0.1
+isort==9.0.2
     # via pylint
 jinja2==3.1.6
     # via
@@ -178,7 +178,7 @@ jsonschema-specifications==2025.9.1
     # via
     #   -r requirements/base.txt
     #   jsonschema
-markupsafe==3.0.3
+markupsafe==3.0.4
     # via jinja2
 mccabe==0.7.0
     # via pylint
@@ -197,6 +197,7 @@ packaging==26.3
     #   pyproject-api
     #   pytest
     #   tox
+    #   virtualenv
 path==17.1.1
     # via
     #   -r requirements/base.txt
@@ -205,7 +206,7 @@ path-py==12.5.0
     # via -r requirements/base.txt
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==4.12.0
+platformdirs==4.12.3
     # via
     #   pylint
     #   tox
@@ -236,12 +237,12 @@ pygments==2.21.0
     # via
     #   diff-cover
     #   pytest
-pyjwt[crypto]==2.15.0
+pyjwt[crypto]==2.15.1
     # via
     #   -r requirements/base.txt
     #   drf-jwt
     #   edx-drf-extensions
-pylint==4.0.9
+pylint==4.1.2
     # via -r requirements/test.in
 pymongo==4.18.2
     # via
@@ -251,7 +252,7 @@ pynacl==1.6.2
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pyproject-api==1.11.2
+pyproject-api==1.11.3
     # via tox
 pytest==9.1.1
     # via
@@ -288,7 +289,7 @@ requests==2.34.2
     #   -r requirements/base.txt
     #   edx-drf-extensions
     #   meilisearch
-rpds-py==2026.6.3
+rpds-py==2026.9.1
     # via
     #   -r requirements/base.txt
     #   jsonschema
@@ -321,7 +322,7 @@ tomli-w==1.2.0
     # via tox
 tomlkit==0.15.1
     # via pylint
-tox==4.64.4
+tox==4.64.8
     # via -r requirements/test.in
 typing-extensions==4.16.0
     # via
@@ -345,7 +346,7 @@ urllib3==1.26.20
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==21.13.0
+virtualenv==21.14.5
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
