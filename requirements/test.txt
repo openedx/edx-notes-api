@@ -28,7 +28,7 @@ camel-converter[pydantic]==5.1.0
     # via
     #   -r requirements/base.txt
     #   meilisearch
-certifi==2026.4.22
+certifi==2026.10.19
     # via
     #   -r requirements/base.txt
     #   elasticsearch
