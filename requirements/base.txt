@@ -16,7 +16,7 @@ attrs==25.4.0
     #   referencing
 camel-converter[pydantic]==5.0.0
     # via meilisearch
-certifi==2025.10.5
+certifi==2026.10.19
     # via
     #   elasticsearch
     #   requests
@@ -172,7 +172,6 @@ stevedore==5.5.0
 typing-extensions==4.15.0
     # via
     #   edx-opaque-keys
-    #   elasticsearch-dsl
     #   pydantic
     #   pydantic-core
     #   referencing
