@@ -8,7 +8,7 @@ annotated-types==0.8.0
     # via
     #   -r requirements/base.txt
     #   pydantic
-asgiref==3.12.1
+asgiref==3.13.0
     # via
     #   -r requirements/base.txt
     #   django
@@ -22,13 +22,13 @@ attrs==26.1.0
     #   -r requirements/base.txt
     #   jsonschema
     #   referencing
-cachetools==7.2.3
+cachetools==7.2.5
     # via tox
 camel-converter[pydantic]==6.0.0
     # via
     #   -r requirements/base.txt
     #   meilisearch
-certifi==2026.10.19
+certifi==2026.10.23
     # via
     #   -r requirements/base.txt
     #   elasticsearch
@@ -53,7 +53,7 @@ code-annotations==3.0.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.16.2
+coverage[toml]==7.17.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -147,7 +147,7 @@ factory-boy==3.3.3
     # via -r requirements/test.in
 faker==40.43.0
     # via factory-boy
-filelock==4.2.2
+filelock==4.2.4
     # via
     #   python-discovery
     #   tox
@@ -206,7 +206,7 @@ path-py==12.5.0
     # via -r requirements/base.txt
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==4.13.4
+platformdirs==4.13.5
     # via
     #   pylint
     #   tox
@@ -221,7 +221,7 @@ psutil==7.2.2
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pycparser==3.11
+pycparser==3.12
     # via
     #   -r requirements/base.txt
     #   cffi
@@ -263,11 +263,11 @@ pytest-cov==7.1.0
     # via -r requirements/test.in
 pytest-django==4.14.0
     # via -r requirements/test.in
-python-dateutil==2.9.0.post0
+python-dateutil==3.0.0
     # via
     #   -r requirements/base.txt
     #   elasticsearch-dsl
-python-discovery==1.6.3
+python-discovery==1.6.4
     # via
     #   tox
     #   virtualenv
@@ -337,6 +337,10 @@ typing-inspection==0.4.4
     # via
     #   -r requirements/base.txt
     #   pydantic
+tzdata==2026.5
+    # via
+    #   -r requirements/base.txt
+    #   python-dateutil
 uritemplate==4.2.0
     # via
     #   -r requirements/base.txt
@@ -346,9 +350,9 @@ urllib3==1.26.20
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==21.14.11
+virtualenv==21.14.13
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==84.0.0
+setuptools==84.2.1
     # via -r requirements/base.txt

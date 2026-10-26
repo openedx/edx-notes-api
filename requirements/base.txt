@@ -6,7 +6,7 @@
 #
 annotated-types==0.8.0
     # via pydantic
-asgiref==3.12.1
+asgiref==3.13.0
     # via
     #   django
     #   django-cors-headers
@@ -16,7 +16,7 @@ attrs==26.1.0
     #   referencing
 camel-converter[pydantic]==6.0.0
     # via meilisearch
-certifi==2026.10.19
+certifi==2026.10.23
     # via
     #   elasticsearch
     #   requests
@@ -116,7 +116,7 @@ path-py==12.5.0
     # via -r requirements/base.in
 psutil==7.2.2
     # via edx-django-utils
-pycparser==3.11
+pycparser==3.12
     # via cffi
 pydantic==2.14.1
     # via camel-converter
@@ -131,7 +131,7 @@ pymongo==4.19.0
     # via edx-opaque-keys
 pynacl==1.6.2
     # via edx-django-utils
-python-dateutil==2.9.0.post0
+python-dateutil==3.0.0
     # via
     #   -r requirements/base.in
     #   elasticsearch-dsl
@@ -170,12 +170,15 @@ stevedore==5.9.1
 typing-extensions==4.16.0
     # via
     #   edx-opaque-keys
+    #   elasticsearch-dsl
     #   pydantic
     #   pydantic-core
     #   referencing
     #   typing-inspection
 typing-inspection==0.4.4
     # via pydantic
+tzdata==2026.5
+    # via python-dateutil
 uritemplate==4.2.0
     # via drf-spectacular
 urllib3==1.26.20
@@ -184,5 +187,5 @@ urllib3==1.26.20
     #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==84.0.0
+setuptools==84.2.1
     # via -r requirements/base.in
