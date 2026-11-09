@@ -26,7 +26,7 @@ attrs==26.1.0
     #   -r requirements/test.txt
     #   jsonschema
     #   referencing
-cachetools==7.2.8
+cachetools==8.0.0
     # via
     #   -r requirements/test.txt
     #   tox
@@ -56,7 +56,7 @@ charset-normalizer==3.5.2
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   requests
-click==8.5.0
+click==8.5.1
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -75,7 +75,7 @@ colorama==0.4.6
     # via
     #   -r requirements/test.txt
     #   tox
-coverage[toml]==7.17.0
+coverage[toml]==7.17.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -86,7 +86,7 @@ cryptography==50.0.2
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.txt
-diff-cover==11.0.0
+diff-cover==11.0.1
     # via -r requirements/test.txt
 dill==0.4.1
     # via
@@ -96,7 +96,7 @@ distlib==0.4.4
     # via
     #   -r requirements/test.txt
     #   virtualenv
-django==5.2.18
+django==5.2.19
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
@@ -148,7 +148,7 @@ djangorestframework==3.18.3
     #   drf-jwt
     #   drf-spectacular
     #   edx-drf-extensions
-dnspython==2.9.1
+dnspython==2.9.2
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -171,7 +171,7 @@ edx-django-utils==8.1.0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   edx-drf-extensions
-edx-drf-extensions==10.10.0
+edx-drf-extensions==10.11.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -201,7 +201,7 @@ faker==40.44.0
     # via
     #   -r requirements/test.txt
     #   factory-boy
-filelock==4.2.6
+filelock==4.2.9
     # via
     #   -r requirements/test.txt
     #   python-discovery
@@ -258,7 +258,7 @@ meilisearch==0.43.0
     #   -r requirements/test.txt
 more-itertools==11.2.1
     # via -r requirements/test.txt
-mypy-extensions==1.1.0
+mypy-extensions==1.2.0
     # via
     #   -r requirements/test.txt
     #   isort
@@ -286,7 +286,7 @@ path-py==12.5.0
     #   -r requirements/test.txt
 pep8==1.7.1
     # via -r requirements/test.txt
-platformdirs==4.14.3
+platformdirs==4.14.5
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -311,12 +311,12 @@ pycparser==3.12
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   cffi
-pydantic==2.14.2
+pydantic==2.14.3
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   camel-converter
-pydantic-core==2.50.2
+pydantic-core==2.50.4
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -358,7 +358,7 @@ pynacl==1.6.2
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   edx-django-utils
-pyproject-api==1.12.2
+pyproject-api==1.12.5
     # via
     #   -r requirements/test.txt
     #   tox
@@ -376,7 +376,7 @@ python-dateutil==4.0.0
     #   -r requirements/base.txt
     #   -r requirements/test.txt
     #   elasticsearch-dsl
-python-discovery==1.9.0
+python-discovery==1.9.5
     # via
     #   -r requirements/test.txt
     #   tox
@@ -449,7 +449,7 @@ tomlkit==0.15.2
     #   -r requirements/test.txt
     #   edx-lint
     #   pylint
-tox==4.67.5
+tox==4.67.13
     # via -r requirements/test.txt
 typing-extensions==4.16.0
     # via
@@ -461,7 +461,7 @@ typing-extensions==4.16.0
     #   referencing
     #   tox
     #   typing-inspection
-typing-inspection==0.4.4
+typing-inspection==0.4.5
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
@@ -482,7 +482,7 @@ urllib3==1.26.20
     #   -r requirements/test.txt
     #   elasticsearch
     #   requests
-virtualenv==21.15.2
+virtualenv==21.15.6
     # via
     #   -r requirements/test.txt
     #   tox
