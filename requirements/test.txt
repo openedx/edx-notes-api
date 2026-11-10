@@ -22,7 +22,7 @@ attrs==26.1.0
     #   -r requirements/base.txt
     #   jsonschema
     #   referencing
-cachetools==7.2.8
+cachetools==8.0.0
     # via tox
 camel-converter[pydantic]==6.0.0
     # via
@@ -44,7 +44,7 @@ charset-normalizer==3.5.2
     # via
     #   -r requirements/base.txt
     #   requests
-click==8.5.0
+click==8.5.1
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -53,7 +53,7 @@ code-annotations==3.0.0
     # via -r requirements/test.in
 colorama==0.4.6
     # via tox
-coverage[toml]==7.17.0
+coverage[toml]==7.17.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -63,7 +63,7 @@ cryptography==50.0.2
     #   pyjwt
 ddt==1.7.2
     # via -r requirements/test.in
-diff-cover==11.0.0
+diff-cover==11.0.1
     # via -r requirements/test.in
 dill==0.4.1
     # via pylint
@@ -110,7 +110,7 @@ djangorestframework==3.18.3
     #   drf-jwt
     #   drf-spectacular
     #   edx-drf-extensions
-dnspython==2.9.1
+dnspython==2.9.2
     # via
     #   -r requirements/base.txt
     #   pymongo
@@ -126,7 +126,7 @@ edx-django-utils==8.1.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-edx-drf-extensions==10.10.0
+edx-drf-extensions==10.11.0
     # via -r requirements/base.txt
 edx-opaque-keys==4.0.1
     # via
@@ -147,7 +147,7 @@ factory-boy==3.3.3
     # via -r requirements/test.in
 faker==40.44.0
     # via factory-boy
-filelock==4.2.6
+filelock==4.2.9
     # via
     #   python-discovery
     #   tox
@@ -186,7 +186,7 @@ meilisearch==0.43.0
     # via -r requirements/base.txt
 more-itertools==11.2.1
     # via -r requirements/test.in
-mypy-extensions==1.1.0
+mypy-extensions==1.2.0
     # via isort
 mysqlclient==2.3.0
     # via -r requirements/base.txt
@@ -206,7 +206,7 @@ path-py==12.5.0
     # via -r requirements/base.txt
 pep8==1.7.1
     # via -r requirements/test.in
-platformdirs==4.14.3
+platformdirs==4.14.5
     # via
     #   pylint
     #   tox
@@ -225,11 +225,11 @@ pycparser==3.12
     # via
     #   -r requirements/base.txt
     #   cffi
-pydantic==2.14.2
+pydantic==2.14.3
     # via
     #   -r requirements/base.txt
     #   camel-converter
-pydantic-core==2.50.2
+pydantic-core==2.50.4
     # via
     #   -r requirements/base.txt
     #   pydantic
@@ -252,7 +252,7 @@ pynacl==1.6.2
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
-pyproject-api==1.12.2
+pyproject-api==1.12.5
     # via tox
 pytest==9.2.0
     # via
@@ -267,7 +267,7 @@ python-dateutil==4.0.0
     # via
     #   -r requirements/base.txt
     #   elasticsearch-dsl
-python-discovery==1.9.0
+python-discovery==1.9.5
     # via
     #   tox
     #   virtualenv
@@ -321,7 +321,7 @@ tomli-w==1.2.0
     # via tox
 tomlkit==0.15.2
     # via pylint
-tox==4.67.5
+tox==4.67.13
     # via -r requirements/test.in
 typing-extensions==4.16.0
     # via
@@ -332,7 +332,7 @@ typing-extensions==4.16.0
     #   referencing
     #   tox
     #   typing-inspection
-typing-inspection==0.4.4
+typing-inspection==0.4.5
     # via
     #   -r requirements/base.txt
     #   pydantic
@@ -349,7 +349,7 @@ urllib3==1.26.20
     #   -r requirements/base.txt
     #   elasticsearch
     #   requests
-virtualenv==21.15.2
+virtualenv==21.15.6
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:

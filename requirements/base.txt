@@ -26,11 +26,11 @@ cffi==2.1.1
     #   pynacl
 charset-normalizer==3.5.2
     # via requests
-click==8.5.0
+click==8.5.1
     # via edx-django-utils
 cryptography==50.0.2
     # via pyjwt
-django==5.2.18
+django==5.2.19
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
@@ -67,7 +67,7 @@ djangorestframework==3.18.3
     #   drf-jwt
     #   drf-spectacular
     #   edx-drf-extensions
-dnspython==2.9.1
+dnspython==2.9.2
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
@@ -79,7 +79,7 @@ edx-django-utils==8.1.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
-edx-drf-extensions==10.10.0
+edx-drf-extensions==10.11.0
     # via -r requirements/base.in
 edx-opaque-keys==4.0.1
     # via edx-drf-extensions
@@ -118,9 +118,9 @@ psutil==7.2.2
     # via edx-django-utils
 pycparser==3.12
     # via cffi
-pydantic==2.14.2
+pydantic==2.14.3
     # via camel-converter
-pydantic-core==2.50.2
+pydantic-core==2.50.4
     # via pydantic
 pyjwt[crypto]==2.15.1
     # via
@@ -174,7 +174,7 @@ typing-extensions==4.16.0
     #   pydantic-core
     #   referencing
     #   typing-inspection
-typing-inspection==0.4.4
+typing-inspection==0.4.5
     # via pydantic
 tzdata==2026.6
     # via python-dateutil
