@@ -14,6 +14,25 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.12"]
+        mysql-version: ["8"]
+    services:
+      mysql:
+        image: mysql:${{ matrix.mysql-version }}
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: "edxapp"
+          MYSQL_USER: "edxapp001"
+          MYSQL_PASSWORD: "password"
+          MYSQL_RANDOM_ROOT_PASSWORD: true
+        # Ping over TCP, not the socket. On first start the image creates the
+        # database and user using a temporary server with networking turned off,
+        # so a socket ping can report healthy before MySQL accepts connections.
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
 
     steps:
       - name: Checkout code
@@ -26,8 +45,12 @@ jobs:
           cache: "pip"
           cache-dependency-path: "**/pip-tools.txt"
 
+      # mysqlclient is built from source below and needs the client headers.
+      # --no-upgrade leaves the image's own MySQL packages alone: upgrading the
+      # client pulls in a mysql-server upgrade whose post-install script fails
+      # on ubuntu-26.04 runners.
       - name: Install system packages
-        run: sudo apt-get update && sudo apt-get install -y libxmlsec1-dev
+        run: sudo apt-get update && sudo apt-get install -y --no-upgrade libxmlsec1-dev libmysqlclient-dev mysql-client pkg-config
 
       - name: Install Python dependencies
         run: |
@@ -37,21 +60,15 @@ jobs:
           pip uninstall -y mysqlclient
           pip install --no-binary mysqlclient mysqlclient
 
-      - name: Start MySQL service
-        run: sudo service mysql start
-
-      - name: Reset MySQL root password
-        run: |
-          mysql -h 127.0.0.1 -u root -proot -e "UPDATE mysql.user SET authentication_string = null WHERE user = 'root'; FLUSH PRIVILEGES;"
+      - name: Verify MySQL credentials
+        run: mysql -h 127.0.0.1 -uedxapp001 -ppassword -e "select version();" edxapp
 
       - name: Run migrations
         env:
           DB_ENGINE: django.db.backends.mysql
-          DB_NAME: edx_notes_api
-          DB_USER: root
-          DB_PASSWORD:
-          DB_HOST: localhost
+          DB_NAME: edxapp
+          DB_USER: edxapp001
+          DB_PASSWORD: password
+          DB_HOST: 127.0.0.1
           DB_PORT: 3306
-        run: |
-          echo "CREATE DATABASE IF NOT EXISTS edx_notes_api;" | sudo mysql -u root
-          python manage.py migrate --settings=notesserver.settings.test
+        run: python manage.py migrate --settings=notesserver.settings.test
