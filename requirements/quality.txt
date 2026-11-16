@@ -175,7 +175,7 @@ edx-drf-extensions==10.11.0
     # via
     #   -r requirements/base.txt
     #   -r requirements/test.txt
-edx-lint==6.3.0
+edx-lint==6.3.1
     # via -r requirements/quality.in
 edx-opaque-keys==4.0.1
     # via
@@ -262,8 +262,9 @@ mypy-extensions==1.2.0
     # via
     #   -r requirements/test.txt
     #   isort
-mysqlclient==2.3.1
+mysqlclient==2.3.0
     # via
+    #   -c requirements/common_constraints.txt
     #   -r requirements/base.txt
     #   -r requirements/test.txt
 packaging==26.3
