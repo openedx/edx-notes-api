@@ -14,9 +14,9 @@ attrs==26.1.0
     # via
     #   jsonschema
     #   referencing
-camel-converter[pydantic]==6.0.1
+camel-converter[pydantic]==6.0.2
     # via meilisearch
-certifi==2026.10.23
+certifi==2026.11.20
     # via
     #   elasticsearch
     #   requests
@@ -75,13 +75,13 @@ drf-spectacular==0.30.0
     # via -r requirements/base.in
 edx-django-release-util==1.5.0
     # via -r requirements/base.in
-edx-django-utils==8.2.0
+edx-django-utils==8.2.1
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
 edx-drf-extensions==10.11.0
     # via -r requirements/base.in
-edx-opaque-keys==4.0.1
+edx-opaque-keys==5.0.0
     # via edx-drf-extensions
 elasticsearch==7.13.4
     # via
@@ -106,7 +106,7 @@ jsonschema-specifications==2025.9.1
     # via jsonschema
 meilisearch==0.43.0
     # via -r requirements/base.in
-mysqlclient==2.3.0
+mysqlclient==2.3.2
     # via
     #   -c requirements/common_constraints.txt
     #   -r requirements/base.in
@@ -120,16 +120,16 @@ psutil==7.2.2
     # via edx-django-utils
 pycparser==3.12
     # via cffi
-pydantic==2.14.3
+pydantic==2.14.4
     # via camel-converter
-pydantic-core==2.50.4
+pydantic-core==2.50.5
     # via pydantic
 pyjwt[crypto]==2.15.1
     # via
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
-pymongo==4.20.0
+pymongo==4.20.1
     # via edx-opaque-keys
 pynacl==1.6.2
     # via edx-django-utils
@@ -137,7 +137,7 @@ python-dateutil==4.0.0
     # via
     #   -r requirements/base.in
     #   elasticsearch-dsl
-pyyaml==6.0.3
+pyyaml==6.0.4
     # via
     #   drf-spectacular
     #   edx-django-release-util
